@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:background="@android:color/transparent"
+    android:layout_height="wrap_content" >
+
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:background="@drawable/rounded_popup_window"
+        android:layout_height="wrap_content">
+
+
+        <ImageView
+            android:id="@+id/image"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:src="@drawable/cancel"
+            android:fontFamily="@font/robofont"
+            android:layout_gravity="end"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="10dp"
+            android:textSize="25dp"
+            android:text="X"/>
+
+
+        <TextView
+            android:id="@+id/text"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/robofont"
+            android:gravity="center_horizontal"
+            android:textSize="20dp"
+            android:text="Payment Received"
+            android:textColor="@color/black"/>
+
+        <TextView
+            android:id="@+id/text1"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/robofont"
+            android:layout_marginTop="5dp"
+            android:textSize="18dp"
+            android:text="Please confirm that you've received payment from "
+            android:gravity="center_horizontal"
+            android:textColor="@color/black" />
+
+
+
+
+    </LinearLayout>
+
+
+    <Button
+        android:id="@+id/submit_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="SUBMIT"
+        android:fontFamily="@font/robofont"
+        android:textColor="@color/white"
+        android:textSize="18dp"
+        android:background="@drawable/gradient_alert_bg"
+        />
+
+</LinearLayout>

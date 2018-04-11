@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="50dp"
+    android:paddingRight="30dp"
+    android:paddingLeft="30dp"
+    >
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/txtInvPrice"
+        android:paddingRight="30dp"
+        android:fontFamily="@font/roboto_light"
+        android:textSize="20sp"
+        android:layout_centerVertical="true"
+        android:textStyle="bold"
+        android:layout_alignParentRight="true"
+
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:maxLines="1"
+        android:layout_toRightOf="@+id/txtDate"
+        android:ellipsize="end"
+        android:fontFamily="@font/roboto_light"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_centerVertical="true"
+        android:layout_height="wrap_content"
+        android:id="@+id/txtSerName"
+        android:layout_toLeftOf="@+id/txtInvPrice"
+        />
+    <TextView
+        android:layout_width="80dp"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:fontFamily="@font/roboto_light"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:text="10/06"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:layout_height="wrap_content"
+        android:id="@+id/txtDate"
+
+        />
+
+</RelativeLayout>

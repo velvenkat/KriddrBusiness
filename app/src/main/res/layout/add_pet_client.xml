@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:id="@+id/camera_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true">
+
+
+            <ImageView
+                android:id="@+id/add_photo"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+                android:src="@drawable/addphoto" />
+
+
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:id="@+id/child_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/camera_layout"
+            android:padding="20dp">
+
+
+            <TextView
+                android:id="@+id/client_txt"
+                android:layout_width="wrap_content"
+                android:fontFamily="@font/robofont"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:text="@string/client"
+                android:textColor="@color/text_color" />
+
+            <EditText
+                android:id="@+id/petname_value"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:fontFamily="@font/robofont"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@+id/client_txt"
+                android:background="@drawable/rounded_edittext"
+                android:hint="@string/pet_name"
+                android:paddingBottom="5dp"
+                android:paddingLeft="15dp"
+                android:paddingTop="5dp" />
+
+
+            <EditText
+                android:id="@+id/day_month_year"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:focusable="false"
+                android:inputType="date"
+                android:fontFamily="@font/robofont"
+                android:layout_alignLeft="@+id/petname_value"
+                android:layout_below="@+id/petname_value"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/rounded_edittext"
+                android:hint="@string/birth_month"
+                android:paddingBottom="5dp"
+                android:paddingLeft="15dp"
+                android:paddingTop="5dp" />
+
+
+            <TextView
+                android:id="@+id/brand_txt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/robofont"
+                android:layout_below="@+id/day_month_year"
+                android:layout_marginTop="30dp"
+                android:text="@string/food"
+                android:textColor="@color/text_color" />
+
+
+            <EditText
+                android:id="@+id/brand_value"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:fontFamily="@font/robofont"
+                android:layout_below="@+id/day_month_year"
+                android:layout_alignLeft="@+id/day_month_year"
+                android:layout_marginTop="20dp"
+                android:layout_toRightOf="@+id/brand_txt"
+                android:background="@drawable/rounded_edittext"
+                android:hint="@string/brand"
+                android:paddingBottom="5dp"
+                android:paddingLeft="15dp"
+                android:paddingTop="5dp" />
+
+            <EditText
+                android:id="@+id/protein_value"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:fontFamily="@font/robofont"
+                android:layout_below="@+id/brand_value"
+                android:layout_alignLeft="@+id/brand_value"
+                android:layout_marginTop="10dp"
+                android:layout_toRightOf="@+id/brand_txt"
+                android:background="@drawable/rounded_edittext"
+                android:hint="@string/proteins"
+                android:paddingBottom="5dp"
+                android:paddingLeft="15dp"
+                android:paddingTop="5dp" />
+
+            <EditText
+                android:id="@+id/servings_value"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:fontFamily="@font/robofont"
+                android:layout_below="@+id/protein_value"
+                android:layout_alignLeft="@+id/protein_value"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/rounded_edittext"
+                android:hint="@string/servings_norm"
+                android:paddingBottom="5dp"
+                android:paddingLeft="15dp"
+                android:paddingTop="5dp"
+                android:visibility="visible" />
+
+
+            <TextView
+                android:id="@+id/pet_parenttxt"
+                android:layout_width="wrap_content"
+                android:fontFamily="@font/robofont"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/servings_value"
+                android:layout_marginTop="15dp"
+                android:text="@string/pet_parent"
+                android:textColor="@color/text_color" />
+
+            <EditText
+                android:id="@+id/name_value"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:fontFamily="@font/robofont"
+                android:layout_below="@+id/servings_value"
+                android:layout_alignLeft="@+id/servings_value"
+                android:layout_marginTop="10dp"
+                android:layout_toRightOf="@+id/brand_txt"
+                android:background="@drawable/rounded_edittext"
+                android:hint="Pet parent name"
+                android:paddingBottom="5dp"
+                android:paddingLeft="15dp"
+                android:paddingTop="5dp" />
+
+            <EditText
+                android:id="@+id/mobile_value"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:fontFamily="@font/robofont"
+                android:layout_below="@+id/name_value"
+                android:layout_alignLeft="@+id/name_value"
+                android:layout_marginTop="10dp"
+                android:layout_toRightOf="@+id/brand_txt"
+                android:background="@drawable/rounded_edittext"
+                android:hint="@string/mobile_number"
+                android:inputType="phone"
+                android:paddingBottom="5dp"
+                android:paddingLeft="15dp"
+                android:paddingTop="5dp" />
+
+            <EditText
+                android:id="@+id/parent_email_value"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:fontFamily="@font/robofont"
+                android:layout_below="@+id/mobile_value"
+                android:layout_alignLeft="@+id/mobile_value"
+                android:layout_marginTop="10dp"
+                android:layout_toRightOf="@+id/brand_txt"
+                android:background="@drawable/rounded_edittext"
+                android:hint="@string/enter_email"
+                android:inputType="textNoSuggestions"
+                android:paddingBottom="5dp"
+                android:paddingLeft="15dp"
+                android:paddingTop="5dp" />
+
+
+
+            <EditText
+                android:id="@+id/address_value"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:fontFamily="@font/robofont"
+                android:layout_below="@+id/parent_email_value"
+                android:layout_marginTop="10dp"
+                android:layout_alignLeft="@+id/parent_email_value"
+
+
+                android:layout_toRightOf="@+id/brand_txt"
+                android:background="@drawable/rounded_edittext"
+                android:hint="@string/address"
+                android:paddingBottom="5dp"
+                android:paddingLeft="15dp"
+                android:paddingTop="5dp" />
+
+
+
+            <TextView
+                android:id="@+id/prefred_contact"
+                android:layout_width="wrap_content"
+                android:fontFamily="@font/robofont"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/address_value"
+                android:layout_marginTop="15dp"
+                android:text="@string/preferred_contact"
+                android:textColor="@color/text_color" />
+
+            <RadioGroup
+                android:id="@+id/prefred_radiogroup"
+                android:layout_below="@+id/prefred_contact"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_marginTop="@dimen/dots_margin_bottom"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/prefered_text_message"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:fontFamily="@font/robofont"
+                    android:checked="true"
+                    android:text="Text message" />
+
+                <RadioButton
+                    android:id="@+id/prefred_email"
+                    android:layout_width="wrap_content"
+                    android:fontFamily="@font/robofont"
+                    android:textColor="@color/black"
+                    android:layout_height="wrap_content"
+                    android:text="Email" />
+
+            </RadioGroup>
+
+
+
+        </RelativeLayout>
+
+
+        <Button
+            android:id="@+id/done_button"
+            android:layout_below="@+id/child_layout"
+            android:layout_width="match_parent"
+            android:fontFamily="@font/robofont"
+            android:background="@drawable/gradient_bg"
+            android:text="@string/done"
+            android:textSize="18dp"
+            android:textColor="@color/white"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+</ScrollView>

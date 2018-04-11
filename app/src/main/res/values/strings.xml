@@ -1,0 +1,127 @@
+<resources>
+    <string name="app_name">Kriddr Business</string>
+
+    <string name="sign_up">Sign up</string>
+    <string name="already_member">Already a member?</string>
+    <string name="login">Sign in</string>
+    <string name="first_lastName">First and last name</string>
+    <string name="mobile_num">Mobile number</string>
+    <string name="phone">Phone number</string>
+    <string name="email_val">Email (optional)</string>
+    <string name="verification_message">Please enter the verification \n code sent to your phone number</string>
+    <string name="address">Address</string>
+    <string name="phone_number">Phone number</string>
+    <string name="business_name">Business name</string>
+    <string name="create_profile">CREATE PROFILE</string>
+    <string name="done">DONE</string>
+    <string name="preferred_contact">Preferred Contact</string>
+    <string name="client">CLIENT</string>
+    <string name="clientus">Client</string>
+    <string name="pet_name">Pet name</string>
+    <string name="birth_month">Birth month/year</string>
+    <string name="food">FOOD</string>
+    <string name="name">Name</string>
+    <string name="mobile_number">Mobile Number</string>
+    <string name="email">Email</string>
+    <string name="brand">Brand</string>
+    <string name="pet_parent">PET\nPARENT</string>
+    <string name="pet_parent_full">PET PARENT</string>
+    <string name="protein_servings">Protein and servings (in  \n cups, tablespoons, etc.)</string>
+    <string name="account_inactivate">Your account is currently inactivate</string>
+    <string name="submit">Submit</string>
+    <string name="invalid_otp">Oops,it looks like that code is incorrect! Please try again.</string>
+    <string name="business_address">Business Address</string>
+    <string name="business_records">Business Records</string>
+    <string name="enter_email">Enter email</string>
+    
+    <string name="search_pet">Search pet</string>
+    
+    <string name="search_document">Search document name</string>
+    <string name="select_category">Select category</string>
+    
+    <string name="search_owner">Search owner</string>
+    <string name="no_clients">No clients</string>
+    <string name="invoice_comments">Thanks for coming in, see you next time!</string>
+
+    <string name="begin_by_adding">Begin by adding your three \n \u0020 \u0020 \u0020 \u0020 \u0020 best clients!</string>
+    <string name="client_creation">Client creation successfully</string>
+    
+    <string name="payment_received_confirm">Payment Received Sucessfully</string>
+    <string name="record_creation">Record saved</string>
+    <string name="note_success">Note sucessfully saved</string>
+
+    <string name="invoice_creation">Invoice creation successfully</string>
+    
+    <string name="servings_norm">Servings (in  cups, \n tablespoons, etc.)</string>
+
+    <string name="bus_name">Business Name</string>
+
+    <string name="sampe_address">743 Ceder St.\nCambridge, MA 02177</string>
+
+    <string name="business_phone_number">Business Phone Number</string>
+
+    <string name="terms_and_conditons">Terms &amp; Conditions</string>
+    <string name="privacy">Privacy Policy</string>
+    <string name="logout">Sign Out</string>
+
+    <string name="enter_flname">Please enter your name</string>
+    <string name="enter_mobile">Please enter your mobile number</string>
+    <string name="invalid_email">Invalid email</string>
+    <string name="no_internet">No internet connection</string>
+    <string name="already_user_exist">Already user exist this mobile number</string>
+    <string name="enter_business">Please enter business name</string>
+    <string name="enter_address">Please enter address</string>
+    <string name="invalid_user">Invalid user</string>
+    <string name="fill_alldigit">Fill all the digits</string>
+    <string name="choose_image">Please choose the image</string>
+    <string name="do_you_want_exit">Do you want to exit?</string>
+    <string name="yes">Yes</string>
+    <string name="cancel">No</string>
+    <string name="business_already_create">Already busniess created</string>
+
+    <string name="enter_mobile_num">Please enter mobile</string>
+
+    <string name="alread_mobile">Already this mobile number is exists for the business owner</string>
+    
+    
+    <string name="enter_pet_name">Please enter pet name</string>
+    
+    <string name="enter_dob">Please enter dob</string>
+
+    <string name="enter_brand">Please enter brand</string>
+
+    <string name="enter_protein">Please enter protein</string>
+
+    <string name="enter_servings">Please enter servings</string>
+    
+    <string name="enter_name">Enter name</string>
+    
+    <string name="enter_number">Enter Number</string>
+    
+
+
+    <!-- Development Instance -->
+    <string name="url_reference">http://13.71.127.81/dev/kriddr/web_service/home/</string>
+    <string name="title_activity_kridder_navigation">KridderNavigationActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+
+    <string name="logout_warning">Are you sure want to signout?</string>
+    <string name="ok">Ok</string>
+
+    <string name="proteins">Protein</string>
+
+
+    <string name="client_name">Client</string>
+    <string name="invoice">Invoice</string>
+    <string name="stats">Stats</string>
+    <string name="profile">Profile</string>
+
+    <string name="select_pet_text">Select an existing pet \n profile or create a new one</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+
+</resources>

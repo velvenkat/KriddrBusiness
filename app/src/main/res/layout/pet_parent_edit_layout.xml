@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:background="@android:color/transparent"
+    android:layout_height="wrap_content" >
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:padding="20dp"
+        android:background="@drawable/rounded_popup_window"
+        android:layout_height="wrap_content">
+
+
+
+        <TextView
+            android:id="@+id/title"
+            android:gravity="center_horizontal"
+            android:textStyle="bold"
+            android:textSize="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="50dp" />
+
+
+        <ImageView
+            android:id="@+id/image"
+            android:layout_alignParentEnd="true"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:src="@drawable/cancel"
+            android:fontFamily="@font/robofont"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:textSize="25dp"/>
+
+        <ImageView
+            android:layout_below="@+id/title"
+            android:id="@+id/profile_icon"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignBottom="@+id/business_name"
+            android:layout_alignTop="@+id/business_name"
+            android:src="@drawable/profilepic" />
+
+
+
+        <EditText
+            android:id="@+id/business_name"
+            android:layout_width="match_parent"
+            android:layout_below="@+id/title"
+            android:layout_height="50dp"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@+id/profile_icon"
+            android:background="@drawable/rounded_edittext"
+            android:fontFamily="@font/robofont"
+            android:hint="@string/business_name"
+            android:inputType="textNoSuggestions"
+            android:paddingBottom="5dp"
+            android:paddingLeft="15dp"
+            android:paddingTop="5dp"
+            android:selectAllOnFocus="true" />
+
+
+        <ImageView
+            android:id="@+id/phone_icon"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignBottom="@+id/mobile"
+            android:layout_alignTop="@+id/mobile"
+            android:layout_below="@+id/profile_icon"
+            android:src="@drawable/mobilelogo" />
+
+
+        <EditText
+            android:id="@+id/mobile"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_below="@+id/profile_icon"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="20dp"
+            android:layout_toRightOf="@+id/phone_icon"
+            android:background="@drawable/rounded_edittext"
+            android:fontFamily="@font/robofont"
+            android:hint="@string/phone"
+            android:inputType="number"
+            android:paddingBottom="5dp"
+            android:paddingLeft="15dp"
+            android:paddingTop="5dp"
+            android:selectAllOnFocus="true" />
+
+
+        <ImageView
+            android:id="@+id/email_icon"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignBottom="@+id/address"
+            android:layout_alignTop="@+id/address"
+            android:layout_below="@+id/phone_icon"
+            android:src="@drawable/loaction" />
+
+
+        <EditText
+            android:id="@+id/address"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_below="@+id/phone_icon"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="20dp"
+            android:layout_toRightOf="@+id/phone_icon"
+            android:background="@drawable/rounded_edittext"
+            android:fontFamily="@font/robofont"
+            android:hint="@string/address"
+            android:inputType="textNoSuggestions"
+            android:paddingBottom="5dp"
+            android:paddingLeft="15dp"
+            android:paddingTop="5dp"
+            android:selectAllOnFocus="true" />
+
+
+        <TextView
+            android:id="@+id/prefred_contact"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/address"
+            android:layout_marginTop="15dp"
+            android:fontFamily="@font/robofont"
+            android:text="@string/preferred_contact"
+            android:textColor="@color/text_color" />
+
+
+        <RadioGroup
+            android:id="@+id/prefred_radiogroup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/prefred_contact"
+            android:layout_gravity="left"
+            android:layout_marginTop="@dimen/dots_margin_bottom"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/prefered_text_message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:fontFamily="@font/robofont"
+                android:text="Text message"
+                android:textColor="@color/black" />
+
+            <RadioButton
+                android:id="@+id/prefred_email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/robofont"
+                android:text="Email"
+                android:textColor="@color/black" />
+
+        </RadioGroup>
+
+
+
+
+
+
+    </RelativeLayout>
+
+
+    <Button
+        android:id="@+id/submit_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="SUBMIT"
+        android:fontFamily="@font/robofont"
+        android:textColor="@color/white"
+        android:textSize="18dp"
+        android:background="@drawable/gradient_alert_bg"
+        />
+
+</LinearLayout>

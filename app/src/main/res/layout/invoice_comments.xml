@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:background="#FAFAFD"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:id="@+id/profile_layout"
+            android:layout_width="match_parent"
+            android:gravity="center_horizontal"
+            android:background="@drawable/profile_cross_view"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:layout_height="200dp"
+                android:layout_width="200dp"
+                android:src="@drawable/profile"
+                android:id="@+id/imageView1"
+
+                >
+            </ImageView>
+
+        </RelativeLayout>
+
+        <LinearLayout
+
+            android:orientation="vertical"
+            android:layout_below="@+id/profile_layout"
+            android:padding="30dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/service_txt"
+                android:text="COMMENTS"
+                android:textSize="20dp"
+                android:fontFamily="@font/roboto_regular"
+                android:textColor="@color/text_color"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+
+
+            <EditText
+                android:id="@+id/textcmt"
+                android:background="@drawable/rounded_edittex_cornerline"
+                android:layout_below="@+id/service_text"
+                android:layout_marginTop="20dp"
+                android:padding="20dp"
+                android:layout_gravity="start"
+                android:gravity="start"
+                android:hint="@string/invoice_comments"
+                android:layout_width="match_parent"
+                android:layout_height="200dp" />
+
+
+
+
+
+        </LinearLayout>
+
+
+
+        <Button
+            android:id="@+id/next_button"
+            android:layout_alignParentBottom="true"
+            android:text="Send Invoice"
+            android:fontFamily="@font/roboto_bold"
+            android:background="@drawable/rounded_full_radius"
+            android:textColor="@color/white"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </RelativeLayout>
+
+
+
+
+</LinearLayout>

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+<TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_toLeftOf="@+id/txtTotalAmt"
+    android:fontFamily="@font/roboto_regular"
+    android:textSize="20sp"
+    android:textStyle="bold"
+    android:paddingLeft="20dp"
+    android:maxLines="1"
+    android:ellipsize="end"
+    android:layout_alignParentLeft="true"
+    android:text="Baxter"
+    android:id="@+id/txtPetName"
+    />
+<TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_below="@+id/txtPetName"
+    android:fontFamily="@font/roboto_regular"
+    android:textColor="@color/text_color"
+    android:textSize="18sp"
+    android:paddingLeft="20dp"
+    android:layout_alignParentLeft="true"
+    android:maxLines="1"
+    android:ellipsize="end"
+    android:text="James"
+    android:layout_toLeftOf="@+id/txtTotalAmt"
+    android:id="@+id/txtPetParentName"
+    />
+
+    <TextView
+        android:id="@+id/txtTotalAmt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_toLeftOf="@+id/imgTick"
+        android:layout_toStartOf="@+id/imgTick"
+        android:fontFamily="@font/roboto_regular"
+
+
+        android:text="$12"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <ImageView
+        android:id="@+id/imgTick"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:visibility="invisible"
+        android:layout_toLeftOf="@+id/imgIndicator"
+        android:layout_marginEnd="20dp"
+        android:layout_centerVertical="true"
+        android:layout_alignTop="@+id/imgIndicator"
+        android:layout_marginRight="30dp"
+        android:src="@drawable/tick" />
+
+    <ImageView
+        android:id="@+id/imgIndicator"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="20dp"
+        android:layout_marginRight="20dp"
+        android:src="@drawable/dxpan" />
+
+
+    <View
+        android:layout_below="@+id/txtPetParentName"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@drawable/devider_basic"/>
+</RelativeLayout>

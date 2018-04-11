@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:padding="10dp"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/image_view"
+        android:layout_width="100dp"
+        android:src="@mipmap/kriddrappstoreicon"
+        android:layout_height="100dp" />
+
+
+    <TextView
+        android:id="@+id/first_name"
+        android:layout_below="@+id/image_view"
+        android:layout_width="wrap_content"
+        android:gravity="center_horizontal"
+        android:layout_centerInParent="true"
+        android:maxLines="1"
+        android:textSize="20dp"
+        android:fontFamily="@font/robofont"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/second_name"
+        android:layout_below="@+id/first_name"
+        android:layout_width="wrap_content"
+        android:gravity="center_horizontal"
+        android:layout_centerInParent="true"
+        android:maxLines="1"
+        android:textSize="16dp"
+        android:fontFamily="@font/robofont"
+        android:layout_height="wrap_content" />
+
+</RelativeLayout>

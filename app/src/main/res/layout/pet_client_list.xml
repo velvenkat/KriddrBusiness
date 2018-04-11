@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:padding="20dp"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/select_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20dp"
+        android:fontFamily="@font/robofont"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center_horizontal"
+        android:text="@string/select_pet_text"
+        />
+
+    <Button
+        android:id="@+id/add_new_pet_client"
+        android:background="@drawable/rounded_curve_radius"
+        android:layout_width="match_parent"
+        android:layout_marginTop="10dp"
+        android:text="Add a new pet client"
+        android:textAllCaps="false"
+        android:layout_below="@+id/select_text"
+        android:textColor="@color/white"
+        android:textSize="18dp"
+        android:fontFamily="@font/robofont"
+        android:layout_height="wrap_content" />
+
+
+    <TextView
+        android:id="@+id/no_client"
+        android:fontFamily="@font/robofont"
+        android:layout_marginTop="20dp"
+        android:layout_gravity="center_vertical"
+        android:gravity="center"
+        android:visibility="gone"
+        android:textSize="30dp"
+        android:text="@string/no_clients"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+
+
+
+    <RelativeLayout
+        android:id="@+id/list_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/client_list"
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+    </android.support.v7.widget.RecyclerView>
+
+
+    </RelativeLayout>
+
+
+</LinearLayout>

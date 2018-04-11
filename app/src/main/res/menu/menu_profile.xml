@@ -1,0 +1,25 @@
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <item
+        android:id="@+id/terms_condition"
+        android:orderInCategory="100"
+        android:title="@string/terms_and_conditons"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/privacy_policy"
+        android:orderInCategory="100"
+        android:title="@string/privacy"
+        app:showAsAction="never" />
+
+
+    <item
+        android:id="@+id/logout"
+        android:orderInCategory="100"
+        android:title="@string/logout"
+        app:showAsAction="never" />
+
+</menu>

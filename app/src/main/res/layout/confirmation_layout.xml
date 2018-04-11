@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:id="@+id/pin_content_layout"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+
+    android:layout_height="match_parent"
+    android:padding="30dp" >
+
+    <TextView android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="100dp"
+        android:text="@string/verification_message"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center"
+        android:fontFamily="@font/robofont"
+        android:textSize="18sp"
+
+        android:layout_marginBottom="@dimen/pin_label_margin" />
+
+    <LinearLayout
+        android:id="@+id/pin_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center_horizontal">
+
+        <EditText
+            android:id="@+id/pin_first_edittext"
+            android:layout_width="50dp"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:imeOptions="actionNext"
+            android:inputType="phone"
+            android:fontFamily="@font/robofont"
+            android:nextFocusRight="@id/pin_second_edittext"
+             android:maxLength="1"
+            android:background="@drawable/rounded_radius"
+            android:layout_height="50dp"/>
+
+        <EditText android:id="@+id/pin_second_edittext"
+            android:layout_width="50dp"
+            android:layout_marginLeft="10dp"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:imeOptions="actionNext"
+            android:nextFocusRight="@id/pin_third_edittext"
+            android:fontFamily="@font/robofont"
+            android:maxLength="1"
+            android:inputType="phone"
+            android:background="@drawable/rounded_radius"
+            android:layout_height="50dp"
+            />
+
+        <EditText android:id="@+id/pin_third_edittext"
+            android:layout_width="50dp"
+            android:layout_marginLeft="10dp"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:nextFocusRight="@id/pin_forth_edittext"
+            android:imeOptions="actionNext"
+            android:fontFamily="@font/robofont"
+            android:maxLength="1"
+            android:inputType="phone"
+            android:background="@drawable/rounded_radius"
+            android:layout_height="50dp"
+            />
+
+        <EditText android:id="@+id/pin_forth_edittext"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:imeOptions="actionNext"
+            android:nextFocusRight="@id/pin_fifth_edittext"
+            android:gravity="center"
+            android:maxLength="1"
+            android:fontFamily="@font/robofont"
+            android:inputType="phone"
+            android:layout_marginLeft="10dp"
+            android:textColor="@color/white"
+            android:background="@drawable/rounded_radius"
+            />
+
+        <EditText android:id="@+id/pin_fifth_edittext"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:maxLength="1"
+            android:inputType="phone"
+            android:gravity="center"
+            android:layout_marginLeft="10dp"
+            android:imeOptions="actionNext"
+            android:fontFamily="@font/robofont"
+            android:textColor="@color/white"
+            android:background="@drawable/rounded_radius"
+             />
+
+
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/submit"
+        android:background="@drawable/rounded_radius"
+        android:layout_marginTop="20dp"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:text="@string/submit"
+        android:textColor="@color/white"
+        android:layout_height="wrap_content" />
+
+
+</LinearLayout>

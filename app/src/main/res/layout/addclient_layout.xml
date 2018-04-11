@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android" >
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_height="wrap_content">
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:padding="20dp"
+            android:layout_height="match_parent">
+
+
+            <TextView
+                android:id="@+id/client_txt"
+                android:text="@string/client"
+                android:layout_marginTop="15dp"
+                android:textColor="@color/text_color"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <EditText
+                android:id="@+id/petname_value"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@+id/client_txt"
+                android:background="@drawable/rounded_edittext"
+                android:hint="@string/pet_name"
+                android:paddingLeft="15dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="45dp" />
+
+
+            <EditText
+                android:id="@+id/day_month_year"
+                android:layout_below="@+id/petname_value"
+                android:background="@drawable/rounded_edittext"
+                android:layout_alignLeft="@+id/petname_value"
+                android:layout_marginTop="10dp"
+                android:hint="@string/birth_month"
+                android:paddingLeft="15dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="45dp" />
+
+
+
+            <TextView
+                android:id="@+id/brand_txt"
+                android:text="@string/food"
+                android:layout_marginTop="15dp"
+                android:textColor="@color/text_color"
+                android:layout_below="@+id/day_month_year"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+
+            <EditText
+                android:id="@+id/brand_value"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@+id/brand_txt"
+                android:layout_below="@+id/day_month_year"
+                android:background="@drawable/rounded_edittext"
+                android:hint="@string/brand"
+                android:paddingLeft="15dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:layout_marginTop="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="45dp" />
+
+            <EditText
+                android:id="@+id/protein_value"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@+id/brand_txt"
+                android:layout_below="@+id/brand_value"
+                android:background="@drawable/rounded_edittext"
+                android:hint="@string/protein_servings"
+                android:paddingLeft="15dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="60dp" />
+
+
+            <TextView
+                android:id="@+id/pet_parenttxt"
+                android:text="@string/pet_parent"
+                android:layout_marginTop="15dp"
+                android:textColor="@color/text_color"
+                android:layout_below="@+id/protein_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <EditText
+                android:id="@+id/name_value"
+                android:layout_marginLeft="15dp"
+                android:layout_toRightOf="@+id/brand_txt"
+                android:layout_below="@+id/protein_value"
+                android:background="@drawable/rounded_edittext"
+                android:hint="@string/name"
+                android:paddingLeft="15dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="45dp" />
+
+            <EditText
+                android:id="@+id/mobile_value"
+                android:layout_marginLeft="15dp"
+                android:layout_toRightOf="@+id/brand_txt"
+                android:layout_below="@+id/name_value"
+                android:background="@drawable/rounded_edittext"
+                android:hint="@string/mobile_number"
+                android:paddingLeft="15dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="45dp" />
+
+            <EditText
+                android:id="@+id/email_value"
+                android:layout_marginLeft="15dp"
+                android:layout_toRightOf="@+id/brand_txt"
+                android:layout_below="@+id/mobile_value"
+                android:background="@drawable/rounded_edittext"
+                android:hint="@string/email"
+                android:paddingLeft="15dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="45dp" />
+
+
+            <EditText
+                android:id="@+id/address_value"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_alignTop="@+id/email_value"
+                android:layout_toEndOf="@+id/brand_txt"
+                android:layout_toRightOf="@+id/brand_txt"
+                android:background="@drawable/rounded_edittext"
+                android:hint="@string/address"
+                android:paddingBottom="5dp"
+                android:paddingLeft="15dp"
+                android:paddingTop="5dp" />
+
+        </RelativeLayout>
+
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:text="@string/preferred_contact"
+            android:layout_marginLeft="20dp"
+            android:textSize="16sp"
+            android:textColor="@color/text_color"
+            android:layout_height="wrap_content" />
+
+
+        <RadioGroup
+            android:id="@+id/rg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_above="@id/signup_button"
+            android:padding="5dp"
+            android:layout_marginLeft="5dp"
+            >
+            <RadioButton
+                android:id="@+id/rb_coldfusion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Text message"
+                android:textSize="16sp"
+                android:paddingRight="10dp"
+                />
+            <RadioButton
+                android:id="@+id/rb_flex"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Email"
+                android:textSize="16sp"
+                android:paddingRight="10dp"
+                />
+        </RadioGroup>
+
+
+
+
+
+        <Button
+            android:id="@+id/signup_button"
+            android:layout_alignParentBottom="true"
+            android:layout_width="match_parent"
+            android:background="#ea8948"
+            android:text="@string/done"
+            android:textColor="@color/white"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+
+</ScrollView>

@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#FFFFFF"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+<ScrollView android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    android:layout_above="@+id/next_button"
+    >
+
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+
+    android:layout_height="match_parent">
+
+
+
+    <RelativeLayout
+        android:id="@+id/profile_layout"
+        android:layout_width="match_parent"
+        android:gravity="center_horizontal"
+        android:background="@drawable/profile_cross_view"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:layout_height="200dp"
+            android:layout_width="200dp"
+            android:src="@drawable/profile"
+            android:id="@+id/imageView1"
+
+            >
+        </ImageView>
+
+    </RelativeLayout>
+
+
+
+        <TextView
+            android:id="@+id/service_txt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="SERVICES"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="30dp"
+            android:textColor="@color/text_color"
+            android:textSize="20dp" />
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_marginLeft="10dp"
+    android:id="@+id/service_layout"
+    >
+
+
+</LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_marginRight="40dp"
+        android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/enter_value"
+        android:layout_toLeftOf="@+id/total_val"
+        android:fontFamily="@font/roboto_regular"
+        android:text="TOTAL:"
+        android:textSize="20dp" />
+
+
+    <TextView
+        android:id="@+id/total_val"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/enter_value"
+        android:fontFamily="@font/roboto_regular"
+        android:textSize="20dp"
+        android:textStyle="bold" />
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/add_service"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:fontFamily="@font/roboto_regular"
+        android:gravity="center"
+        android:text="+ Add another service"
+        android:textSize="20sp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</LinearLayout>
+
+
+
+</ScrollView>
+
+
+    <Button
+        android:id="@+id/next_button"
+        android:layout_alignParentBottom="true"
+        android:text="NEXT"
+        android:background="@drawable/rounded_full_radius"
+        android:textColor="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+</RelativeLayout>

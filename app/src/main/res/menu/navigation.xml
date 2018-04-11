@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_client"
+        android:icon="@drawable/tabclientdark"
+        android:title="@string/clientus" />
+
+    <item
+        android:id="@+id/navigation_invoice"
+        android:icon="@drawable/tabinvoicelight"
+        android:title="@string/invoice" />
+
+    <item
+        android:id="@+id/navigation_stats"
+        android:icon="@drawable/tabstatlight"
+        android:title="@string/stats" />
+
+    <item
+        android:id="@+id/navigation_profile"
+        android:icon="@drawable/tabprofilelight"
+        android:title="@string/profile" />
+
+</menu>

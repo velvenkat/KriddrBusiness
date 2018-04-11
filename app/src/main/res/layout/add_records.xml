@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <RelativeLayout
+        android:id="@+id/camera_layout"
+        android:layout_width="match_parent"
+        android:layout_centerHorizontal="true"
+        android:layout_height="250dp">
+
+
+        <ImageView
+            android:id="@+id/add_photo"
+            android:src="@drawable/upload"
+            android:layout_width="match_parent"
+            android:layout_marginTop="20dp"
+            android:scaleType="fitXY"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_height="250dp" />
+
+
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:padding="20dp"
+        android:layout_below="@+id/camera_layout"
+        android:layout_height="wrap_content">
+
+       <TextView
+           android:id="@+id/doc_txt"
+           android:layout_width="match_parent"
+           android:text="Document name"
+           android:fontFamily="@font/robofont"
+           android:textColor="@color/text_color"
+           android:textSize="20dp"
+           android:layout_height="wrap_content" />
+
+
+
+
+    <EditText
+        android:id="@+id/doc_name"
+        android:layout_marginLeft="10dp"
+        android:layout_below="@+id/doc_txt"
+        android:background="@drawable/rounded_edittext"
+        android:hint="Name"
+        android:layout_marginTop="10dp"
+        android:paddingLeft="15dp"
+        android:selectAllOnFocus="true"
+        android:fontFamily="@font/robofont"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:inputType="textNoSuggestions"
+        android:layout_width="match_parent"
+        android:layout_height="50dp" />
+
+
+
+    <TextView
+        android:id="@+id/category_txt"
+        android:layout_below="@+id/doc_name"
+        android:layout_width="match_parent"
+        android:text="Category"
+        android:layout_marginTop="20dp"
+        android:fontFamily="@font/robofont"
+        android:textColor="@color/text_color"
+        android:textSize="20dp"
+        android:layout_height="wrap_content" />
+
+
+    <Spinner
+        android:id="@+id/category_value"
+        android:layout_below="@+id/category_txt"
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:background="@drawable/bg_spinner"
+        android:layout_height="60dp">
+
+
+    </Spinner>
+
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/submit_button"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:background="@drawable/gradient_bg"
+        android:fontFamily="@font/robofont"
+        android:text="DONE"
+        android:textColor="@color/white"
+        android:layout_height="wrap_content" />
+
+</RelativeLayout>

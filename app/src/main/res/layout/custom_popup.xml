@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:background="@android:color/transparent"
+    android:layout_height="wrap_content" >
+
+
+   <LinearLayout
+       android:orientation="vertical"
+       android:layout_width="match_parent"
+       android:background="@drawable/rounded_popup_window"
+       android:layout_height="wrap_content">
+
+
+    <ImageView
+        android:id="@+id/image"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:src="@drawable/cancel"
+        android:fontFamily="@font/robofont"
+        android:layout_gravity="end"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="10dp"
+        android:textSize="25dp"
+        android:text="X"/>
+
+
+    <TextView
+        android:id="@+id/text"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/robofont"
+        android:gravity="center_horizontal"
+        android:textSize="20dp"
+        android:textColor="@color/black"/>
+
+    <TextView
+        android:id="@+id/text1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/robofont"
+        android:layout_marginTop="20dp"
+        android:textSize="18dp"
+        android:gravity="center_horizontal"
+        android:text="Enter pet parent's phone number"
+        android:textColor="@color/black" />
+
+    <EditText
+        android:id="@+id/edit_text_number"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@drawable/pet_name_edit_background"
+        android:fontFamily="@font/robofont"
+        android:inputType="phone"
+        android:textSize="18dp"
+        android:paddingLeft="10dp"
+        android:textColor="@color/black"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="30dp"
+        android:layout_marginTop="20dp"/>
+
+
+   </LinearLayout>
+
+
+    <Button
+        android:id="@+id/submit_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="SUBMIT"
+        android:fontFamily="@font/robofont"
+        android:textColor="@color/white"
+        android:textSize="18dp"
+        android:background="@drawable/gradient_alert_bg"
+        />
+
+</LinearLayout>

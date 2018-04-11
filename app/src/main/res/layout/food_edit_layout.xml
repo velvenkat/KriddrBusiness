@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:background="@android:color/transparent"
+    android:layout_height="wrap_content" >
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:padding="20dp"
+        android:background="@drawable/rounded_popup_window"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/title"
+            android:gravity="center_horizontal"
+            android:textStyle="bold"
+            android:textSize="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="50dp" />
+
+
+        <ImageView
+            android:id="@+id/image"
+            android:layout_alignParentEnd="true"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:src="@drawable/cancel"
+            android:fontFamily="@font/robofont"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:textSize="25dp"/>
+
+
+        <EditText
+            android:id="@+id/brand_value"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:fontFamily="@font/robofont"
+            android:layout_below="@+id/title"
+            android:layout_alignLeft="@+id/day_month_year"
+            android:layout_marginTop="20dp"
+            android:layout_toRightOf="@+id/brand_txt"
+            android:background="@drawable/rounded_edittext"
+            android:hint="@string/brand"
+            android:paddingBottom="5dp"
+            android:paddingLeft="15dp"
+            android:paddingTop="5dp" />
+
+
+
+        <EditText
+            android:id="@+id/protein_value"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:fontFamily="@font/robofont"
+            android:layout_below="@+id/brand_value"
+            android:layout_alignLeft="@+id/brand_value"
+            android:layout_marginTop="10dp"
+            android:layout_toRightOf="@+id/brand_txt"
+            android:background="@drawable/rounded_edittext"
+            android:hint="@string/proteins"
+            android:paddingBottom="5dp"
+            android:paddingLeft="15dp"
+            android:paddingTop="5dp" />
+
+        <EditText
+            android:id="@+id/servings_value"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:fontFamily="@font/robofont"
+            android:layout_below="@+id/protein_value"
+            android:layout_alignLeft="@+id/protein_value"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/rounded_edittext"
+            android:hint="@string/servings_norm"
+            android:paddingBottom="5dp"
+            android:paddingLeft="15dp"
+            android:paddingTop="5dp"
+            android:visibility="visible" />
+
+
+
+    </RelativeLayout>
+
+
+    <Button
+        android:id="@+id/submit_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="SUBMIT"
+        android:fontFamily="@font/robofont"
+        android:textColor="@color/white"
+        android:textSize="18dp"
+        android:background="@drawable/gradient_alert_bg"
+        />
+
+</LinearLayout>

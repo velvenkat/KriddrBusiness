@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:padding="30dp"
+    android:background="#FFFFFF"
+    android:layout_height="match_parent">
+
+    <AutoCompleteTextView
+        android:id="@+id/search_pet"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:fontFamily="@font/robofont"
+        android:layout_marginLeft="10dp"
+        android:background="@drawable/search_edittext"
+        android:hint="@string/search_document"
+        android:paddingBottom="5dp"
+        android:paddingLeft="25dp"
+        android:paddingTop="5dp" />
+
+    <TextView
+        android:text="OR"
+        android:textSize="20dp"
+        android:layout_marginTop="10dp"
+        android:fontFamily="@font/robofont"
+        android:layout_gravity="center_horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+
+    <AutoCompleteTextView
+        android:id="@+id/search_owner"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginTop="10dp"
+        android:fontFamily="@font/robofont"
+        android:layout_marginLeft="10dp"
+        android:background="@drawable/search_edittext"
+        android:hint="@string/select_category"
+        android:paddingBottom="5dp"
+        android:paddingLeft="25dp"
+        android:paddingTop="5dp" />
+
+
+</LinearLayout>

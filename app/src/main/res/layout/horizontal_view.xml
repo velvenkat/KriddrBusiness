@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:id="@+id/parent_layout"
+
+    android:layout_height="wrap_content">
+
+
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:id="@+id/rl_prof_contr"
+    android:background="#ffffff"
+    android:layout_height="wrap_content">
+    <TextView
+        android:id="@+id/business_record_text"
+        android:text="@string/business_records"
+        android:layout_width="match_parent"
+        android:textSize="16sp"
+        android:textColor="@color/text_color"
+        android:layout_marginLeft="50dp"
+
+        android:layout_height="wrap_content" />
+
+
+    <RelativeLayout
+        android:layout_below="@+id/business_record_text"
+        android:layout_width="match_parent"
+        android:layout_marginTop="10dp"
+        android:layout_height="200dp">
+
+        <ImageView
+            android:id="@+id/img_plus_btn"
+            android:src="@drawable/add"
+            android:layout_width="30dp"
+            android:layout_marginLeft="10dp"
+            android:layout_centerVertical="true"
+            android:layout_height="30dp"/>
+
+
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/catalog_view"
+            android:layout_width="match_parent"
+            android:layout_marginLeft="20dp"
+            android:layout_toRightOf="@+id/img_plus_btn"
+            android:layout_height="match_parent"
+            />
+
+
+
+        <ImageView
+            android:id="@+id/img_next_btn"
+            android:src="@drawable/next_btn"
+            android:layout_width="30dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_height="30dp"/>
+    </RelativeLayout>
+
+
+    </RelativeLayout>
+
+
+
+
+
+</RelativeLayout>

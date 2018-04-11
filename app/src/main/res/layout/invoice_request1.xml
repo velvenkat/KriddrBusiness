@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:id="@+id/profile_layout"
+            android:layout_width="match_parent"
+            android:gravity="center_horizontal"
+            android:background="@drawable/profile_cross_view"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:layout_height="200dp"
+                android:layout_width="200dp"
+                android:src="@drawable/profile"
+                android:id="@+id/imageView1"
+
+                >
+            </ImageView>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/service_text"
+            android:layout_below="@+id/profile_layout"
+            android:padding="30dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/service_txt"
+                android:text="SERVICES"
+                android:textSize="20dp"
+                android:textColor="@color/text_color"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+
+
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/category_service_layout"
+            android:layout_below="@+id/service_text"
+            android:layout_width="match_parent"
+            android:layout_height="100dp">
+
+        <android.support.v7.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_marginLeft="20dp"
+            android:layout_height="match_parent">
+
+
+        </android.support.v7.widget.RecyclerView>
+
+
+
+        </RelativeLayout>
+
+
+
+        <RelativeLayout
+            android:layout_below="@+id/category_service_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:fontFamily="@font/roboto_regular"
+                android:layout_alignParentRight="true"
+                android:textStyle="bold"
+                android:layout_below="@+id/service_text"
+                android:layout_marginEnd="120dp"
+                android:layout_marginRight="120dp"
+                android:text="TOTAL:" />
+
+            <TextView
+                android:layout_below="@+id/textView2"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/robofont"
+                android:text="+ Add another service"
+                android:textSize="18dp"
+                android:gravity="center"
+                android:id="@+id/add_service"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+
+        </RelativeLayout>
+
+
+
+        <Button
+            android:id="@+id/next_button"
+            android:layout_alignParentBottom="true"
+            android:text="NEXT"
+            android:background="@drawable/rounded_full_radius"
+            android:textColor="@color/white"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+
+    </RelativeLayout>
+
+
+
+
+</LinearLayout>

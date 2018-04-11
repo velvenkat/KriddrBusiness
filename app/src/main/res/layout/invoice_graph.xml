@@ -1,0 +1,448 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:background="@color/white"
+            android:layout_marginTop="20dp"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:text="INVOICE HISTORY"
+                android:textSize="20sp"
+                android:textColor="@color/text_color"
+                android:layout_width="match_parent"
+                android:layout_marginLeft="20dp"
+                android:layout_height="wrap_content" />
+
+
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:background="@color/white"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:background="@drawable/graph_button_radius"
+                android:layout_gravity="center_horizontal"
+                android:paddingLeft="40dp"
+                android:paddingRight="40dp"
+                android:paddingTop="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent">
+
+                <android.support.design.widget.TabLayout
+                    android:id="@+id/tabs"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    app:tabGravity="fill"
+                    app:tabMode="fixed"
+                    app:tabPaddingStart="0dp"
+                    app:tabPaddingEnd="0dp"/>
+
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:visibility="visible"
+            android:layout_height="200dp">
+
+
+            <com.github.mikephil.charting.charts.LineChart
+                android:id="@+id/linechart"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+
+        </LinearLayout>
+
+
+
+        <LinearLayout
+            android:visibility="visible"
+            android:background="#FFFFFF"
+            android:layout_marginTop="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/invoice_text"
+                    android:text="INVOICE"
+                    android:textSize="20sp"
+                    android:layout_marginLeft="20dp"
+                    android:textColor="@color/text_color"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:id="@+id/total_sent_invoice"
+                    android:layout_below="@+id/invoice_text"
+                    android:text="Total sent invoice"
+                    android:layout_marginLeft="20dp"
+                    android:textSize="16sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_below="@+id/total_sent_invoice"
+                    android:layout_width="match_parent"
+                    android:padding="10dp"
+                    android:weightSum="4"
+                    android:layout_height="wrap_content">
+
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_weight="1"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/week_value"
+                            android:layout_width="wrap_content"
+                            android:fontFamily="@font/roboto_bold"
+                            android:textSize="16sp"
+                            android:maxLines="1"
+                            android:layout_height="wrap_content" />
+
+
+                        <TextView
+                            android:id="@+id/week_txt"
+                            android:layout_width="wrap_content"
+                            android:text="WEEK"
+                            android:textSize="14sp"
+                            android:fontFamily="@font/roboto_medium"
+                            android:layout_height="wrap_content" />
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_weight="1"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+
+                        <TextView
+                            android:id="@+id/month_value"
+                            android:layout_width="wrap_content"
+                            android:maxLines="1"
+                            android:textSize="16sp"
+                            android:fontFamily="@font/roboto_bold"
+                            android:layout_height="wrap_content" />
+
+
+                        <TextView
+                            android:id="@+id/month_txt"
+                            android:layout_width="wrap_content"
+                            android:fontFamily="@font/roboto_medium"
+                            android:text="MONTH"
+                            android:textSize="14sp"
+                            android:layout_height="wrap_content" />
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_weight="1"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/year_value"
+                            android:layout_width="wrap_content"
+                            android:textSize="16sp"
+                            android:maxLines="1"
+                            android:fontFamily="@font/roboto_bold"
+                            android:layout_height="wrap_content" />
+
+                        <TextView
+                            android:id="@+id/year_txt"
+                            android:layout_width="wrap_content"
+                            android:text="YEAR"
+                            android:textSize="14sp"
+                            android:fontFamily="@font/roboto_medium"
+                            android:layout_height="wrap_content" />
+
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_weight="1"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+
+                        <TextView
+                            android:id="@+id/total_val"
+                            android:layout_width="wrap_content"
+                            android:textSize="16sp"
+                            android:maxLines="1"
+                            android:fontFamily="@font/roboto_bold"
+                            android:layout_height="wrap_content" />
+
+                        <TextView
+                            android:id="@+id/total_txt"
+                            android:layout_width="wrap_content"
+                            android:text="TOTAL"
+                            android:textSize="14sp"
+                            android:fontFamily="@font/roboto_medium"
+                            android:layout_height="wrap_content" />
+
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+
+
+            </RelativeLayout>
+
+
+        </LinearLayout>
+
+
+
+
+
+
+
+        <LinearLayout
+            android:layout_marginTop="20dp"
+            android:background="#FFFFFF"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/revenue_text"
+                    android:text="REVENUE"
+                    android:layout_marginLeft="20dp"
+                    android:textSize="20sp"
+                    android:textColor="@color/text_color"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:id="@+id/total_confirmed_payment"
+                    android:layout_below="@+id/revenue_text"
+                    android:layout_marginLeft="20dp"
+                    android:text="Total confirmed payments"
+                    android:textSize="16sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_below="@+id/total_confirmed_payment"
+                    android:layout_width="match_parent"
+                    android:padding="10dp"
+                    android:weightSum="4"
+                    android:layout_height="wrap_content">
+
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_weight="1"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/revenue_week_value"
+                            android:layout_width="wrap_content"
+                            android:textSize="16sp"
+                            android:fontFamily="@font/roboto_bold"
+                            android:layout_height="wrap_content" />
+
+
+                        <TextView
+                            android:id="@+id/revenue_week_txt"
+                            android:layout_width="wrap_content"
+                            android:text="WEEK"
+                            android:textSize="14sp"
+                            android:fontFamily="@font/roboto_medium"
+                            android:layout_height="wrap_content" />
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_weight="1"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+
+                        <TextView
+                            android:id="@+id/revenue_month_value"
+                            android:layout_width="wrap_content"
+                            android:textSize="16sp"
+                            android:fontFamily="@font/roboto_bold"
+                            android:layout_height="wrap_content" />
+
+
+                        <TextView
+                            android:id="@+id/revenue_month_txt"
+                            android:layout_width="wrap_content"
+                            android:text="MONTH"
+                            android:textSize="14sp"
+                            android:fontFamily="@font/roboto_medium"
+                            android:layout_height="wrap_content" />
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_weight="1"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/revenue_year_value"
+                            android:layout_width="wrap_content"
+                            android:textSize="16sp"
+                            android:fontFamily="@font/roboto_bold"
+                            android:layout_height="wrap_content" />
+
+                        <TextView
+                            android:id="@+id/revenue_year_txt"
+                            android:layout_width="wrap_content"
+                            android:text="YEAR"
+                            android:textSize="14sp"
+                            android:fontFamily="@font/roboto_medium"
+                            android:layout_height="wrap_content" />
+
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_weight="1"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+
+                        <TextView
+                            android:id="@+id/revenue_total_val"
+                            android:layout_width="wrap_content"
+                            android:textSize="16sp"
+                            android:fontFamily="@font/roboto_bold"
+                            android:layout_height="wrap_content" />
+
+                        <TextView
+                            android:id="@+id/revenue_total_txt"
+                            android:layout_width="wrap_content"
+                            android:text="TOTAL"
+                            android:textSize="14sp"
+                            android:fontFamily="@font/roboto_medium"
+                            android:layout_height="wrap_content" />
+
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+
+
+            </RelativeLayout>
+
+
+        </LinearLayout>
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_marginTop="20dp"
+            android:background="@color/white"
+            android:layout_height="300dp">
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:padding="20dp"
+                android:layout_height="match_parent">
+
+
+                <TextView
+                    android:id="@+id/map_text"
+                    android:text="MAP"
+                    android:textSize="20sp"
+                    android:textColor="@color/text_color"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+
+                <fragment
+                    android:layout_below="@+id/map_text"
+                    android:layout_marginTop="10dp"
+                    android:id="@+id/map"
+                    class="com.google.android.gms.maps.SupportMapFragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+
+            </RelativeLayout>
+
+
+        </LinearLayout>
+
+
+
+
+
+    </LinearLayout>
+
+
+</ScrollView>

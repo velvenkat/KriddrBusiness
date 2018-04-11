@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+
+
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:padding="20dp"
+        android:layout_marginTop="30dp"
+        android:layout_height="match_parent">
+
+
+
+        <ImageView
+            android:id="@+id/profile_icon"
+            android:layout_width="30dp"
+            android:layout_alignBottom="@+id/flname"
+            android:layout_alignTop="@+id/flname"
+            android:src="@drawable/person"
+            android:layout_height="30dp"
+            android:layout_alignParentTop="true"/>
+
+
+        <EditText
+            android:id="@+id/flname"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@+id/profile_icon"
+            android:background="@drawable/rounded_edittext"
+            android:hint="@string/first_lastName"
+            android:fontFamily="@font/robofont"
+            android:paddingLeft="15dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:inputType="textNoSuggestions"
+            android:layout_width="match_parent"
+            android:layout_height="50dp" />
+
+
+        <ImageView
+            android:id="@+id/phone_icon"
+            android:layout_width="30dp"
+            android:layout_alignBottom="@+id/mobile"
+            android:layout_alignTop="@+id/mobile"
+            android:layout_below="@+id/profile_icon"
+            android:src="@drawable/phone"
+            android:layout_height="30dp"/>
+
+
+        <EditText
+            android:id="@+id/mobile"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="10dp"
+            android:layout_below="@+id/profile_icon"
+            android:layout_toRightOf="@+id/phone_icon"
+            android:background="@drawable/rounded_edittext"
+            android:hint="@string/mobile_num"
+            android:paddingLeft="15dp"
+            android:fontFamily="@font/robofont"
+            android:inputType="phone"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="50dp" />
+
+
+
+    </RelativeLayout>
+
+
+
+    <Button
+        android:id="@+id/login_button"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:fontFamily="@font/robofont"
+        android:background="@drawable/gradient_bg"
+        android:text="@string/login"
+        android:textSize="18dp"
+        android:textColor="@color/white"
+        android:layout_height="wrap_content" />
+
+</RelativeLayout>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tabs"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:tabGravity="fill"
+            app:tabMode="fixed"
+            app:tabPaddingStart="0dp"
+            app:tabPaddingEnd="0dp"/>
+
+
+
+
+
+
+
+
+
+    <ScrollView
+        android:layout_above="@+id/btnConfirm"
+        android:layout_marginTop="40dp"
+        android:layout_below="@+id/tabs"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+
+        <LinearLayout
+            android:id="@+id/invoice_main_layout"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+
+
+
+        </LinearLayout>
+
+
+
+
+    </ScrollView>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Confirm"
+        android:textColor="#ffffff"
+        android:visibility="gone"
+        android:fontFamily="@font/roboto_light"
+        android:background="@drawable/gradient_bg"
+        android:layout_alignParentBottom="true"
+        android:id="@+id/btnConfirm"
+        />
+</RelativeLayout>
