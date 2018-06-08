@@ -31,18 +31,18 @@
         android:id="@+id/text"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/robofont"
+        android:fontFamily="@font/roboto_medium"
         android:gravity="center_horizontal"
-        android:textSize="20dp"
+        android:textSize="21dp"
         android:textColor="@color/black"/>
 
     <TextView
         android:id="@+id/text1"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/robofont"
+        android:fontFamily="@font/roboto_regular"
         android:layout_marginTop="20dp"
-        android:textSize="18dp"
+        android:textSize="17sp"
         android:gravity="center_horizontal"
         android:text="Enter pet parent's phone number"
         android:textColor="@color/black" />
@@ -52,7 +52,7 @@
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:background="@drawable/pet_name_edit_background"
-        android:fontFamily="@font/robofont"
+        android:fontFamily="@font/roboto_regular"
         android:inputType="phone"
         android:textSize="18dp"
         android:paddingLeft="10dp"
@@ -63,18 +63,20 @@
         android:layout_marginTop="20dp"/>
 
 
+       <Button
+           android:id="@+id/submit_btn"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:text="SUBMIT"
+           android:fontFamily="@font/roboto_medium"
+           android:textColor="@color/white"
+           android:textSize="18dp"
+           android:background="@drawable/gradient_alert_bg" />
+
+
    </LinearLayout>
 
 
-    <Button
-        android:id="@+id/submit_btn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="SUBMIT"
-        android:fontFamily="@font/robofont"
-        android:textColor="@color/white"
-        android:textSize="18dp"
-        android:background="@drawable/gradient_alert_bg"
-        />
+
 
 </LinearLayout>

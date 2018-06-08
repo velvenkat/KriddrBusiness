@@ -43,36 +43,20 @@ public class KridderNavigationActivity extends AppCompatActivity implements Inte
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_client:
-//                    mTextMessage.setText(R.string.title_home);
-
                     fragmentCall_mainObj.Fragment_call(new ClientFragment(),"clientfrag",null);
-
                     return true;
                 case R.id.navigation_invoice:
-                  //  mTextMessage.setText(R.string.title_dashboard);
-
-                   // fragmentCall_mainObj.Fragment_call(new InvoiceFragment(),"invoicefrag",null);
 
                     fragmentCall_mainObj.Fragment_call(new InvoiceViewFragment(),"invoicefrag",null);
                     return true;
                 case R.id.navigation_stats:
-                  //  mTextMessage.setText(R.string.title_notifications);
 
                     fragmentCall_mainObj.Fragment_call(new InvoiceHistory(),"invoicehist",null);
                     return true;
 
                 case R.id.navigation_profile:
-                  //  mTextMessage.setText(R.string.title_dashboard);
 
-                   // fragmentCall_mainObj=new GenFragmentCall_Main(KridderNavigationActivity.this);
                     fragmentCall_mainObj.Fragment_call(new ProfileFragment(),"profilefrag",null);
-                 /*   Fragment test;
-                    FragmentManager fragmentManager = getSupportFragmentManager();
-                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    test = new ProfileFragment();
-                    fragmentTransaction.replace(R.id.frame_layout,test,"profilefrag");
-                    fragmentTransaction.addToBackStack("profilefrag");
-                    fragmentTransaction.commit();*/
                     return true;
             }
             return false;
@@ -105,7 +89,6 @@ public class KridderNavigationActivity extends AppCompatActivity implements Inte
 
        fragmentCall_mainObj.Fragment_call(new ClientFragment(),"clientfrag",null);
 
-        //Toast.makeText(this,"USERID"+userModel.getId(),Toast.LENGTH_SHORT).show();
        ScreenFromVal=getIntent().getIntExtra(MainActivity.SCREEN_FROM_TAG,-1);
 
 
@@ -175,8 +158,6 @@ public class KridderNavigationActivity extends AppCompatActivity implements Inte
         super.onBackPressed();
 
         final int frag_count = getSupportFragmentManager().getBackStackEntryCount();
-        // Toast.makeText(MainActivity.this,"Count "+frag_count,Toast.LENGTH_SHORT).show();
-        Log.d("FRAGCOUNT", "FRAGCOUNT" + frag_count);
 
 
         if (frag_count == 0) {

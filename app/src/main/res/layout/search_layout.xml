@@ -10,7 +10,8 @@
         android:id="@+id/search_pet"
         android:layout_width="match_parent"
         android:layout_height="45dp"
-        android:fontFamily="@font/robofont"
+        android:fontFamily="@font/roboto_regular"
+        android:textSize="17sp"
         android:layout_marginLeft="10dp"
         android:background="@drawable/search_edittext"
         android:hint="@string/search_pet"
@@ -20,9 +21,9 @@
 
     <TextView
         android:text="OR"
-        android:textSize="20dp"
+        android:textSize="17sp"
         android:layout_marginTop="10dp"
-        android:fontFamily="@font/robofont"
+        android:fontFamily="@font/roboto_regular"
         android:layout_gravity="center_horizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
@@ -33,8 +34,10 @@
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:layout_marginTop="10dp"
-        android:fontFamily="@font/robofont"
+        android:fontFamily="@font/roboto_regular"
         android:layout_marginLeft="10dp"
+        android:textSize="17sp"
+        android:imeOptions="actionDone"
         android:background="@drawable/search_edittext"
         android:hint="@string/search_owner"
         android:paddingBottom="5dp"

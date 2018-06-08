@@ -122,6 +122,13 @@ public class NotesFragment extends Fragment {
         });
 
         actionBarUtilObj.setTitle("BACK");
+        actionBarUtilObj.getTitle().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((AppCompatActivity) getActivity()).getSupportFragmentManager().popBackStackImmediate();
+
+            }
+        });
 
 
         add_Notes = (ImageView)rootView.findViewById(R.id.add_Notes);
@@ -186,7 +193,16 @@ public class NotesFragment extends Fragment {
 
                 String notes = enter_notes.getText().toString().trim();
 
-                addNotes(getResources().getString(R.string.url_reference) + "pet_notes_creation.php",notes);
+                if(notes.equals("") || notes.isEmpty())
+                {
+                    Toast.makeText(getActivity(),"Please enter the notes",Toast.LENGTH_SHORT).show();
+                }
+                else
+                {
+                    addNotes(getResources().getString(R.string.url_reference) + "pet_notes_creation.php",notes);
+                }
+
+
 
 
             }
@@ -256,6 +272,7 @@ public class NotesFragment extends Fragment {
                 params.put("user_id",userModel.getId());
                 params.put("pet_id",pet_id);
                 params.put("notes",notes);
+                params.put("user_type","business");
 
                 return params;
             }
@@ -320,8 +337,6 @@ public class NotesFragment extends Fragment {
 
 
 
-//                feedlist = BaseUnitParser.parserFeed(s);
-//                display_data();
 
             }
         }, new Response.ErrorListener() {

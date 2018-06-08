@@ -131,9 +131,6 @@ public class AddInvoiceFragment extends Fragment {
             @Override
             public void onClick(View view) {
 
-//                Gson gson = new Gson();
-//                String jsonValue=gson.toJson(flower);
-//                Log.e("d","d"+jsonValue);
 
                 String invoice_select = "", invoice_value = "";
 
@@ -154,47 +151,7 @@ public class AddInvoiceFragment extends Fragment {
                     bundle.putParcelable("flower_model", flower);
                     fragmentCall_mainObj.Fragment_call(new AddInvoiceCommentsFragment(), "addinvoicecomments", bundle);
 
-
-
-//
-//                    Fragment test;
-//                    android.support.v4.app.FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-//                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//                    test = new AddInvoiceCommentsFragment();
-//
-//                    Bundle bundle= new Bundle();
-//                    bundle.putString("pet_id",pet_id);
-//                    bundle.putString("pet_photo",pet_photo);
-//                    test.setArguments(bundle);
-//
-//                    fragmentTransaction.replace(R.id.frame_layout,test,"addinvoicecomments");
-//                    fragmentTransaction.addToBackStack(AddInvoiceFragment.class.getName());
-//                    fragmentTransaction.commit();
-
-
-
-                    //fragmentCall_mainObj.Fragment_call(new AddInvoiceFragment(),"addinvoice",bundle);
                 }
-
-
-//
-//                    for (int index = 0; index < flower.getServices().size(); index++) {
-//                    String invoice_select = flower.getServices().get(index).getInvoice_service_id();
-//                    String invoice_value = flower.getServices().get(index).getAmount();
-//
-//                    if (invoice_select.equalsIgnoreCase("Select") || invoice_value.equals("")) {
-//                        Toast.makeText(getActivity(), "Please choose the valid data", Toast.LENGTH_SHORT).show();
-//                        break;
-//                    }
-//                    else {
-//
-//                        Bundle bundle= new Bundle();
-//                        bundle.putString("pet_photo",pet_photo);
-//                        fragmentCall_mainObj.Fragment_call(new AddInvoiceCommentsFragment(), "addinvoicecomments", bundle);
-//                    }
-//
-//                }
-
 
             }
         });
@@ -234,53 +191,7 @@ public class AddInvoiceFragment extends Fragment {
         category_service.setTag(INVOICE_ADDED);
         category_service.setOnItemSelectedListener(new SpinnerSelectedListener(INVOICE_ADDED));
         price_value.addTextChangedListener(new TextChangeListener(price_value, INVOICE_ADDED));
-/*
-        category_service.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-
-                boolean isnotExist = true;
-
-
-                inv_id = invoiceserviceIdList.get(position).toString();
-                inv_ser_name = invoiceserviceNameList.get(position).toString();
-
-                for (int index = 0; index < flower.getServices().size(); index++) {
-                    String invoiceid = flower.getServices().get(index).getInvoice_service_id();
-
-                    if (invoiceid.equalsIgnoreCase(inv_id) && !(inv_id.equalsIgnoreCase("Select"))) {
-                        isnotExist = false;
-                        category_service.setSelection(0);
-                        Toast.makeText(getActivity(), "This service already choosed", Toast.LENGTH_SHORT).show();
-                        break;
-                    }
-                }
-
-
-                if (isnotExist) {
-                    if (flower.getServices().size() > 0) {
-                        if (flower.getServices().size() >= position + 1) {
-                            flower.getServices().get(position).setInvoice_service_id(inv_id);
-                        }
-                    } else {
-                        InvoiceValueModel invoice = new InvoiceValueModel();
-                        invoice.setInvoice_service_id(inv_id);
-                        flower.getServices().add(invoice);
-                    }
-                }
-
-
-                //   if(invoiceserviceNameList)
-
-
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });*/
 
 
         service_layout.addView(view1);
@@ -306,8 +217,6 @@ public class AddInvoiceFragment extends Fragment {
 
                 if (invoiceid.equalsIgnoreCase(inv_id) && !(inv_id.equalsIgnoreCase("Select"))) {
                     isnotExist = false;
-                    /*category_servi
-                    category_service.getTag()setSelection(0);*/
                     ((Spinner) adapterView.findViewById(R.id.category_service)).setSelection(0);
                     Toast.makeText(getActivity(), "This service already choosed", Toast.LENGTH_SHORT).show();
                     break;
@@ -405,8 +314,6 @@ public class AddInvoiceFragment extends Fragment {
             @Override
             public void onResponse(String s) {
 
-                Log.d("CATEGORLIST", "CATEGORLIST" + s);
-
                 invoiceserviceIdList.clear();
                 invoiceserviceNameList.clear();
 
@@ -420,15 +327,12 @@ public class AddInvoiceFragment extends Fragment {
 
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject obj = jsonArray.getJSONObject(i);
-                        // InvoiceValueModel invoice = new InvoiceValueModel();
 
-                        // invoice.setInvoice_service_id(obj.getString("invoice_service_id"));
                         invoice_service_id = obj.getString("invoice_service_id");
                         invoice_service_name = obj.getString("invoice_service_name");
 
                         invoiceserviceIdList.add(invoice_service_id);
                         invoiceserviceNameList.add(invoice_service_name);
-                        // flower.getServices().add(invoice);
                         category_service.setEnabled(true);
 
 

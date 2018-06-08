@@ -29,6 +29,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.util.Base64;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,6 +53,8 @@ import com.purple.kriddr.model.UserModel;
 import com.purple.kriddr.util.ActionBarUtil;
 import com.purple.kriddr.util.GenFragmentCall_Main;
 import com.purple.kriddr.util.NetworkConnection;
+import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
 
 import org.json.JSONObject;
 
@@ -67,6 +70,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static android.app.Activity.RESULT_OK;
 import static com.bumptech.glide.load.resource.bitmap.TransformationUtils.rotateImage;
 
 /**
@@ -140,6 +144,13 @@ public class PetClientCreationFragment extends Fragment implements View.OnClickL
 
 
         actionBarUtilObj.setTitle("Back");
+        actionBarUtilObj.getTitle().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((AppCompatActivity) getActivity()).getSupportFragmentManager().popBackStackImmediate();
+
+            }
+        });
 
         Bundle bundle_args=getArguments();
         if(bundle_args!=null) {
@@ -216,14 +227,6 @@ public class PetClientCreationFragment extends Fragment implements View.OnClickL
         day_month_year.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-//                new DatePickerDialog(getActivity(), pickup_date, myCalendar1
-//                        .get(Calendar.YEAR), myCalendar1.get(Calendar.MONTH),
-//                        myCalendar1.get(Calendar.DAY_OF_MONTH)).show();
-//
-//
-//                updatePickupDate();
-
 
                 datePickerDialog.show();
 
@@ -311,161 +314,94 @@ public class PetClientCreationFragment extends Fragment implements View.OnClickL
 
 
 
-    private void performCrop(Uri picUri) {
-
-        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
-        StrictMode.setVmPolicy(builder.build());
-
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-            builder.detectFileUriExposure();
-        }
-
-        if (checkPermissionForExternalStorage()||checkPermissionForCamera())
-        {
-            try {
-                Intent cropIntent = new Intent("com.android.camera.action.CROP");
-                // indicate image type and Uri
-                cropIntent.setDataAndType(picUri, "image/*");
-                // set crop properties here
-                cropIntent.putExtra("crop", true);
-                // indicate aspect of desired crop
-                cropIntent.putExtra("aspectX", 1);
-                cropIntent.putExtra("aspectY", 1);
-                // indicate output X and Y
-                cropIntent.putExtra("outputX", 128);
-                cropIntent.putExtra("outputY", 128);
-                // retrieve data on return
-                cropIntent.putExtra("return-data", true);
-                // start the activity - we handle returning in onActivityResult
-                startActivityForResult(cropIntent, PIC_CROP);
-            }
-            // respond to users whose devices do not support the crop action
-            catch (ActivityNotFoundException anfe) {
-                // display an error message
-                String errorMessage = "Whoops - your device doesn't support the crop action!";
-                Toast toast = Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_SHORT);
-                toast.show();
-            }
-
-        }
-
-
-
-    }
-
-
-
-
     public String getStringImage(Bitmap bmp) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bmp.compress(Bitmap.CompressFormat.JPEG, 70, baos);
+        bmp.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         byte[] imageBytes = baos.toByteArray();
         String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
         return encodedImage;
     }
+    public void _handleBackKey(){
+        rootView.setFocusableInTouchMode(true);
+        rootView.requestFocus();
 
+        rootView.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_BACK && (event.getAction() == KeyEvent.ACTION_UP)) {
+                    //alert_Back(getActivity());
+                    getActivity().setResult(Activity.RESULT_CANCELED);
+                    return true;
+                }
+                return false;
+            }
+        });
 
-    private static Bitmap rotateImageIfRequired(Bitmap img, Uri selectedImage) throws IOException {
-
-        ExifInterface ei = new ExifInterface(selectedImage.getPath());
-        int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
-
-        switch (orientation) {
-            case ExifInterface.ORIENTATION_ROTATE_90:
-                return rotateImage(img, 90);
-            case ExifInterface.ORIENTATION_ROTATE_180:
-                return rotateImage(img, 180);
-            case ExifInterface.ORIENTATION_ROTATE_270:
-                return rotateImage(img, 270);
-            default:
-                return img;
-        }
     }
 
-    public Bitmap getResizedBitmap(Bitmap image, int maxSize) {
-        int width = image.getWidth();
-        int height = image.getHeight();
 
-        float bitmapRatio = (float) width / (float) height;
-        if (bitmapRatio > 0) {
-            width = maxSize;
-            height = (int) (width / bitmapRatio);
-        } else {
-            height = maxSize;
-            width = (int) (height * bitmapRatio);
-        }
-        return Bitmap.createScaledBitmap(image, width, height, true);
-    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(resultCode == Activity.RESULT_OK) {
-            if(requestCode == PIC_CROP)
+
+        if (resultCode == Activity.RESULT_OK) {
             {
+                if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+                    CropImage.ActivityResult result = CropImage.getActivityResult(data);
+                    if (resultCode == RESULT_OK) {
+                        ((ImageView) getActivity().findViewById(R.id.add_photo)).setImageURI(result.getUri());
 
-                if (data != null) {
-                    Uri extras = data.getData();
+                        picUri = result.getUri();
+                        try {
+                            selectedBitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), picUri);
 
-                    try {
 
-
-                        selectedBitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(),extras);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
 
 
                         RoundedBitmapDrawable drawable = RoundedBitmapDrawableFactory.create(getResources(), selectedBitmap);
                         drawable.setCircular(true);
                         add_Photo.setImageDrawable(drawable);
-                    }
-                    catch (Exception e)
-                    {
-                        e.printStackTrace();
-                    }
 
 
+                        // Toast.makeText(getActivity(), "Cropping successful, Sample: " + result.getSampleSize(), Toast.LENGTH_LONG).show();
+                    } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                        Toast.makeText(getActivity(), "Cropping failed: " + result.getError(), Toast.LENGTH_LONG).show();
+                    }
 
 
                 }
-            }
+                if (requestCode == PICK_IMAGE_REQUEST) {
+                    if (getPickImageResultUri(data) != null) {
+                        picUri = getPickImageResultUri(data);
+
+                        CropImage.activity(picUri)
+                                .setGuidelines(CropImageView.Guidelines.OFF)
+                                .setActivityTitle("My Crop")
+                                .setCropShape(CropImageView.CropShape.OVAL)
+                                .setCropMenuCropButtonTitle("Done")
+                                .setMinCropResultSize(400, 400)
+                                .setMaxCropResultSize(1500, 1500)
+                                .setAspectRatio(1, 1)
+                                .start(getContext(),this);
 
 
-            if (requestCode == PICK_IMAGE_REQUEST)
-            {
 
 
-                if (getPickImageResultUri(data) != null) {
-                    picUri = getPickImageResultUri(data);
-
-
-                    performCrop(picUri);
-
-//                try {
-//                    bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), picUri);
-//                    bitmap = rotateImageIfRequired(bitmap, picUri);
-//                    bitmap = getResizedBitmap(bitmap, 200);
-//
-//
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-
-
+                    }
                 }
-//                else {
-//
-//
-//                    bitmap = (Bitmap) data.getExtras().get("data");
-//
-//                }
             }
 
-//            RoundedBitmapDrawable drawable = RoundedBitmapDrawableFactory.create(getResources(), bitmap);
-//            drawable.setCircular(true);
-//            add_photo.setImageDrawable(drawable);
         }
 
 
+
     }
+
+
+
 
 
     public Uri getPickImageResultUri(Intent data) {
@@ -481,8 +417,7 @@ public class PetClientCreationFragment extends Fragment implements View.OnClickL
 
 
     private void showFileChooser() {
-        //  Intent i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        // startActivityForResult(i, PICK_IMAGE_REQUEST);
+
 
         startActivityForResult(getPickImageChooserIntent(), PICK_IMAGE_REQUEST);
 
@@ -518,18 +453,6 @@ public class PetClientCreationFragment extends Fragment implements View.OnClickL
         if (petnameVal.isEmpty() || petnameVal.equals("")) {
             Toast.makeText(getActivity(), getResources().getString(R.string.enter_pet_name), Toast.LENGTH_SHORT).show();
         }
-//        else if (daymonthyear.isEmpty() || daymonthyear.equals("")) {
-//            Toast.makeText(getActivity(), getResources().getString(R.string.enter_dob), Toast.LENGTH_SHORT).show();
-//        }
-//        else if (brandVal.isEmpty() || brandVal.equals("")) {
-//            Toast.makeText(getActivity(), getResources().getString(R.string.enter_brand), Toast.LENGTH_SHORT).show();
-//        }
-//        else if (proteinVal.isEmpty() || proteinVal.equals("")) {
-//            Toast.makeText(getActivity(), getResources().getString(R.string.enter_protein), Toast.LENGTH_SHORT).show();
-//        }
-//        else if (servingVal.isEmpty() || servingVal.equals("")) {
-//            Toast.makeText(getActivity(), getResources().getString(R.string.enter_servings), Toast.LENGTH_SHORT).show();
-//        }
         else if (nameVal.isEmpty() || nameVal.equals("")) {
             Toast.makeText(getActivity(), "Please enter pet parent name", Toast.LENGTH_SHORT).show();
 
@@ -545,10 +468,6 @@ public class PetClientCreationFragment extends Fragment implements View.OnClickL
         {
             Toast.makeText(getActivity(), "Invalid Email", Toast.LENGTH_SHORT).show();
         }
-//        else if (addressVal.isEmpty() || addressVal.equals("")) {
-//            Toast.makeText(getActivity(), getResources().getString(R.string.enter_address), Toast.LENGTH_SHORT).show();
-//
-//        }
 
         else {
             if (NetworkConnection.isOnline(getActivity())) {
@@ -615,6 +534,8 @@ public class PetClientCreationFragment extends Fragment implements View.OnClickL
             @Override
             public void onErrorResponse(VolleyError volleyError) {
                 // progress.hide();
+
+                Log.d("ERRORES","ERRORES"+volleyError.getMessage());
 
                 myProgressDialog.hide();
 

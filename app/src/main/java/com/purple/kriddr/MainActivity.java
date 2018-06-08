@@ -44,8 +44,6 @@ public class MainActivity extends AppCompatActivity implements FragmentCallInter
             userModelObj = getIntent().getParcelableExtra(KridderNavigationActivity.USER_MODEL_TAG);
 
 
-            Log.d("PageFrom", "SCREEN From" + Screen_From_Val + "VA " + userModelObj.getBusiness_name());
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -86,10 +84,6 @@ public class MainActivity extends AppCompatActivity implements FragmentCallInter
         super.onBackPressed();
 
         final int frag_count = getSupportFragmentManager().getBackStackEntryCount();
-        // Toast.makeText(MainActivity.this,"Count "+frag_count,Toast.LENGTH_SHORT).show();
-        Log.d("FRAGCOUNT", "FRAGCOUNT" + frag_count);
-
-
         if (frag_count == 0) {
             finish();
         }

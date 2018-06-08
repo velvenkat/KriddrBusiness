@@ -71,9 +71,7 @@ public class GenreAdapter extends MultiTypeExpandableRecyclerViewAdapter<GenreVi
 
     @Override
     public ChildViewHolder onCreateChildViewHolder(ViewGroup parent, int viewType) {
-        /*LayoutInflater inflater=LayoutInflater.from(context);
-        View view = inflater.inflate(R.invoice_graph.scrn_inv_expand_child, parent, false);
-        return new InvoiceViewHolder(view);*/
+
         LayoutInflater inflater = LayoutInflater.from(context);
 
         switch (viewType) {
@@ -83,8 +81,6 @@ public class GenreAdapter extends MultiTypeExpandableRecyclerViewAdapter<GenreVi
             case PaymentRecdType:
                 View favorite = inflater.inflate(R.layout.bottom_payment_recd, parent, false);
                 PaymentRecivedViewHolder payRecdHolder = new PaymentRecivedViewHolder(getAdapter_Pos(),favorite, mListenr);
-         //       Toast.makeText(context, "Hdr Pos" + UpdateHdrPos, Toast.LENGTH_SHORT).show();
-             //   payRecdHolder.setFLATPOSITION(UpdateHdrPos);
                 return payRecdHolder;
             default:
                 throw new IllegalArgumentException("Invalid viewType");
@@ -116,8 +112,7 @@ public class GenreAdapter extends MultiTypeExpandableRecyclerViewAdapter<GenreVi
     @Override
     public void onBindChildViewHolder(ChildViewHolder holder, int flatPosition, ExpandableGroup group,
                                       int childIndex) {
-       /* final InvoiceDetailsInfoModel artist = ((Genre) group).getItems().get(childIndex);
-        holder.setArtistName(artist.getInvoice_month_day());*/
+
         int viewType = getItemViewType(flatPosition);
 
         InvoiceDetailsInfoModel artist = ((Genre) group).getItems().get(childIndex);
@@ -138,18 +133,6 @@ public class GenreAdapter extends MultiTypeExpandableRecyclerViewAdapter<GenreVi
         }
     }
 
-
-
-   /* @Override
-    public int getItemViewType(int position) {
-        return position;
-    }
-
-    @Override
-    public long getItemId(int i) {
-        return i;
-    }
-*/
 
     @Override
     public void onBindGroupViewHolder(GenreViewHolder holder, int flatPosition,

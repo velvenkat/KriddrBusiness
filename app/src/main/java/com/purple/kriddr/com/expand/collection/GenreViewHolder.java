@@ -35,7 +35,6 @@ public class GenreViewHolder extends GroupViewHolder {
     @Override
     public void onClick(View v) {
         super.onClick(v);
-     //   ((TextView)v.findViewById(R.id.txtPetName)).setText("Di ");
         ImageView imgIndicator=(ImageView) v.findViewById(R.id.imgIndicator);
         if(imgIndicator.getTag().toString().equalsIgnoreCase("up")){
             imgIndicator.setImageResource(R.drawable.expan);
@@ -52,7 +51,6 @@ public class GenreViewHolder extends GroupViewHolder {
    public void setImgTickChange(boolean visiblle){
             if(visiblle) {
                 imgTick.setVisibility(View.VISIBLE);
-                //txtTotalAmt.setTextColor(R.color.text_green_color);
 
                 txtTotalAmt.setTextColor(Color.parseColor("#a3d69a"));
             }

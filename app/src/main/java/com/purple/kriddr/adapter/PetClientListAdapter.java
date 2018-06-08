@@ -51,7 +51,6 @@ public class PetClientListAdapter extends RecyclerView.Adapter<PetClientListAdap
     public void onBindViewHolder(final PetClientListAdapter.MyViewHolder holder, int position) {
 
         final PetModel nature = clientList.get(position);
-        Log.d("ONCIMB","ONCIMB");
 
         holder.first_Name.setText(nature.getPet_name());
         holder.second_Name.setText(nature.getOwner_name());
@@ -60,45 +59,20 @@ public class PetClientListAdapter extends RecyclerView.Adapter<PetClientListAdap
             @Override
             public void onClick(View view) {
 
-                Log.d("PETCLIEMADA","PETCLIEMADA"+nature.getOwwner_id() + "PET ID"+nature.getPet_id());
 
                 dataFromAdapterToFragment.getClientInfo(nature.getPet_id(),nature.getOwwner_id());
             }
         });
 
-        //  Glide.with(context).load(ImageList.get(position)).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(holder.imageView);
+        if(nature.getPhoto().isEmpty() || nature.getPhoto().equals(""))
+        {
+            holder.imageView.setImageResource(R.drawable.defaultpetphoto);
+        }
+        else
+        {
+            Glide.with(context).load(nature.getPhoto()).transform(new CircleTransform(context)).into(holder.imageView);
+        }
 
-
-        //Rounded Set Image through XML
-        // Glide.with(context).load(ImageList.get(position)).bitmapTransform(new CenterCrop(context)).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(holder.imageView);
-
-        Glide.with(context).load(nature.getPhoto()).transform(new CircleTransform(context)).into(holder.imageView);
-
-
-
-
-//        Picasso.with(context)
-//                .load(ImageList.get(position))
-//                .into(new Target() {
-//                    @Override
-//                    public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-//                        // loaded bitmap is here (bitmap)
-//
-//                        RoundedBitmapDrawable drawable = RoundedBitmapDrawableFactory.create(context.getResources(), bitmap);
-//                        drawable.setCircular(true);
-//                        holder.imageView.setImageDrawable(drawable);
-//                    }
-//
-//                    @Override
-//                    public void onBitmapFailed(Drawable errorDrawable) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onPrepareLoad(Drawable placeHolderDrawable) {
-//
-//                    }
-//                });
 
 
 

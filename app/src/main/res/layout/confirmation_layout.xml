@@ -12,9 +12,9 @@
         android:text="@string/verification_message"
         android:layout_gravity="center_horizontal"
         android:gravity="center"
-        android:fontFamily="@font/robofont"
+        android:textColor="@color/text_name_color"
+        android:fontFamily="@font/roboto_regular"
         android:textSize="18sp"
-
         android:layout_marginBottom="@dimen/pin_label_margin" />
 
     <LinearLayout

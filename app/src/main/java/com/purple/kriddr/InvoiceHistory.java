@@ -44,19 +44,6 @@ import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.listener.ChartTouchListener;
 import com.github.mikephil.charting.listener.OnChartGestureListener;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.purple.kriddr.controller.AppController;
 import com.purple.kriddr.iface.FragmentCallInterface;
 import com.purple.kriddr.iface.InterfaceActionBarUtil;
@@ -84,7 +71,7 @@ import java.util.Map;
  * Created by pf-05 on 3/19/2018.
  */
 
-public class InvoiceHistory extends Fragment implements OnChartGestureListener, OnChartValueSelectedListener, LocationListener, OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+public class InvoiceHistory extends Fragment implements OnChartGestureListener, OnChartValueSelectedListener {
 
     ActionBarUtil actionBarUtilObj;
     GenFragmentCall_Main fragmentCall_mainObj;
@@ -92,12 +79,7 @@ public class InvoiceHistory extends Fragment implements OnChartGestureListener, 
     UserModel userModel;
     TabLayout tabLayout;
     private LineChart mchart;
-    private GoogleMap googleMapObj;
-    GoogleApiClient mGoogleApiClient;
-    LocationRequest mLocationRequest;
-    Marker mCurrLocationMarker;
     Context context;
-    Location mLastLocation;
     String key = "";
     JSONObject graphJsonObject;
     InvoiceModelGraph invoiceModelGraph;
@@ -122,6 +104,7 @@ public class InvoiceHistory extends Fragment implements OnChartGestureListener, 
 
         mchart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
         mchart.getXAxis().setDrawGridLines(false);
+
 
 
 
@@ -197,10 +180,6 @@ public class InvoiceHistory extends Fragment implements OnChartGestureListener, 
             }
         });
 
-        SupportMapFragment mapFragment = (SupportMapFragment) this.getChildFragmentManager()
-                .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
-
 
         if (NetworkConnection.isOnline(getActivity())) {
             invoiceHistoryDetails(getResources().getString(R.string.url_reference) + "invoice_week_month_year.php");
@@ -228,10 +207,7 @@ public class InvoiceHistory extends Fragment implements OnChartGestureListener, 
                 try {
                     JSONObject jsonObject = new JSONObject(s);
                     JSONArray jsonArray = jsonObject.getJSONArray("response");
-                     //xVals.add("0");
-//
-//                    xVals = new ArrayList<String>();
-//                    yVals = new ArrayList<Entry>();
+
 
                     for (int index = 0; index < jsonArray.length(); index++) {
                         invoiceModelGraph = new InvoiceModelGraph();
@@ -245,7 +221,7 @@ public class InvoiceHistory extends Fragment implements OnChartGestureListener, 
 
                         if(!xAxis.equalsIgnoreCase("Empty") )
                         {
-                            int yAxis=graphJsonObject.getInt("yaxis");
+                            int yAxis= graphJsonObject.getInt("yaxis");
                             xVals.add(xAxis);
                             yVals.add(new Entry(Float.valueOf(yAxis), index));
                             if(yAxis>Y_VAL_MAX)
@@ -263,15 +239,10 @@ public class InvoiceHistory extends Fragment implements OnChartGestureListener, 
 
 
                     }
-                    // add data
 
-
-                    //JSONObject jsonObject1 = new JSONObject("sent_invoice_total");
 
                     JSONObject basic = jsonObject.getJSONObject("sent_invoice_total");
 
-
-                    Log.d("KGDFASDF","KGDFASDF"+basic);
 
 
                     String wee_amount = "", month_amount = "", year_amount= "", total= "", rev_amount_week = "" , rev_amount_month = "", rev_amount_year = "", rev_amount_total = "";
@@ -402,7 +373,7 @@ public class InvoiceHistory extends Fragment implements OnChartGestureListener, 
 
     private void setupTabIcons() {
 
-        View tabOne = (View) LayoutInflater.from(getContext()).inflate(R.layout.custom_tab_btn, null);
+        View tabOne = (View) LayoutInflater.from(getContext()).inflate(R.layout.custom_tab_btn_graph, null);
         TextView txtTab1 = (TextView) tabOne.findViewById(R.id.tab);
         txtTab1.setText("WEEK");
         TabLayout.Tab tab = tabLayout.newTab();
@@ -411,91 +382,34 @@ public class InvoiceHistory extends Fragment implements OnChartGestureListener, 
         tabOne.setBackgroundResource(R.drawable.rounded_cornor_tab);
 
 
-        View tabTwo = (View) LayoutInflater.from(getContext()).inflate(R.layout.custom_tab_btn, null);
+        View tabTwo = (View) LayoutInflater.from(getContext()).inflate(R.layout.custom_tab_btn_graph, null);
         TextView txtTab2 = (TextView) tabTwo.findViewById(R.id.tab);
         txtTab2.setText("MONTH");
         TabLayout.Tab tab1 = tabLayout.newTab();
         tabLayout.addTab(tab1);
         tab1.setCustomView(tabTwo);
         tabTwo.setBackgroundResource(R.drawable.rounded_cornor_tab_normal);
-        /*tabTwo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
 
-                key = "month";
 
-            }
-        });
-*/
-
-        View tabThree = (View) LayoutInflater.from(getContext()).inflate(R.layout.custom_tab_btn, null);
+        View tabThree = (View) LayoutInflater.from(getContext()).inflate(R.layout.custom_tab_btn_graph, null);
         TextView txtTab3 = (TextView) tabThree.findViewById(R.id.tab);
         txtTab3.setText("YEAR");
         TabLayout.Tab tab2 = tabLayout.newTab();
         tabLayout.addTab(tab2);
         tab2.setCustomView(tabThree);
         tabThree.setBackgroundResource(R.drawable.rounded_cornor_tab_right);
-/*
-
-        tabThree.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                key = "year";
-            }
-        });
-*/
-
-
-
-       /* tabLayout.add(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                Log.d("DAFDASF","DAFDASF");
-                Toast.makeText(getActivity(),"This is onTabSelected",Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-
-               // Log.d("RESERE","RESERE");
-
-              //  Toast.makeText(getActivity(),"This is onTabUnSelected",Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-                Log.d("ONTABSERE","ONTABSERE");
-
-
-                Toast.makeText(getActivity(),"This is onTabReSelected",Toast.LENGTH_SHORT).show();
-            }
-        });
-
-*/
-        Log.d("KERYVARLDDA", "KERYVARLDDA");
 
     }
 
 
     private ArrayList<String> setXAxisValues() {
-//
-//        xVals.add("Fri");
-//        xVals.add("Sat");
-//        xVals.add("M0n");
-//        xVals.add("Tues");
-//        xVals.add("G");
+
 
         return xVals;
     }
 
     private ArrayList<Entry> setYAxisValues() {
 
-//        yVals.add(new Entry(60, 0));
-//        yVals.add(new Entry(48, 1));
-//        yVals.add(new Entry(42.5f, 2));
-//        yVals.add(new Entry(52, 3));
-//        yVals.add(new Entry(68.9f, 4));
 
         return yVals;
     }
@@ -506,26 +420,20 @@ public class InvoiceHistory extends Fragment implements OnChartGestureListener, 
 
         YAxis leftAxis = mchart.getAxisLeft();
         leftAxis.removeAllLimitLines(); // reset all limit lines to avoid overlapping lines
-        //    leftAxis.addLimitLine(upper_limit);
-        //      leftAxis.addLimitLine(lower_limit);
+
         leftAxis.setAxisMaxValue(Y_VAL_MAX+100);
         leftAxis.setAxisMinValue(0f);
         leftAxis.setLabelCount(yVals.size(), true);
-        //leftAxis.setYOffset(20f);
 
-        //  leftAxis.enableGridDashedLine(10f, 10f, 0f);
         leftAxis.setDrawZeroLine(false);
 
-      /*  // limit lines are drawn behind data (and not on top)
-        leftAxis.setDrawLimitLinesBehindData(true);*/
+
         leftAxis.setEnabled(true);
         mchart.getAxisRight().setEnabled(false);
         leftAxis.setDrawAxisLine(true);
         leftAxis.setDrawLimitLinesBehindData(true);
 
 
-        //mChart.getViewPortHandler().setMaximumScaleY(2f);
-        //mChart.getViewPortHandler().setMaximumScaleX(2f);
 
         mchart.animateX(2500, Easing.EasingOption.EaseInOutQuart);
 
@@ -543,16 +451,12 @@ public class InvoiceHistory extends Fragment implements OnChartGestureListener, 
         set1.setFillAlpha(110);
         set1.setDrawValues(false);
 
-        set1.setFillColor(Color.RED);
+        set1.setDrawHighlightIndicators(false);
+        set1.setFillDrawable(getResources().getDrawable(R.drawable.line_fill));
 
-        // set the line to be drawn like this "- - - - - -"
-        //   set1.enableDashedLine(10f, 5f, 0f);
-        // set1.enableDashedHighlightLine(10f, 5f, 0f);
-        // set1.setColor(Color.RED);
-        // set1.setCircleColor(Color.BLACK);
+
         set1.setLineWidth(1f);
-        // set1.setCircleRadius(3f);
-        //  set1.setDrawCircleHole(false);
+
         set1.setValueTextSize(9f);
         set1.setDrawFilled(true);
 
@@ -562,8 +466,10 @@ public class InvoiceHistory extends Fragment implements OnChartGestureListener, 
         // create a data object with the datasets
         LineData data = new LineData(xVals, dataSets);
 
+
         // set data
         mchart.setData(data);
+
 
 
     }
@@ -587,7 +493,6 @@ public class InvoiceHistory extends Fragment implements OnChartGestureListener, 
         if (context instanceof InterfaceUserModel) {
             interfaceUserModel = (InterfaceUserModel) context;
             userModel = interfaceUserModel.getUserModel();
-            //  Toast.makeText(getActivity(),"USRMDOELDID"+userModel.getId(),Toast.LENGTH_SHORT).show();
 
         }
     }
@@ -600,112 +505,6 @@ public class InvoiceHistory extends Fragment implements OnChartGestureListener, 
 
     }
 
-
-    public void StoreLocation(double latitude, double longitude) {
-
-        SharedPreferences sharedPref = getActivity().getSharedPreferences("locationpref", 0);
-        SharedPreferences.Editor sharedEdite = sharedPref.edit();
-        sharedEdite.putFloat("latitude", (float) latitude);
-        sharedEdite.putFloat("longitute", (float) longitude);
-        sharedEdite.commit();
-    }
-
-
-    private boolean isGooglePlayServicesAvailable() {
-        int status = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(context);
-
-        if (ConnectionResult.SUCCESS == status) {
-            return true;
-        } else {
-            GoogleApiAvailability.getInstance().getErrorDialog(getActivity(), status, 0).show();
-            return false;
-        }
-    }
-
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-
-        googleMapObj = googleMap;
-        googleMapObj.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
-        googleMapObj.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-            @Override
-            public void onMapClick(LatLng latLng) {
-
-             /*   StoreLocation(latLng.latitude,  latLng.longitude);
-
-                Log.d("MAPLATLONG",""+latLng.latitude + "DLAFD"+latLng.longitude);
-
-
-
-                mCurrLocationMarker.setPosition(latLng);
-                googleMapObj.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-                googleMapObj.animateCamera(CameraUpdateFactory.zoomTo(15));*/
-                Location loc = new Location("");
-                loc.setLatitude(latLng.latitude);
-                loc.setLongitude(latLng.longitude);
-                onLocationChanged(loc);
-            }
-        });
-        // Setting a custom info window adapter for the google map
-        googleMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
-
-            // Use default InfoWindow frame
-            @Override
-            public View getInfoWindow(Marker arg0) {
-                return null;
-            }
-
-            // Defines the contents of the InfoWindow
-            @Override
-            public View getInfoContents(Marker arg0) {
-
-                // Getting view from the layout file info_window_layout
-                View v = getLayoutInflater().inflate(R.layout.map_info_view, null);
-
-                // Getting the position from the marker
-
-                LatLng latLng = arg0.getPosition();
-
-                // Getting reference to the TextView to set latitude
-                TextView tvLat = (TextView) v.findViewById(R.id.txtInfo);
-
-
-                // Setting the latitude
-                tvLat.setText(arg0.getTitle());
-
-
-                // Returning the view containing InfoWindow contents
-                return v;
-
-            }
-        });
-        //Initialize Google Play Services
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (ContextCompat.checkSelfPermission(getContext(),
-                    Manifest.permission.ACCESS_FINE_LOCATION)
-                    == PackageManager.PERMISSION_GRANTED) {
-                //Location Permission already granted
-                buildGoogleApiClient();
-                googleMapObj.setMyLocationEnabled(true);
-            } else {
-                //Request Location Permission
-                checkLocationPermission();
-            }
-        } else {
-            buildGoogleApiClient();
-            googleMapObj.setMyLocationEnabled(true);
-        }
-
-    }
-
-    protected synchronized void buildGoogleApiClient() {
-        mGoogleApiClient = new GoogleApiClient.Builder(getContext())
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .addApi(LocationServices.API)
-                .build();
-        mGoogleApiClient.connect();
-    }
 
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
 
@@ -744,147 +543,6 @@ public class InvoiceHistory extends Fragment implements OnChartGestureListener, 
             }
         }
     }
-
-    /* @Override
-     public boolean onKey(View v, int keyCode, KeyEvent event) {
-
-         if(KeyEvent.KEYCODE_BACK==keyCode){
-             if (mGoogleApiClient != null) {
-                 LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
-             }
-           //  locationManager.removeUpdates(this);
-             return true;
-         }
-
-         return false;
-     }
- */
-    @Override
-    public void onConnected(@Nullable Bundle bundle) {
-        mLocationRequest = new LocationRequest();
-
-        mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
-        if (ContextCompat.checkSelfPermission(getContext(),
-                Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED) {
-            //LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
-        }
-
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           String permissions[], int[] grantResults) {
-        switch (requestCode) {
-            case MY_PERMISSIONS_REQUEST_LOCATION: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
-                    // permission was granted, yay! Do the
-                    // location-related task you need to do.
-                    if (ContextCompat.checkSelfPermission(getContext(),
-                            Manifest.permission.ACCESS_FINE_LOCATION)
-                            == PackageManager.PERMISSION_GRANTED) {
-
-                        if (mGoogleApiClient == null) {
-                            buildGoogleApiClient();
-                        }
-                        googleMapObj.setMyLocationEnabled(true);
-                    }
-
-                } else {
-
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
-                    Toast.makeText(getContext(), "permission denied", Toast.LENGTH_LONG).show();
-                }
-                return;
-            }
-
-            // other 'case' lines to check for other
-            // permissions this app might request
-        }
-    }
-
-
-    @Override
-    public void onLocationChanged(Location location) {
-        mLastLocation = location;
-        if (mCurrLocationMarker != null) {
-            mCurrLocationMarker.remove();
-        }
-
-        //Place current location marker
-        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-        MarkerOptions markerOptions = new MarkerOptions();
-        markerOptions.position(latLng);
-        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
-
-
-        Geocoder geocoder;
-        List<Address> addresses;
-        geocoder = new Geocoder(getActivity(), Locale.getDefault());
-
-        String address = "", city = "", state = "", country = "", postalCode = "", knownName = "", locationName = "";
-
-
-        try {
-            addresses = geocoder.getFromLocation(Double.parseDouble(String.valueOf(location.getLatitude())), Double.parseDouble(String.valueOf(location.getLongitude())), 1);
-
-
-            for (int index = 0; index < addresses.size(); index++) {
-                address = addresses.get(index).getAddressLine(index); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
-                city = addresses.get(index).getLocality();
-                state = addresses.get(index).getAdminArea();
-//                country = addresses.get(index).getCountryName();
-                postalCode = addresses.get(index).getPostalCode();
-                knownName = addresses.get(index).getFeatureName();
-                locationName = address;
-                markerOptions.title(locationName);
-                mCurrLocationMarker = googleMapObj.addMarker(markerOptions);
-                mCurrLocationMarker.showInfoWindow();
-                mCurrLocationMarker.setZIndex(100);
-                Log.d("MAPADDR", "MAPADDR" + address + "Ci " + city + "St " + state + "Cou " + country + "POc " + postalCode);
-            }
-
-
-        } catch (IOException e) {
-            mCurrLocationMarker = googleMapObj.addMarker(markerOptions);
-            e.printStackTrace();
-        }
-
-
-        StoreLocation(latLng.latitude, latLng.longitude);
-        //move map camera
-        googleMapObj.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
-    }
-
-    @Override
-    public void onStatusChanged(String s, int i, Bundle bundle) {
-
-    }
-
-    @Override
-    public void onProviderEnabled(String s) {
-
-    }
-
-    @Override
-    public void onProviderDisabled(String s) {
-
-    }
-
 
     @Override
     public void onChartGestureStart(MotionEvent me, ChartTouchListener.ChartGesture lastPerformedGesture) {
@@ -935,6 +593,7 @@ public class InvoiceHistory extends Fragment implements OnChartGestureListener, 
     public void onValueSelected(Entry e, int dataSetIndex, Highlight h) {
 
     }
+
 
     @Override
     public void onNothingSelected() {

@@ -44,17 +44,19 @@
                     android:layout_height="wrap_content"
                     android:textSize="20sp"
                     android:layout_marginLeft="10dp"
+                    android:textColor="#3d3d3d"
                     android:layout_centerVertical="true"
-                    android:fontFamily="@font/robofont"
-                    android:textStyle="bold"
+                    android:fontFamily="@font/roboto_medium"
                     android:text="Relative layout"/>
 
                 <TextView
                     android:id="@+id/contact"
+                    android:fontFamily="@font/roboto_light"
                     android:layout_width="wrap_content"
                     android:text="Compound button"
+                    android:textColor="#3d3d3d"
                     android:layout_height="wrap_content"
-                    android:textSize="18dp"
+                    android:textSize="17sp"
                     android:layout_centerVertical="true"
                     android:layout_below="@+id/name"
                     android:layout_alignLeft="@+id/name"/>

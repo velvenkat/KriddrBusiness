@@ -2,7 +2,10 @@ package com.purple.kriddr;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -120,6 +123,13 @@ public class PetClientListFragment extends android.support.v4.app.Fragment imple
 
 
         actionBarUtilObj.setTitle("Back");
+        actionBarUtilObj.getTitle().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((AppCompatActivity) getActivity()).getSupportFragmentManager().popBackStackImmediate();
+
+            }
+        });
 
 
 
@@ -140,9 +150,6 @@ public class PetClientListFragment extends android.support.v4.app.Fragment imple
         mLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL,true);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-//
-//        mAdapter = new PetClientListAdapter(getActivity(),first_Name,second_Name,ImageList);
-//        mRecyclerView.setAdapter(mAdapter);
 
 
         if (NetworkConnection.isOnline(getActivity())) {
@@ -153,6 +160,27 @@ public class PetClientListFragment extends android.support.v4.app.Fragment imple
 
 
         return rootView;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        Fragment mContent;
+        if(savedInstanceState != null)
+        {
+            mContent = getActivity().getSupportFragmentManager().getFragment(savedInstanceState,"PETCLNTFRGST");
+            FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.frame_layout,mContent,"petparentlist");
+            fragmentTransaction.addToBackStack("petparentlist");
+            fragmentTransaction.commit();
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        getActivity().getSupportFragmentManager().putFragment(outState,"PETCLNTFRGST",this);
     }
 
     @Override
@@ -189,7 +217,6 @@ public class PetClientListFragment extends android.support.v4.app.Fragment imple
 
             mRecyclerView.setAdapter(new PetClientListAdapter(getActivity(),feedlist,this));
 
-//            mRecyclerView.scrollToPosition(1);
             LinearLayoutManager manager=(LinearLayoutManager)mRecyclerView.getLayoutManager();
 
             manager.scrollToPositionWithOffset(feedlist.size()-1,0);
@@ -212,7 +239,8 @@ public class PetClientListFragment extends android.support.v4.app.Fragment imple
                 try
                 {
 
-                    JSONArray jsonArray = new JSONArray(s);
+                    JSONObject jsonObject = new JSONObject(s);
+                    JSONArray jsonArray = jsonObject.getJSONArray("response");
                     for(int i=0; i < jsonArray.length(); i++)
                     {
 
@@ -220,7 +248,7 @@ public class PetClientListFragment extends android.support.v4.app.Fragment imple
 
                         String pet_id = parentObject.getString("pet_id");
 
-                        if(pet_id.equals("Empty") || pet_id.contains("Empty"))
+                        if(pet_id.equals("Empty") || pet_id.contains("Empty") || pet_id.equals(""))
                         {
                             no_client.setVisibility(View.VISIBLE);
                             mRecyclerView.setVisibility(View.GONE);
@@ -242,6 +270,10 @@ public class PetClientListFragment extends android.support.v4.app.Fragment imple
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
+
+
+
+
                 // progress.hide();
 
             }
@@ -252,7 +284,7 @@ public class PetClientListFragment extends android.support.v4.app.Fragment imple
                 Map<String, String> params = new HashMap<String, String>();
 
                 Log.d("USERID","USERID"+userModel.getId() + "MOBIL "+phone_number);
-                params.put("user_id",userModel.getId());
+//                params.put("user_id",userModel.getId());
                 params.put("mobile",phone_number);
                 return params;
             }

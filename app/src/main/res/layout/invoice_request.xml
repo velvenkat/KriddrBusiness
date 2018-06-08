@@ -45,10 +45,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="SERVICES"
+            android:fontFamily="@font/roboto_regular"
             android:layout_marginLeft="30dp"
             android:layout_marginTop="30dp"
             android:textColor="@color/text_color"
-            android:textSize="20dp" />
+            android:textSize="18sp" />
 
 <LinearLayout
     android:layout_width="match_parent"
@@ -98,7 +99,7 @@
         android:fontFamily="@font/roboto_regular"
         android:gravity="center"
         android:text="+ Add another service"
-        android:textSize="20sp" />
+        android:textSize="18sp" />
 
 
 
@@ -124,6 +125,8 @@
         android:id="@+id/next_button"
         android:layout_alignParentBottom="true"
         android:text="NEXT"
+        android:fontFamily="@font/roboto_medium"
+        android:textSize="16sp"
         android:background="@drawable/rounded_full_radius"
         android:textColor="@color/white"
         android:layout_width="match_parent"

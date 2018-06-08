@@ -4,10 +4,10 @@
     <string name="sign_up">Sign up</string>
     <string name="already_member">Already a member?</string>
     <string name="login">Sign in</string>
-    <string name="first_lastName">First and last name</string>
-    <string name="mobile_num">Mobile number</string>
+    <string name="first_lastName">First and Last name</string>
+    <string name="mobile_num">Phone number</string>
     <string name="phone">Phone number</string>
-    <string name="email_val">Email (optional)</string>
+    <string name="email_val">Email</string>
     <string name="verification_message">Please enter the verification \n code sent to your phone number</string>
     <string name="address">Address</string>
     <string name="phone_number">Phone number</string>
@@ -21,7 +21,7 @@
     <string name="birth_month">Birth month/year</string>
     <string name="food">FOOD</string>
     <string name="name">Name</string>
-    <string name="mobile_number">Mobile Number</string>
+    <string name="mobile_number">Phone Number</string>
     <string name="email">Email</string>
     <string name="brand">Brand</string>
     <string name="pet_parent">PET\nPARENT</string>
@@ -33,6 +33,8 @@
     <string name="business_address">Business Address</string>
     <string name="business_records">Business Records</string>
     <string name="enter_email">Enter email</string>
+
+    <string name="payment_received_msg">Please confirm that you have received payment from </string>
     
     <string name="search_pet">Search pet</string>
     
@@ -42,13 +44,15 @@
     <string name="search_owner">Search owner</string>
     <string name="no_clients">No clients</string>
     <string name="invoice_comments">Thanks for coming in, see you next time!</string>
+    <string name="no_notes_found">No notes found</string>
+    <string name="no_record_found">No records found</string>
 
     <string name="begin_by_adding">Begin by adding your three \n \u0020 \u0020 \u0020 \u0020 \u0020 best clients!</string>
     <string name="client_creation">Client creation successfully</string>
     
-    <string name="payment_received_confirm">Payment Received Sucessfully</string>
+    <string name="payment_received_confirm">Payment received sucessfully</string>
     <string name="record_creation">Record saved</string>
-    <string name="note_success">Note sucessfully saved</string>
+    <string name="note_success">Note successfully saved</string>
 
     <string name="invoice_creation">Invoice creation successfully</string>
     
@@ -66,6 +70,7 @@
 
     <string name="enter_flname">Please enter your name</string>
     <string name="enter_mobile">Please enter your mobile number</string>
+    <string name="enter_email_val">Please enter your email</string>
     <string name="invalid_email">Invalid email</string>
     <string name="no_internet">No internet connection</string>
     <string name="already_user_exist">Already user exist this mobile number</string>
@@ -101,13 +106,18 @@
 
 
     <!-- Development Instance -->
-    <string name="url_reference">http://13.71.127.81/dev/kriddr/web_service/home/</string>
+    <!--<string name="url_reference">http://13.71.127.81/dev/kriddr/web_service/home/</string>-->
+
+
+    <string name="url_reference">http://18.188.194.43/kriddr/web_service/home/</string>
+
+
     <string name="title_activity_kridder_navigation">KridderNavigationActivity</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
 
-    <string name="logout_warning">Are you sure want to signout?</string>
+    <string name="logout_warning">Are you sure want to sign out?</string>
     <string name="ok">Ok</string>
 
     <string name="proteins">Protein</string>

@@ -29,10 +29,9 @@ public class RecordsAdapter extends RecyclerView.Adapter<RecordsAdapter.MyViewHo
     RecordsAdapter.DataFromAdapterToFragment dataFromAdapterToFragment;
 
 
-
     public RecordsAdapter(ArrayList<DocumentModel> docList,Context context,RecordsAdapter.DataFromAdapterToFragment listener)
     {
-        Log.d("JASIRE","JASIRE"+docList.size());
+
         this.docList = docList;
         this.context = context;
         this.dataFromAdapterToFragment = listener;
@@ -54,8 +53,6 @@ public class RecordsAdapter extends RecyclerView.Adapter<RecordsAdapter.MyViewHo
 
     @Override
     public void onBindViewHolder(RecordsAdapter.MyViewHolder holder, final int position) {
-
-        Log.d("PIRSDR","PIRSDR"+docList.get(position));
 
         Glide.with(context).load(docList.get(position).getDocument()).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(holder.record_image);
 
@@ -83,10 +80,11 @@ public class RecordsAdapter extends RecyclerView.Adapter<RecordsAdapter.MyViewHo
 
     @Override
     public int getItemCount() {
-        Log.d("RECNAMLST","RECNAMLST"+docList.size());
         return docList.size();
 
     }
+
+
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
 

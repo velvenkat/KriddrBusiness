@@ -49,7 +49,7 @@ public class OTPFragment extends Fragment {
     EditText pin_first_edittext, pin_second_edittext, pin_third_edittext, pin_forth_edittext, pin_fifth_edittext;
     String mobile;
     Button submit;
-    String append_OTP;
+    String type;
     List<UserModel> feedslist;
     GenFragmentCall_Main genFragmentCall_main;
     ActionBarUtil actionBarUtilObj;
@@ -81,7 +81,8 @@ public class OTPFragment extends Fragment {
 
         try {
             mobile = bundle.getString("mobile");
-            Log.d("MOBRES", "MOBRES" + mobile);
+            type = bundle.getString("type");
+            Log.d("MOBRES", "MOBRES" + mobile + "SDAFR "+type);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -273,6 +274,7 @@ public class OTPFragment extends Fragment {
                 Map<String, String> params = new HashMap<String, String>();
                 params.put("mobile", mobile);
                 params.put("otp", full_otp);
+                params.put("type",type);
                 return params;
             }
 
@@ -304,18 +306,12 @@ public class OTPFragment extends Fragment {
 
                 } else {
 
-                   /* Fragment test;
-                    FragmentManager fragmentManager = getFragmentManager();
-                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    test = new CreateBusinessProfile();*/
+
                     Bundle args = new Bundle();
                     args.putParcelable(KridderNavigationActivity.USER_MODEL_TAG, flower);
                     args.putInt(MainActivity.SCREEN_FROM_TAG, MainActivity.Screens.OTP.ordinal());
                     genFragmentCall_main.Fragment_call(new CreateBusinessProfile(),"OTP",args);
-                    /*test.setArguments(args);
-                    fragmentTransaction.replace(R.id.content_frame, test, "signinfrag");
-                    fragmentTransaction.addToBackStack("signinfrag");
-                    fragmentTransaction.commit();*/
+
 
                 }
             } else if (flower.getStatus().equals("Invalid OTP")) {

@@ -15,10 +15,7 @@ import com.thoughtbot.expandablerecyclerview.viewholders.ChildViewHolder;
 
 public class PaymentRecivedViewHolder extends ChildViewHolder {
 
-   /* PaymentRecivedViewHolder(){
 
-    }
-*/
    boolean isLoadViews=false;
    checkChangeListener mListener;
     int HDRINDEX;
@@ -43,24 +40,7 @@ public class PaymentRecivedViewHolder extends ChildViewHolder {
         mListener=listenr;
         AdapterPos=Pos;
         chkPaymentRecd=(CheckBox)itemView.findViewById(R.id.chk_pay_recd);
-        /*chkPaymentRecd.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-Log.e("HIII","I am here");
-                    if(!isLoadViews) {
-                        if (compoundButton.isChecked()) {
-                            mListener.checkChange(AdapterPos, true, HDRINDEX);
-                        } else {
-                            mListener.checkChange(AdapterPos, false, HDRINDEX);
-                        }
-                    }
-                     else    {
-                          isLoadViews=false;
-                        }
 
-
-            }
-        });*/
         chkPaymentRecd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

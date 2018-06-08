@@ -45,12 +45,15 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.purple.kriddr.controller.AppController;
 import com.purple.kriddr.iface.InterfaceActionBarUtil;
 import com.purple.kriddr.model.UserModel;
 import com.purple.kriddr.util.ActionBarUtil;
 import com.purple.kriddr.util.NetworkConnection;
 import com.google.gson.Gson;
+import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
 
 import org.json.JSONObject;
 
@@ -63,6 +66,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import static android.app.Activity.RESULT_OK;
 import static com.bumptech.glide.load.resource.bitmap.TransformationUtils.rotateImage;
 
 /**
@@ -86,6 +90,7 @@ public class CreateBusinessProfile extends Fragment implements View.OnClickListe
     List<UserModel> feedslist;
     String image = "";
     ActionBarUtil actionBarUtilObj;
+    public static final int CROP_IMAGE_ACTIVITY_REQUEST_CODE = 203;
 
 
     @Nullable
@@ -101,14 +106,10 @@ public class CreateBusinessProfile extends Fragment implements View.OnClickListe
         address = (EditText) rootView.findViewById(R.id.address);
         create_profile = (Button) rootView.findViewById(R.id.create_profile);
 
-
-       /* ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
-        actionBar.show();*/
         actionBarUtilObj.setActionBarVisible();
 
         actionBarUtilObj.getEditText().setVisibility(View.INVISIBLE);
 
-        //ImageView img_ActionBarBack = (ImageView) actionBar.getCustomView().findViewById(R.id.img_actionBarBack);
         business.requestFocus();
 
 
@@ -128,8 +129,6 @@ public class CreateBusinessProfile extends Fragment implements View.OnClickListe
         });
 
 
-        //TextView textView = (TextView) actionBar.getCustomView().findViewById(R.id.textBarTitle);
-       // actionBarUtilObj.setTitle("Create Business Profile");
 
 
         if (Build.VERSION.SDK_INT == Build.VERSION_CODES.M) {
@@ -161,9 +160,17 @@ public class CreateBusinessProfile extends Fragment implements View.OnClickListe
                 business.setText(userModel.getBusiness_name());
                 mobile.setText(userModel.getBusiness_phone());
                 address.setText(userModel.getBusiness_address());
-                //Glide.with(getActivity()).load(userModel.getLogo_url()).into(add_Photo);
 
-                Glide.with(getActivity()).load(userModel.getLogo_url()).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(add_Photo);
+                Glide.with(getActivity()).load(userModel.getLogo_url()).asBitmap().diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).centerCrop().into(new BitmapImageViewTarget(add_Photo) {
+                    @Override
+                    protected void setResource(Bitmap resource) {
+                        RoundedBitmapDrawable circularBitmapDrawable =
+                                RoundedBitmapDrawableFactory.create(getActivity().getResources(), resource);
+                        circularBitmapDrawable.setCircular(true);
+                        add_Photo.setImageDrawable(circularBitmapDrawable);
+                    }
+                });
+
 
 
             } else {
@@ -174,7 +181,6 @@ public class CreateBusinessProfile extends Fragment implements View.OnClickListe
             e.printStackTrace();
         }
 
-//        mResources = getResources();
 
         Log.e("HHH", "HHHMMM");
 
@@ -336,81 +342,70 @@ public class CreateBusinessProfile extends Fragment implements View.OnClickListe
 
     public String getStringImage(Bitmap bmp) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bmp.compress(Bitmap.CompressFormat.JPEG, 70, baos);
+        bmp.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         byte[] imageBytes = baos.toByteArray();
         String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
         return encodedImage;
     }
 
 
-    private static Bitmap rotateImageIfRequired(Bitmap img, Uri selectedImage) throws IOException {
-
-        ExifInterface ei = new ExifInterface(selectedImage.getPath());
-        int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
-
-        switch (orientation) {
-            case ExifInterface.ORIENTATION_ROTATE_90:
-                return rotateImage(img, 90);
-            case ExifInterface.ORIENTATION_ROTATE_180:
-                return rotateImage(img, 180);
-            case ExifInterface.ORIENTATION_ROTATE_270:
-                return rotateImage(img, 270);
-            default:
-                return img;
-        }
-    }
-
-    public Bitmap getResizedBitmap(Bitmap image, int maxSize) {
-        int width = image.getWidth();
-        int height = image.getHeight();
-
-        float bitmapRatio = (float) width / (float) height;
-        if (bitmapRatio > 0) {
-            width = maxSize;
-            height = (int) (width / bitmapRatio);
-        } else {
-            height = maxSize;
-            width = (int) (height * bitmapRatio);
-        }
-        return Bitmap.createScaledBitmap(image, width, height, true);
-    }
-
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
+        if (resultCode == Activity.RESULT_OK) {
+            {
+                if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+                    CropImage.ActivityResult result = CropImage.getActivityResult(data);
+                    if (resultCode == RESULT_OK) {
+                        ((ImageView) getActivity().findViewById(R.id.add_photo)).setImageURI(result.getUri());
 
-        if (resultCode == Activity.RESULT_OK)
+                        picUri = result.getUri();
+                        try {
+                            bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), picUri);
 
-        {
-            if (getPickImageResultUri(data) != null) {
-                picUri = getPickImageResultUri(data);
-
-                try {
-                    bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), picUri);
-                    bitmap = rotateImageIfRequired(bitmap, picUri);
-                    bitmap = getResizedBitmap(bitmap, 200);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
 
 
-                } catch (IOException e) {
-                    e.printStackTrace();
+                        RoundedBitmapDrawable drawable = RoundedBitmapDrawableFactory.create(getResources(), bitmap);
+                        drawable.setCircular(true);
+                        add_Photo.setImageDrawable(drawable);
+
+
+                       // Toast.makeText(getActivity(), "Cropping successful, Sample: " + result.getSampleSize(), Toast.LENGTH_LONG).show();
+                    } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                        Toast.makeText(getActivity(), "Cropping failed: " + result.getError(), Toast.LENGTH_LONG).show();
+                    }
+
+
                 }
+                if (requestCode == PICK_IMAGE_REQUEST) {
+                    if (getPickImageResultUri(data) != null) {
+                        picUri = getPickImageResultUri(data);
+
+                        CropImage.activity(picUri)
+                                .setGuidelines(CropImageView.Guidelines.OFF)
+                                .setActivityTitle("My Crop")
+                                .setCropShape(CropImageView.CropShape.OVAL)
+                                .setCropMenuCropButtonTitle("Done")
+                                .setMinCropResultSize(400, 400)
+                                .setMaxCropResultSize(1500, 1500)
+                                .setAspectRatio(1, 1)
+                                .start(getContext(),this);
 
 
-            } else {
 
 
-                bitmap = (Bitmap) data.getExtras().get("data");
-
+                    }
+                }
             }
 
-            RoundedBitmapDrawable drawable = RoundedBitmapDrawableFactory.create(getResources(), bitmap);
-            drawable.setCircular(true);
-            add_Photo.setImageDrawable(drawable);
         }
 
-
     }
+
 
     public Uri getPickImageResultUri(Intent data) {
         boolean isCamera = true;
@@ -464,9 +459,7 @@ public class CreateBusinessProfile extends Fragment implements View.OnClickListe
                 image = getStringImage(bitmap);
             }
         }
-//        else if(bitmap==null){
-//            Toast.makeText(getActivity(), getResources().getString(R.string.choose_image),Toast.LENGTH_SHORT).show();
-//        }
+
         if (isFieldSet) {
             if (NetworkConnection.isOnline(getActivity())) {
                 if (ScreenFromVal== MainActivity.Screens.EDIT_PROFILE.ordinal()) {
@@ -517,7 +510,6 @@ public class CreateBusinessProfile extends Fragment implements View.OnClickListe
                         dbhelp entry = new dbhelp(getActivity());
                         entry.open();
                         entry.deleteTable();
-                        // entry.createuser(id,user_name,email,mobile,business_status,status,business_id,business_name,logo,phone,address);
                         entry.createuser(flower.getId(), flower.getName(), flower.getEmail(), flower.getMobile(), flower.getBusiness_status(), flower.getStatus(), flower.getBusiness_id(), flower.getBusiness_name(), flower.getLogo_url(), flower.getBusiness_phone(), flower.getBusiness_address());
                         entry.close();
 
@@ -595,10 +587,9 @@ public class CreateBusinessProfile extends Fragment implements View.OnClickListe
     }
 
     private void showFileChooser() {
-        //  Intent i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        // startActivityForResult(i, PICK_IMAGE_REQUEST);
 
         startActivityForResult(getPickImageChooserIntent(), PICK_IMAGE_REQUEST);
+
 
     }
 

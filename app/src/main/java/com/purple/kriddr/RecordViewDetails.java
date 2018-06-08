@@ -107,22 +107,6 @@ public class RecordViewDetails extends Fragment implements RecordSearchAdapter.D
             public void onClick(View view) {
 
 
-//                WindowManager wm = (WindowManager) getActivity().getSystemService(Context.WINDOW_SERVICE);
-//                int width = wm.getDefaultDisplay().getWidth();
-//                int height = wm.getDefaultDisplay().getHeight();
-//                final Dialog dialog = new Dialog(getActivity());
-//
-//
-//                View view1= LayoutInflater.from(getActivity()).inflate(R.invoice_graph.search_layout, null);
-//
-//                WindowManager.LayoutParams params = dialog.getWindow().getAttributes();
-//                params.width = WindowManager.LayoutParams.MATCH_PARENT;
-//                params.height = WindowManager.LayoutParams.WRAP_CONTENT;
-//
-//                dialog.setContentView(view1);
-//                dialog.getWindow().setGravity(Gravity.TOP);
-//                dialog.show();
-
 
                 mBottomSheetDialog = new Dialog(getActivity(), R.style.MaterialDialogSheet);
                 mBottomSheetDialog.setContentView(R.layout.search_doc); // your custom view.
@@ -137,11 +121,6 @@ public class RecordViewDetails extends Fragment implements RecordSearchAdapter.D
 
                 setAutoSearchAdapter(search_pet,true);
                 setAutoSearchAdapter(search_owner,false);
-             /*  adapter = new AutoCompleteSearchAdapter(getContext(), R.invoice_graph.search_layout, R.id.search_pet, feedlist,true,fragmentCall_mainObj);
-                search_pet.setAdapter(adapter);
-                adapter = new AutoCompleteSearchAdapter(getContext(), R.invoice_graph.search_layout, R.id.search_owner, feedlist,false,fragmentCall_mainObj);
-                search_owner.setAdapter(adapter);
-*/
                 mBottomSheetDialog.show();
 
 
@@ -163,8 +142,7 @@ public class RecordViewDetails extends Fragment implements RecordSearchAdapter.D
     public void setAutoSearchAdapter(AutoCompleteTextView txtView, boolean isPet) {
         adapter = new RecordSearchAdapter(getContext(), R.layout.search_layout, R.id.search_pet, documentList, isPet,(RecordSearchAdapter.DataFromAdapterToFragment)this);
         txtView.setAdapter(adapter);
-              /*  adapter = new AutoCompleteSearchAdapter(getContext(), R.invoice_graph.search_layout, R.id.search_owner, feedlist,false,fragmentCall_mainObj);
-                search_owner.setAdapter(adapter);*/
+
 
     }
 
@@ -207,8 +185,6 @@ public class RecordViewDetails extends Fragment implements RecordSearchAdapter.D
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<String, String>();
 
-//                params.put("user_id", userModel.getId());
-//                params.put("pet_id", pet_id);
                 params.put("document_id",doc_id);
 
 
@@ -240,7 +216,6 @@ public class RecordViewDetails extends Fragment implements RecordSearchAdapter.D
         if (context instanceof InterfaceUserModel) {
             interfaceUserModel = (InterfaceUserModel) context;
             userModel = interfaceUserModel.getUserModel();
-            //  Toast.makeText(getActivity(),"USRMDOELDID"+userModel.getId(),Toast.LENGTH_SHORT).show();
 
         }
     }

@@ -2,6 +2,7 @@ package com.purple.kriddr;
 
 import android.app.Dialog;
 import android.graphics.Color;
+import android.net.Uri;
 import android.support.v4.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -10,9 +11,10 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -28,32 +30,49 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.purple.kriddr.adapter.BusinessRecordAdapter;
+import com.purple.kriddr.adapter.BusinessRecordsAdapter;
+import com.purple.kriddr.controller.AppController;
+import com.purple.kriddr.iface.FragmentCallInterface;
 import com.purple.kriddr.iface.InterfaceActionBarUtil;
 import com.purple.kriddr.iface.InterfaceUserModel;
+import com.purple.kriddr.model.DocumentModel;
 import com.purple.kriddr.model.UserModel;
 import com.purple.kriddr.util.ActionBarUtil;
+import com.purple.kriddr.util.GenFragmentCall_Main;
 import com.purple.kriddr.util.NetworkConnection;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by pf-05 on 2/5/2018.
  */
 
-public class ProfileFragment extends Fragment {
+public class ProfileFragment extends Fragment implements BusinessRecordsAdapter.DataFromAdaptertoFragment{
 
     View rootView;
     RecyclerView mRecyclerView;
     RecyclerView.LayoutManager mLayoutManager;
-    BusinessRecordAdapter mAdapter;
     ArrayList<String> record_nameList = new ArrayList<>();
     UserModel userModel;
     TextView bus_name_value, bus_phone_value, address_Value, name_value, email_value;
-    ImageView business_image, img_unLink;
+    ImageView business_image, img_unLink,img_plus_btn,img_next_btn;
     ActionBarUtil actionBarUtilObj;
+    GenFragmentCall_Main fragmentCall_mainObj;
+    ArrayList<DocumentModel> documentList;
+    DocumentModel documentModel;
+    JSONObject documentJsonObject;
+    BusinessRecordsAdapter mAdapter;
 
 
     @Override
@@ -62,6 +81,8 @@ public class ProfileFragment extends Fragment {
 
         rootView = inflater.inflate(R.layout.business_profile_main, container, false);
 
+        ((KridderNavigationActivity) getActivity()).setNavigationVisibility(true);
+
         bus_name_value = (TextView) rootView.findViewById(R.id.bus_name_value);
         bus_phone_value = (TextView) rootView.findViewById(R.id.bus_phone_value);
         address_Value = (TextView) rootView.findViewById(R.id.address_Value);
@@ -69,36 +90,13 @@ public class ProfileFragment extends Fragment {
         email_value = (TextView) rootView.findViewById(R.id.email_value);
         business_image = (ImageView) rootView.findViewById(R.id.business_image);
 
+        img_next_btn = (ImageView)rootView.findViewById(R.id.img_next_btn);
+
         img_unLink = (ImageView) rootView.findViewById(R.id.img_unLink);
+        img_plus_btn = (ImageView)rootView.findViewById(R.id.img_plus_btn);
 
 
         setHasOptionsMenu(true);
-
-
-        Log.d("JSMKRD", "JSMKRD" + userModel.getBusiness_name() + "BUPGONO " + userModel.getBusiness_phone() + "BUADD " + userModel.getBusiness_address());
-
-
-        bus_name_value.setText(userModel.getBusiness_name());
-        bus_phone_value.setText(userModel.getBusiness_phone());
-        address_Value.setText(userModel.getBusiness_address());
-        name_value.setText(userModel.getName());
-        email_value.setText(userModel.getEmail());
-
-
-        record_nameList.add("11/7/17");
-        record_nameList.add("12/7/17");
-        record_nameList.add("13/7/17");
-
-        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.lst_view);
-        mRecyclerView.setHasFixedSize(true);
-
-//        mLayoutManager = new LinearLayoutManager(getActivity());
-//        mRecyclerView.setLayoutManager(mLayoutManager);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, true));
-
-
-        mAdapter = new BusinessRecordAdapter(record_nameList, getActivity());
-        mRecyclerView.setAdapter(mAdapter);
 
 
         actionBarUtilObj.setActionBarVisible();
@@ -120,6 +118,16 @@ public class ProfileFragment extends Fragment {
         actionBarUtilObj.setTitle("BUSINESS PROFILE");
 
 
+
+        bus_name_value.setText(userModel.getBusiness_name());
+        bus_phone_value.setText(userModel.getBusiness_phone());
+        address_Value.setText(userModel.getBusiness_address());
+        name_value.setText(userModel.getName());
+        email_value.setText(userModel.getEmail());
+
+
+
+
         LayoutInflater layoutInflater1 = (LayoutInflater) getActivity().getBaseContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View addView1 = layoutInflater1.inflate(R.layout.bottom_layout, null);
 
@@ -127,9 +135,39 @@ public class ProfileFragment extends Fragment {
         container.addView(addView1);
 
 
+
+        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.lst_view);
+        mRecyclerView.setHasFixedSize(true);
+
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
+
+
+        img_next_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                LinearLayoutManager linearLayoutManager = (LinearLayoutManager) mRecyclerView.getLayoutManager();
+
+                int lastVisibleItemIndex = linearLayoutManager.findFirstCompletelyVisibleItemPosition();
+
+
+                if (linearLayoutManager.findFirstCompletelyVisibleItemPosition() > 0) {
+
+                    linearLayoutManager.smoothScrollToPosition(mRecyclerView, null, lastVisibleItemIndex-1);
+
+                    LinearLayoutManager manager = (LinearLayoutManager) mRecyclerView.getLayoutManager();
+                    //Toast.makeText(getActivity(), "" + manager.findFirstCompletelyVisibleItemPosition(), Toast.LENGTH_SHORT).show();
+                }
+
+
+
+
+            }
+        });
+
+
         if (NetworkConnection.isOnline(getActivity())) {
-            //Glide.with(getActivity()).load(userModel.getLogo_url()).into(business_image);
-            //Glide.with(getActivity()).load(userModel.getLogo_url()).into(business_image).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(business_image);
+
             Glide.with(getActivity()).load(userModel.getLogo_url()).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(business_image);
 
         } else {
@@ -167,10 +205,105 @@ public class ProfileFragment extends Fragment {
             }
         });
 
+        img_plus_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle = new Bundle();
+                fragmentCall_mainObj.Fragment_call(new ProfileRecordCreationFragment(), "addrecord", bundle);
+            }
+        });
+
+
+
+        if (NetworkConnection.isOnline(getActivity())) {
+            recordList(getResources().getString(R.string.url_reference) + "business_profile_documents_list.php");
+        } else {
+            Toast.makeText(getActivity(), getResources().getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
+        }
 
         return rootView;
 
     }
+
+
+    public void recordAdapter() {
+
+        mAdapter = new BusinessRecordsAdapter(documentList, getActivity(),this);
+        mRecyclerView.setAdapter(mAdapter);
+
+
+    }
+
+
+
+    public void recordList(String url) {
+        StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String s) {
+                //progress.hide();
+                Log.d("LISTOFCLIENTS", "LISTOFCLIENTS" + s);
+
+                try
+                {
+                    JSONObject jsonObject = new JSONObject(s);
+
+                    JSONArray jsonArray2 = jsonObject.getJSONArray("details");
+                    documentList = new ArrayList<>();
+
+                    for (int index = 0; index < jsonArray2.length(); index++) {
+
+                        documentModel = new DocumentModel();
+
+                        documentJsonObject = jsonArray2.getJSONObject(index);
+                        
+                        documentModel.setDocument(documentJsonObject.getString("image"));
+                        documentModel.setCreated(documentJsonObject.getString("created"));
+
+                        documentList.add(documentModel);
+
+                    }
+
+                    recordAdapter();
+                    LinearLayoutManager manager = (LinearLayoutManager) mRecyclerView.getLayoutManager();
+                    manager.scrollToPositionWithOffset(documentList.size() - 1, 0);
+
+
+
+
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+
+
+
+
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                // progress.hide();
+
+            }
+        }) {
+
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+
+                Log.d("USERID", "USERID" + userModel.getId());
+                params.put("user_id", userModel.getId());
+                return params;
+            }
+
+        };
+        AppController.getInstance().addToRequestQueue(request);
+
+    }
+
+
 
 
     public void alert_Back(Context context) {
@@ -240,6 +373,25 @@ public class ProfileFragment extends Fragment {
 
                 switch (position)
                 {
+                    case 0:
+
+                        String url = "https://www.kriddr.com/terms-of-service";
+                        Intent i = new Intent(Intent.ACTION_VIEW);
+                        i.setData(Uri.parse(url));
+                        startActivity(i);
+                        break;
+
+                    case 1:
+
+                        String url_lk = "https://www.kriddr.com/privacy-policy";
+                        Intent in = new Intent(Intent.ACTION_VIEW);
+                        in.setData(Uri.parse(url_lk));
+                        startActivity(in);
+                        break;
+
+
+
+
                     case 2:
 
                         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -280,10 +432,7 @@ public class ProfileFragment extends Fragment {
                         Button negativeButton = alert.getButton(AlertDialog.BUTTON_NEGATIVE);
 
                         positiveButton.setTextColor(Color.parseColor("#FF0000"));
-                        //positiveButton.setBackgroundColor(Color.parseColor("#FFE1FCEA"));
-
                         negativeButton.setTextColor(Color.parseColor("#FF0000"));
-                        //negativeButton.setBackgroundColor(Color.parseColor("#FFFCB9B7"));
 
                         break;
 
@@ -302,6 +451,11 @@ public class ProfileFragment extends Fragment {
         Log.d("ONATTACHCRE", "ONATTACHCRE");
         InterfaceUserModel interfaceUserModel;
 
+        if (context instanceof FragmentCallInterface) {
+            FragmentCallInterface callInterface = (FragmentCallInterface) context;
+            fragmentCall_mainObj = callInterface.Get_GenFragCallMainObj();
+        }
+
         if (context instanceof InterfaceUserModel) {
             interfaceUserModel = (InterfaceUserModel) context;
             userModel = interfaceUserModel.getUserModel();
@@ -317,4 +471,11 @@ public class ProfileFragment extends Fragment {
 
 
 
+    @Override
+    public void getBusinessRecordsinfo(String doc_id, String image_url) {
+        Bundle bundle = new Bundle();
+        bundle.putString("image_url",image_url);
+        fragmentCall_mainObj.Fragment_call(new BusinessRecordViewDetails(), "businessrecd", bundle);
+
+    }
 }

@@ -20,6 +20,7 @@
             <TextView
                 android:text="INVOICE HISTORY"
                 android:textSize="20sp"
+                android:fontFamily="@font/roboto_regular"
                 android:textColor="@color/text_color"
                 android:layout_width="match_parent"
                 android:layout_marginLeft="20dp"
@@ -46,14 +47,19 @@
 
                 <android.support.design.widget.TabLayout
                     android:id="@+id/tabs"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_width="wrap_content"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
                     app:tabGravity="fill"
-                    app:tabMode="fixed"
                     app:tabPaddingStart="0dp"
-                    app:tabPaddingEnd="0dp"/>
+                    app:tabPaddingEnd="0dp"
+                    app:tabMode="fixed"
+                    app:tabIndicatorHeight="0dp"
+                    android:scrollbars="none"/>
 
 
 
@@ -62,9 +68,20 @@
         </LinearLayout>
 
         <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
             android:visibility="visible"
+            android:background="#FFFFFF"
             android:layout_height="200dp">
+
+            <TextView
+                android:text="$"
+                android:textSize="16sp"
+                android:fontFamily="@font/roboto_regular"
+                android:textColor="@color/black"
+                android:layout_width="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_height="wrap_content" />
 
 
             <com.github.mikephil.charting.charts.LineChart
@@ -92,6 +109,7 @@
                     android:id="@+id/invoice_text"
                     android:text="INVOICE"
                     android:textSize="20sp"
+                    android:fontFamily="@font/roboto_regular"
                     android:layout_marginLeft="20dp"
                     android:textColor="@color/text_color"
                     android:layout_width="wrap_content"
@@ -102,7 +120,9 @@
                     android:layout_below="@+id/invoice_text"
                     android:text="Total sent invoice"
                     android:layout_marginLeft="20dp"
-                    android:textSize="16sp"
+                    android:textColor="#a0a4b0"
+                    android:textSize="14sp"
+                    android:fontFamily="@font/roboto_regular"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 
@@ -127,8 +147,9 @@
                         <TextView
                             android:id="@+id/week_value"
                             android:layout_width="wrap_content"
-                            android:fontFamily="@font/roboto_bold"
-                            android:textSize="16sp"
+                            android:fontFamily="@font/roboto_regular"
+                            android:textSize="17sp"
+                            android:textColor="#323e57"
                             android:maxLines="1"
                             android:layout_height="wrap_content" />
 
@@ -137,8 +158,9 @@
                             android:id="@+id/week_txt"
                             android:layout_width="wrap_content"
                             android:text="WEEK"
-                            android:textSize="14sp"
-                            android:fontFamily="@font/roboto_medium"
+                            android:textSize="13sp"
+                            android:textColor="#323e57"
+                            android:fontFamily="@font/roboto_regular"
                             android:layout_height="wrap_content" />
 
 
@@ -157,17 +179,19 @@
                             android:id="@+id/month_value"
                             android:layout_width="wrap_content"
                             android:maxLines="1"
-                            android:textSize="16sp"
-                            android:fontFamily="@font/roboto_bold"
+                            android:textSize="17sp"
+                            android:textColor="#323e57"
+                            android:fontFamily="@font/roboto_regular"
                             android:layout_height="wrap_content" />
 
 
                         <TextView
                             android:id="@+id/month_txt"
                             android:layout_width="wrap_content"
-                            android:fontFamily="@font/roboto_medium"
+                            android:fontFamily="@font/roboto_regular"
                             android:text="MONTH"
-                            android:textSize="14sp"
+                            android:textColor="#323e57"
+                            android:textSize="13sp"
                             android:layout_height="wrap_content" />
 
                     </LinearLayout>
@@ -184,17 +208,19 @@
                         <TextView
                             android:id="@+id/year_value"
                             android:layout_width="wrap_content"
-                            android:textSize="16sp"
+                            android:textSize="17sp"
+                            android:textColor="#323e57"
                             android:maxLines="1"
-                            android:fontFamily="@font/roboto_bold"
+                            android:fontFamily="@font/roboto_regular"
                             android:layout_height="wrap_content" />
 
                         <TextView
                             android:id="@+id/year_txt"
                             android:layout_width="wrap_content"
                             android:text="YEAR"
-                            android:textSize="14sp"
-                            android:fontFamily="@font/roboto_medium"
+                            android:textColor="#323e57"
+                            android:textSize="13sp"
+                            android:fontFamily="@font/roboto_regular"
                             android:layout_height="wrap_content" />
 
 
@@ -213,17 +239,19 @@
                         <TextView
                             android:id="@+id/total_val"
                             android:layout_width="wrap_content"
-                            android:textSize="16sp"
+                            android:textSize="17sp"
+                            android:textColor="#323e57"
                             android:maxLines="1"
-                            android:fontFamily="@font/roboto_bold"
+                            android:fontFamily="@font/roboto_regular"
                             android:layout_height="wrap_content" />
 
                         <TextView
                             android:id="@+id/total_txt"
                             android:layout_width="wrap_content"
                             android:text="TOTAL"
-                            android:textSize="14sp"
-                            android:fontFamily="@font/roboto_medium"
+                            android:textSize="13sp"
+                            android:textColor="#323e57"
+                            android:fontFamily="@font/roboto_regular"
                             android:layout_height="wrap_content" />
 
 
@@ -247,6 +275,7 @@
         <LinearLayout
             android:layout_marginTop="20dp"
             android:background="#FFFFFF"
+            android:layout_marginBottom="20dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -259,6 +288,7 @@
                     android:text="REVENUE"
                     android:layout_marginLeft="20dp"
                     android:textSize="20sp"
+                    android:fontFamily="@font/roboto_regular"
                     android:textColor="@color/text_color"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
@@ -268,7 +298,9 @@
                     android:layout_below="@+id/revenue_text"
                     android:layout_marginLeft="20dp"
                     android:text="Total confirmed payments"
-                    android:textSize="16sp"
+                    android:textColor="#a0a4b0"
+                    android:textSize="14sp"
+                    android:fontFamily="@font/roboto_regular"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 
@@ -293,8 +325,9 @@
                         <TextView
                             android:id="@+id/revenue_week_value"
                             android:layout_width="wrap_content"
-                            android:textSize="16sp"
-                            android:fontFamily="@font/roboto_bold"
+                            android:textSize="17sp"
+                            android:textColor="#323e57"
+                            android:fontFamily="@font/roboto_regular"
                             android:layout_height="wrap_content" />
 
 
@@ -302,8 +335,9 @@
                             android:id="@+id/revenue_week_txt"
                             android:layout_width="wrap_content"
                             android:text="WEEK"
-                            android:textSize="14sp"
-                            android:fontFamily="@font/roboto_medium"
+                            android:textSize="13sp"
+                            android:textColor="#323e57"
+                            android:fontFamily="@font/roboto_regular"
                             android:layout_height="wrap_content" />
 
 
@@ -321,8 +355,9 @@
                         <TextView
                             android:id="@+id/revenue_month_value"
                             android:layout_width="wrap_content"
-                            android:textSize="16sp"
-                            android:fontFamily="@font/roboto_bold"
+                            android:textSize="17sp"
+                            android:textColor="#323e57"
+                            android:fontFamily="@font/roboto_regular"
                             android:layout_height="wrap_content" />
 
 
@@ -330,8 +365,9 @@
                             android:id="@+id/revenue_month_txt"
                             android:layout_width="wrap_content"
                             android:text="MONTH"
-                            android:textSize="14sp"
-                            android:fontFamily="@font/roboto_medium"
+                            android:textSize="13sp"
+                            android:textColor="#323e57"
+                            android:fontFamily="@font/roboto_regular"
                             android:layout_height="wrap_content" />
 
                     </LinearLayout>
@@ -348,16 +384,18 @@
                         <TextView
                             android:id="@+id/revenue_year_value"
                             android:layout_width="wrap_content"
-                            android:textSize="16sp"
-                            android:fontFamily="@font/roboto_bold"
+                            android:textSize="17sp"
+                            android:textColor="#323e57"
+                            android:fontFamily="@font/roboto_regular"
                             android:layout_height="wrap_content" />
 
                         <TextView
                             android:id="@+id/revenue_year_txt"
                             android:layout_width="wrap_content"
                             android:text="YEAR"
-                            android:textSize="14sp"
-                            android:fontFamily="@font/roboto_medium"
+                            android:textSize="13sp"
+                            android:textColor="#323e57"
+                            android:fontFamily="@font/roboto_regular"
                             android:layout_height="wrap_content" />
 
 
@@ -376,16 +414,18 @@
                         <TextView
                             android:id="@+id/revenue_total_val"
                             android:layout_width="wrap_content"
-                            android:textSize="16sp"
-                            android:fontFamily="@font/roboto_bold"
+                            android:textSize="17sp"
+                            android:textColor="#323e57"
+                            android:fontFamily="@font/roboto_regular"
                             android:layout_height="wrap_content" />
 
                         <TextView
                             android:id="@+id/revenue_total_txt"
                             android:layout_width="wrap_content"
                             android:text="TOTAL"
-                            android:textSize="14sp"
-                            android:fontFamily="@font/roboto_medium"
+                            android:textSize="13sp"
+                            android:textColor="#323e57"
+                            android:fontFamily="@font/roboto_regular"
                             android:layout_height="wrap_content" />
 
 
@@ -399,46 +439,6 @@
 
 
         </LinearLayout>
-
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_marginTop="20dp"
-            android:background="@color/white"
-            android:layout_height="300dp">
-
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:padding="20dp"
-                android:layout_height="match_parent">
-
-
-                <TextView
-                    android:id="@+id/map_text"
-                    android:text="MAP"
-                    android:textSize="20sp"
-                    android:textColor="@color/text_color"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
-
-                <fragment
-                    android:layout_below="@+id/map_text"
-                    android:layout_marginTop="10dp"
-                    android:id="@+id/map"
-                    class="com.google.android.gms.maps.SupportMapFragment"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-
-
-            </RelativeLayout>
-
-
-        </LinearLayout>
-
-
 
 
 

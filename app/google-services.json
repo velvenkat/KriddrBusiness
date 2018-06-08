@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "230517854956",
+    "firebase_url": "https://kriddr-business.firebaseio.com",
+    "project_id": "kriddr-business",
+    "storage_bucket": "kriddr-business.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:230517854956:android:0770426e4705f848",
+        "android_client_info": {
+          "package_name": "com.purple.kriddr"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "230517854956-c9h7f45rghvv8mge4klu4et3f9pmr18p.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "230517854956-c9h7f45rghvv8mge4klu4et3f9pmr18p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBVWCHY5XTzfKyh-N2Yucp6RqSkEPJs2Tk"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

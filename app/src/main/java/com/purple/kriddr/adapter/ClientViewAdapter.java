@@ -80,6 +80,7 @@ public class ClientViewAdapter extends RecyclerView.Adapter<ClientViewAdapter.My
     @Override
     public int getItemCount() {
         return clientList.size();
+
     }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder

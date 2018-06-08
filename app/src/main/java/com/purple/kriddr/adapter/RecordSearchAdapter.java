@@ -29,7 +29,6 @@ public class RecordSearchAdapter extends ArrayAdapter<DocumentModel> {
     List<DocumentModel> items, tempItems, suggestions;
     boolean isPet;
     RecordSearchAdapter.DataFromAdapterToFragment dataFromAdapterToFragment;
-    //  GenFragmentCall_Main fragmentCallobj;
 
     public RecordSearchAdapter(Context context, int resource, int textViewResourceId, List<DocumentModel> items, boolean isPetVal,RecordSearchAdapter.DataFromAdapterToFragment dataToFragment) {
         super(context, resource, textViewResourceId, items);
@@ -42,8 +41,6 @@ public class RecordSearchAdapter extends ArrayAdapter<DocumentModel> {
         suggestions = new ArrayList<DocumentModel>();
 
         this.dataFromAdapterToFragment=dataToFragment;
-
-        //  this.fragmentCallobj=fragmentCallobj;
 
 
     }
@@ -74,10 +71,6 @@ public class RecordSearchAdapter extends ArrayAdapter<DocumentModel> {
             @Override
             public void onClick(View view) {
 
-                // dataFromAdapterToFragment.getClientDetails(people.getPet_id(),people.getOwwner_id());
-                /*Bundle bundle=new Bundle();
-                bundle.putString("pet_id",people.getPet_id());
-                fragmentCallobj.Fragment_call(new ClientViewDetailsFragment(),"clientDetails",bundle);*/
                 dataFromAdapterToFragment.getRecordDetails(people.getDocuments_id());
             }
         });

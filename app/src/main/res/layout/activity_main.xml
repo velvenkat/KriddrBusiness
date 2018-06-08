@@ -45,7 +45,7 @@
         android:gravity="center_horizontal"
         android:fontFamily="@font/robofont"
         android:textColor="@color/white"
-        android:textSize="20dp"
+        android:textSize="20sp"
         android:text="SAMOLE"/>
 
 
@@ -56,9 +56,9 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/header_secondtitle"
         android:gravity="center_horizontal"
-        android:fontFamily="@font/robofont"
+        android:fontFamily="@font/roboto_bold"
         android:textColor="@color/white"
-        android:textSize="28dp"
+        android:textSize="38sp"
         android:text="SAMOLE"/>
 
 
@@ -69,9 +69,8 @@
         android:layout_marginRight="20dp"
         android:layout_marginLeft="20dp"
         android:background="@drawable/rounded_radius"
-        android:fontFamily="@font/robofont"
+        android:fontFamily="@font/roboto_medium"
         android:text="@string/sign_up"
-        android:textStyle="bold"
         android:layout_marginBottom="30dp"
         android:textSize="18sp"
         android:layout_above="@+id/signin_layout"
@@ -92,7 +91,7 @@
          android:layout_width="wrap_content"
          android:text="@string/already_member"
            android:textSize="16sp"
-           android:fontFamily="@font/robofont"
+           android:fontFamily="@font/roboto_regular"
          android:layout_marginBottom="30dp"
          android:layout_height="wrap_content" />
 
@@ -102,7 +101,7 @@
             android:text="@string/login"
             android:layout_marginLeft="5dp"
             android:textColor="@color/sign_in"
-            android:fontFamily="@font/robofont"
+            android:fontFamily="@font/roboto_bold"
             android:textSize="16sp"
             android:layout_toRightOf="@+id/txtVw_alrdy_mbr"
             android:layout_height="wrap_content" />

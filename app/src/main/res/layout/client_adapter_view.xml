@@ -17,9 +17,9 @@
         android:layout_width="wrap_content"
         android:gravity="center_horizontal"
         android:layout_centerInParent="true"
-        android:maxLines="1"
-        android:textSize="20dp"
-        android:fontFamily="@font/robofont"
+        android:textColor="@color/invoice_value"
+        android:textSize="16sp"
+        android:fontFamily="@font/roboto_medium"
         android:layout_height="wrap_content" />
 
     <TextView
@@ -28,9 +28,9 @@
         android:layout_width="wrap_content"
         android:gravity="center_horizontal"
         android:layout_centerInParent="true"
-        android:maxLines="1"
-        android:textSize="16dp"
-        android:fontFamily="@font/robofont"
+        android:textSize="14sp"
+        android:textColor="@color/text_client_own"
+        android:fontFamily="@font/roboto_regular"
         android:layout_height="wrap_content" />
 
 </RelativeLayout>

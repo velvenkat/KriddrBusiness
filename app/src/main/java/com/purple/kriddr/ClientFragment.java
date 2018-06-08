@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -44,6 +45,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.google.firebase.crash.FirebaseCrash;
 import com.google.gson.Gson;
 import com.purple.kriddr.adapter.AutoCompleteSearchAdapter;
 import com.purple.kriddr.adapter.ClientViewAdapter;
@@ -83,7 +85,7 @@ public class ClientFragment extends Fragment implements ClientViewAdapter.DataFr
     ArrayAdapter<String> dataAdapter;
     Button add_client;
     ActionBarUtil actionBarUtilObj;
-     Dialog mBottomSheetDialog;
+    Dialog mBottomSheetDialog;
 
     GenFragmentCall_Main fragmentCall_mainObj;
     List<PetModel> feedlist;
@@ -111,7 +113,6 @@ public class ClientFragment extends Fragment implements ClientViewAdapter.DataFr
         if (context instanceof InterfaceUserModel) {
             interfaceUserModel = (InterfaceUserModel) context;
             userModel = interfaceUserModel.getUserModel();
-            //  Toast.makeText(getActivity(),"USRMDOELDID"+userModel.getId(),Toast.LENGTH_SHORT).show();
 
         }
     }
@@ -127,8 +128,8 @@ public class ClientFragment extends Fragment implements ClientViewAdapter.DataFr
 
         sortNameList.clear();
 
-        sortNameList.add("sort by most recent");
-        sortNameList.add("alphabetical");
+        sortNameList.add("Sort by most recent");
+        sortNameList.add("Sort alphabetically");
 
 
         no_clients = (RelativeLayout) rootView.findViewById(R.id.no_cleint_layout);
@@ -152,21 +153,8 @@ public class ClientFragment extends Fragment implements ClientViewAdapter.DataFr
             public void onClick(View view) {
 
 
-//                WindowManager wm = (WindowManager) getActivity().getSystemService(Context.WINDOW_SERVICE);
-//                int width = wm.getDefaultDisplay().getWidth();
-//                int height = wm.getDefaultDisplay().getHeight();
-//                final Dialog dialog = new Dialog(getActivity());
-//
-//
-//                View view1= LayoutInflater.from(getActivity()).inflate(R.invoice_graph.search_layout, null);
-//
-//                WindowManager.LayoutParams params = dialog.getWindow().getAttributes();
-//                params.width = WindowManager.LayoutParams.MATCH_PARENT;
-//                params.height = WindowManager.LayoutParams.WRAP_CONTENT;
-//
-//                dialog.setContentView(view1);
-//                dialog.getWindow().setGravity(Gravity.TOP);
-//                dialog.show();
+                FirebaseCrash.report(new Exception("My first Android non-fatal error"));
+
 
 
                 mBottomSheetDialog = new Dialog(getActivity(), R.style.MaterialDialogSheet);
@@ -182,11 +170,6 @@ public class ClientFragment extends Fragment implements ClientViewAdapter.DataFr
 
                 setAutoSearchAdapter(search_pet,true);
                 setAutoSearchAdapter(search_owner,false);
-             /*  adapter = new AutoCompleteSearchAdapter(getContext(), R.invoice_graph.search_layout, R.id.search_pet, feedlist,true,fragmentCall_mainObj);
-                search_pet.setAdapter(adapter);
-                adapter = new AutoCompleteSearchAdapter(getContext(), R.invoice_graph.search_layout, R.id.search_owner, feedlist,false,fragmentCall_mainObj);
-                search_owner.setAdapter(adapter);
-*/
                 mBottomSheetDialog.show();
 
 
@@ -213,65 +196,6 @@ public class ClientFragment extends Fragment implements ClientViewAdapter.DataFr
             }
         });
 
-
-//
-//        add_client.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Log.d("ONCLICKCAA","ONCLICKCAA");
-//
-//
-//                AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity(),AlertDialog.THEME_HOLO_LIGHT);
-//                LayoutInflater inflater = getActivity().getLayoutInflater();
-//
-//                View dialogView = inflater.inflate(R.invoice_graph.custom_popup, null);
-//
-//                alertDialog.setView(dialogView);
-////                alertDialog.setMessage("Adding a pet client");
-//
-//
-//                TextView text = (TextView) dialogView.findViewById(R.id.text);
-//                text.setText("Adding a pet client");
-//
-//
-//                final AlertDialog dialog = alertDialog.create();
-//
-//                ImageView image = (ImageView)dialogView.findViewById(R.id.image);
-//                image.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View view) {
-//                     dialog.cancel();
-//                    }
-//                });
-//                Button button = (Button)dialogView.findViewById(R.id.submit_btn);
-//
-//                button.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View view) {
-//
-//
-//                         dialog.cancel();
-//
-//
-//                        Fragment test1;
-//                        FragmentManager fragmentManager1 = getFragmentManager();
-//                        FragmentTransaction fragmentTransaction1 = fragmentManager1.beginTransaction();
-//                        test1 = new PetClientListFragment();
-//                        fragmentTransaction1.replace(R.id.frame_layout,test1,"parelist");
-//                        fragmentTransaction1.addToBackStack("parelist");
-//                        fragmentTransaction1.commit();
-//
-//                        fragmentCall_mainObj.Fragment_call(new PetClientListFragment(),"petparentlist",null);
-//
-//                    }
-//                });
-//
-//                dialog.show();
-//
-//
-//
-//            }
-//        });
 
 
         dataAdapter = new ArrayAdapter<String>(getActivity(), R.layout.spinner_layout, sortNameList);
@@ -321,10 +245,6 @@ public class ClientFragment extends Fragment implements ClientViewAdapter.DataFr
         mRecyclerView.setLayoutManager(mLayoutManager);
 
 
-//        mAdapter = new ClientViewAdapter(getActivity(),first_Name,second_Name,ImageList);
-//        mRecyclerView.setAdapter(mAdapter);
-
-
         if (NetworkConnection.isOnline(getActivity())) {
             petList(getResources().getString(R.string.url_reference) + "pet_list.php");
         } else {
@@ -332,6 +252,21 @@ public class ClientFragment extends Fragment implements ClientViewAdapter.DataFr
         }
 
         return rootView;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        Fragment mContent;
+        if(savedInstanceState!= null)
+        {
+            mContent = getActivity().getSupportFragmentManager().getFragment(savedInstanceState,"CLIFRAST");
+            FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.frame_layout,mContent,"clientfrag");
+            fragmentTransaction.addToBackStack("clientfrag");
+            fragmentTransaction.commit();
+        }
     }
 
 
@@ -343,11 +278,22 @@ public class ClientFragment extends Fragment implements ClientViewAdapter.DataFr
         handle_BackKey();
     }
 
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        //To save the instance state
+        getActivity().getSupportFragmentManager().putFragment(outState,"CLIFRAST",this);
+    }
+
     public void setAutoSearchAdapter(AutoCompleteTextView txtView, boolean isPet) {
-        adapter = new AutoCompleteSearchAdapter(getContext(), R.layout.search_layout, R.id.search_pet, feedlist, isPet,(AutoCompleteSearchAdapter.DataFromAdapterToFragment)this);
-        txtView.setAdapter(adapter);
-              /*  adapter = new AutoCompleteSearchAdapter(getContext(), R.invoice_graph.search_layout, R.id.search_owner, feedlist,false,fragmentCall_mainObj);
-                search_owner.setAdapter(adapter);*/
+
+        if(feedlist!= null)
+        {
+            adapter = new AutoCompleteSearchAdapter(getContext(), R.layout.search_layout, R.id.search_pet, feedlist, isPet,(AutoCompleteSearchAdapter.DataFromAdapterToFragment)this);
+            txtView.setAdapter(adapter);
+        }
+
 
     }
 
@@ -397,7 +343,6 @@ public class ClientFragment extends Fragment implements ClientViewAdapter.DataFr
         Button negativeButton = alert.getButton(android.support.v7.app.AlertDialog.BUTTON_NEGATIVE);
 
         positiveButton.setTextColor(Color.parseColor("#FF0000"));
-        //positiveButton.setBackgroundColor(Color.parseColor("#FFE1FCEA"));
 
         negativeButton.setTextColor(Color.parseColor("#FF0000"));
 
@@ -477,11 +422,6 @@ public class ClientFragment extends Fragment implements ClientViewAdapter.DataFr
                 if (mobile_number.equals("") || mobile_number.isEmpty()) {
                     Toast.makeText(getActivity(), getResources().getString(R.string.enter_mobile_num), Toast.LENGTH_SHORT).show();
                 }
-//                else if(userModel.getMobile().equals(mobile_number))
-//                {
-//                    Toast.makeText(getActivity(), getResources().getString(R.string.alread_mobile), Toast.LENGTH_SHORT).show();
-//
-//                }
 
                 else {
                     dialog.cancel();
@@ -529,14 +469,8 @@ public class ClientFragment extends Fragment implements ClientViewAdapter.DataFr
 
                 try {
 
-//                    JSONArray jsonArray = new JSONArray(s);
-//                    JSONObject parentObject = jsonArray.getJSONObject(0);
-
-
                     JSONObject jsonObject = new JSONObject(s);
-
                     JSONArray ar = jsonObject.getJSONArray("response");
-
                     JSONObject parentObject = ar.getJSONObject(0);
                     pet_id = parentObject.getString("pet_id");
 

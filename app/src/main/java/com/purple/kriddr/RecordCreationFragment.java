@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Build;
@@ -39,11 +40,14 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.google.gson.Gson;
+import com.purple.kriddr.adapter.BusinessRecordsAdapter;
 import com.purple.kriddr.adapter.PetClientListAdapter;
 import com.purple.kriddr.controller.AppController;
 import com.purple.kriddr.iface.FragmentCallInterface;
@@ -62,6 +66,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -219,6 +224,10 @@ public class RecordCreationFragment extends Fragment implements View.OnClickList
         else if (selectedBitmap == null) {
             Toast.makeText(getActivity(), "Please choose the image", Toast.LENGTH_SHORT).show();
         }
+        else if(doc_id.equalsIgnoreCase("Select"))
+        {
+            Toast.makeText(getActivity(),"Please choose the category",Toast.LENGTH_SHORT).show();
+        }
 
         else {
             if (NetworkConnection.isOnline(getActivity())) {
@@ -232,9 +241,6 @@ public class RecordCreationFragment extends Fragment implements View.OnClickList
     }
 
 
-
-
-
     private void submitData(String url, final String docName)
     {
 
@@ -245,6 +251,7 @@ public class RecordCreationFragment extends Fragment implements View.OnClickList
             public void onResponse(String s) {
                 //progress.hide();
                 Log.d("RECORDFRAG","RECORDFRAG"+s);
+
 
                 myProgressDialog.hide();
 
@@ -273,6 +280,15 @@ public class RecordCreationFragment extends Fragment implements View.OnClickList
                                 });
                         AlertDialog alert = builder.create();
                         alert.show();
+                        Button positiveButton = alert.getButton(android.support.v7.app.AlertDialog.BUTTON_POSITIVE);
+                        Button negativeButton = alert.getButton(android.support.v7.app.AlertDialog.BUTTON_NEGATIVE);
+                        Button neturalButton = alert.getButton(android.support.v7.app.AlertDialog.BUTTON_NEUTRAL);
+
+                        positiveButton.setTextColor(Color.parseColor("#000000"));
+                        //positiveButton.setBackgroundColor(Color.parseColor("#FFE1FCEA"));
+
+                        negativeButton.setTextColor(Color.parseColor("#000000"));
+                        neturalButton.setTextColor(Color.parseColor("#000000"));
 
 
                     }
@@ -313,7 +329,17 @@ public class RecordCreationFragment extends Fragment implements View.OnClickList
                 params.put("name",docName);
                 params.put("document_category_id",doc_id);
                 params.put("image",image);
+                params.put("user_type","1");
                 return params;
+            }
+
+
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> header = new LinkedHashMap<String, String>();
+                header.put("Content-Type", "application/x-www-form-urlencoded");
+                return super.getHeaders();
             }
 
         };
@@ -362,9 +388,9 @@ public class RecordCreationFragment extends Fragment implements View.OnClickList
                docIdList.clear();
                docNameList.clear();
 
-//
-//                typeIdList.add("Select");
-//                typeNameList.add("Select");
+
+                docIdList.add("Select");
+                docNameList.add("Select");
 
                 try {
 
@@ -384,14 +410,6 @@ public class RecordCreationFragment extends Fragment implements View.OnClickList
                     }
 
                     category_value.setAdapter(category_adapter);
-
-
-//                    for (int i = 0; i < typeIdList.size();i++) {
-//
-//                        if (gas_type_id.equals(typeIdList.get(i))) {
-//                            type_spin.setSelection(i);
-//                        }
-//                    }
 
 
 
@@ -419,6 +437,7 @@ public class RecordCreationFragment extends Fragment implements View.OnClickList
 
                 return params;
             }
+
 
         };
         AppController.getInstance().addToRequestQueue(request);
@@ -456,9 +475,6 @@ public class RecordCreationFragment extends Fragment implements View.OnClickList
 
                     try {
                         selectedBitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), picUri);
-                        selectedBitmap = rotateImageIfRequired(selectedBitmap, picUri);
-                        selectedBitmap = getResizedBitmap(selectedBitmap, 200);
-
 
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -476,89 +492,8 @@ public class RecordCreationFragment extends Fragment implements View.OnClickList
             }
 
 
-
-
-
-//            if(requestCode == PIC_CROP)
-//            {
-//
-//                if (data != null) {
-//                    // get the returned data
-//
-//                    Bundle extras = data.getExtras();
-//
-//
-//                    try {
-//                        selectedBitmap = extras.getParcelable("data");
-//                        if(selectedBitmap== null)
-//                        {
-//
-//                        }
-//
-//
-//                    }
-//                    catch (Exception e)
-//                    {
-//                        Uri uri = data.getData();
-//
-//
-//                        try {
-//                            selectedBitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(),uri);
-//                        } catch (IOException e1) {
-//                            e1.printStackTrace();
-//                        }
-//                        e.printStackTrace();
-//
-//                    }
-//
-//
-//
-//
-//
-//                    add_photo.setImageBitmap(selectedBitmap);
-//                }
-//
-//
-//
-
             }
 
-
-
-
-
-//            if (requestCode == PICK_IMAGE_REQUEST)
-//            {
-//
-//
-//                if (getPickImageResultUri(data) != null) {
-//                    picUri = getPickImageResultUri(data);
-//
-//
-//                   performCrop(picUri);
-//
-////                try {
-////                    bitmap = MediaStore.Images.Media.getBitmap(getActivity().getCfontentResolver(), picUri);
-////                    bitmap = rotateImageIfRequired(bitmap, picUri);
-////                    bitmap = getResizedBitmap(bitmap, 200);
-////
-////
-////                } catch (IOException e) {
-////                    e.printStackTrace();
-////                }
-//
-//
-//                }
-////                else {
-////
-////
-////                    bitmap = (Bitmap) data.getExtras().get("data");
-////
-////                }
-//            }
-
-//            RoundedBitmapDrawable drawable = RoundedBitmapDrawableFactory.create(getResources(), bitmap);
-//            add_photo.setImageDrawable(drawable);
         }
 
 
@@ -597,46 +532,19 @@ public class RecordCreationFragment extends Fragment implements View.OnClickList
     }
 
 
+
+
+
+
     public String getStringImage(Bitmap bmp) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bmp.compress(Bitmap.CompressFormat.JPEG, 70, baos);
+        bmp.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         byte[] imageBytes = baos.toByteArray();
         String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
         return encodedImage;
     }
 
 
-    private static Bitmap rotateImageIfRequired(Bitmap img, Uri selectedImage) throws IOException {
-
-        ExifInterface ei = new ExifInterface(selectedImage.getPath());
-        int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
-
-        switch (orientation) {
-            case ExifInterface.ORIENTATION_ROTATE_90:
-                return rotateImage(img, 90);
-            case ExifInterface.ORIENTATION_ROTATE_180:
-                return rotateImage(img, 180);
-            case ExifInterface.ORIENTATION_ROTATE_270:
-                return rotateImage(img, 270);
-            default:
-                return img;
-        }
-    }
-
-    public Bitmap getResizedBitmap(Bitmap image, int maxSize) {
-        int width = image.getWidth();
-        int height = image.getHeight();
-
-        float bitmapRatio = (float) width / (float) height;
-        if (bitmapRatio > 0) {
-            width = maxSize;
-            height = (int) (width / bitmapRatio);
-        } else {
-            height = maxSize;
-            width = (int) (height * bitmapRatio);
-        }
-        return Bitmap.createScaledBitmap(image, width, height, true);
-    }
 
     public boolean checkPermissionForExternalStorage(){
         int result = ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE);
@@ -666,105 +574,6 @@ public class RecordCreationFragment extends Fragment implements View.OnClickList
     }
 
 
-
-
-
-    private void performCrop(Uri picUri) {
-
-        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
-        StrictMode.setVmPolicy(builder.build());
-
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-            builder.detectFileUriExposure();
-        }
-
-
-        if (checkPermissionForExternalStorage()||checkPermissionForCamera()){
-
-
-            Log.v("pickuri",picUri+"");
-
-            try {
-                Intent cropIntent = new Intent("com.android.camera.action.CROP");
-                // indicate image type and Uri
-                cropIntent.setDataAndType(picUri, "image/*");
-                // set crop properties here
-                cropIntent.putExtra("crop", true);
-                // indicate aspect of desired crop
-                cropIntent.putExtra("aspectX", 1);
-                cropIntent.putExtra("aspectY", 1);
-                // indicate output X and Y
-                cropIntent.putExtra("outputX", 128);
-                cropIntent.putExtra("outputY", 128);
-                // retrieve data on return
-                cropIntent.putExtra("return-data", true);
-                // start the activity - we handle returning in onActivityResult
-
-
-
-                startActivityForResult(cropIntent, PIC_CROP);
-
-
-            }
-            // respond to users whose devices do not support the crop action
-            catch (ActivityNotFoundException anfe) {
-                // display an error message
-                String errorMessage = "Whoops - your device doesn't support the crop action!";
-                Toast toast = Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_SHORT);
-                toast.show();
-            }
-
-        }
-
-
-
-
-
-
-
-      //  try {
-       /*     Intent cropIntent = new Intent("com.android.camera.action.CROP");
-
-            Uri contentUri;
-            File file=new File(picUri.getPath());
-            if(Build.VERSION.SDK_INT > M){
-
-                //contentUri = FileProvider.getUriForFile(getActivity(), "android3.maxtingapp.provider",file);//package.provider
-
-                //TODO:  Permission..
-                   file=new File(picUri.getPath());
-                  contentUri = FileProvider.getUriForFile(getActivity(), "android3.maxtingapp.provider", file);//package.provider
-                getActivity().getApplicationContext().grantUriPermission("com.android.camera", picUri,
-                        Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
-
-                cropIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                cropIntent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-
-            }else{
-
-                contentUri = Uri.fromFile(file);
-
-            }
-
-            cropIntent.setDataAndType(contentUri, "image*//*");
-            cropIntent.putExtra("crop", "true");
-            cropIntent.putExtra("aspectX", 2);
-            cropIntent.putExtra("aspectY", 1);
-            cropIntent.putExtra("outputX", 128);
-            cropIntent.putExtra("outputY", 128);
-
-            cropIntent.putExtra("return-data", true);
-            cropIntent.putExtra(MediaStore.EXTRA_OUTPUT, picUri);
-            startActivityForResult(cropIntent, PIC_CROP);
-*//*
-        }catch (ActivityNotFoundException a) {
-            Log.e("Activity Not Found",""+a.toString());
-        }*/
-
-
-
-    }
 
 
     public Uri getPickImageResultUri(Intent data) {
@@ -830,9 +639,6 @@ public class RecordCreationFragment extends Fragment implements View.OnClickList
 
 
     private void showFileChooser() {
-        //  Intent i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        // startActivityForResult(i, PICK_IMAGE_REQUEST);
-
         startActivityForResult(getPickImageChooserIntent(), PICK_IMAGE_REQUEST);
 
     }

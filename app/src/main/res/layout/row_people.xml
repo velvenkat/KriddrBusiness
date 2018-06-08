@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -32,7 +32,7 @@
                 android:layout_width="match_parent"
                 android:layout_toRightOf="@+id/imageView"
                 android:gravity="center_vertical"
-                android:layout_height="70dp">
+                android:layout_height="80dp">
 
                 <TextView
                     android:id="@+id/name"
@@ -40,11 +40,11 @@
                     android:layout_height="wrap_content"
                     android:textSize="20sp"
                     android:maxLines="1"
+                    android:textColor="#3d3d3d"
                     android:ellipsize="end"
                     android:layout_marginLeft="10dp"
                     android:layout_centerVertical="true"
-                    android:fontFamily="@font/robofont"
-                    android:textStyle="bold"
+                    android:fontFamily="@font/roboto_medium"
                     android:text="Relative layout"/>
 
                 <TextView
@@ -52,10 +52,11 @@
                     android:layout_width="wrap_content"
                     android:text="Compound button"
                     android:layout_height="wrap_content"
-                    android:textSize="18dp"
+                    android:textSize="17sp"
+                    android:textColor="#3d3d3d"
+                    android:fontFamily="@font/roboto_light"
                     android:maxLines="1"
                     android:ellipsize="end"
-
                     android:layout_centerVertical="true"
                     android:layout_below="@+id/name"
                     android:layout_alignLeft="@+id/name"/>
@@ -65,4 +66,4 @@
 
     </android.support.v7.widget.CardView>
 
-</LinearLayout>
+</RelativeLayout>

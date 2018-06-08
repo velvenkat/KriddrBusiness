@@ -80,7 +80,7 @@ public class InvoiceViewFragment extends Fragment implements PaymentRecivedViewH
     JSONObject invoiceviewJsonObject, petdetailsJsonObject, invoicedetailsinfoJsonObject;
     ArrayList<InvoiceViewListModel> invoicelist;
     PaymentModel paymentList;
-    ArrayList<PaymentReceivedModel> paymentReceivedModel = new ArrayList<>();
+    ArrayList<PaymentReceivedModel> paymentReceivedModel=new ArrayList<>();
     List<Genre> listGen_invoice_dtls;
     List<String> listDataHeader;
     List<HashMap<Integer, List<String>>> hashlist_inv_Hdr;
@@ -89,6 +89,7 @@ public class InvoiceViewFragment extends Fragment implements PaymentRecivedViewH
     Button btnConfirm;
     AutoCompleteSearchAdapter adapter;
     String name_UsrSearch = "";
+    AlertDialog dialog;
 
 
     @Nullable
@@ -122,7 +123,8 @@ public class InvoiceViewFragment extends Fragment implements PaymentRecivedViewH
         actionBarUtilObj.getImgSettings().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getActivity(),"GETIMGESETT",Toast.LENGTH_SHORT).show();
+
+//                Toast.makeText(getActivity(),"GETIMGESETT",Toast.LENGTH_SHORT).show();
 
                 if(actionBarUtilObj.getEditText().getVisibility() == View.VISIBLE)
                 {
@@ -139,24 +141,6 @@ public class InvoiceViewFragment extends Fragment implements PaymentRecivedViewH
 
                     invoiceList(getResources().getString(R.string.url_reference) + "client_invoice_details.php", tab_sel_status);
 
-//                    actionBarUtilObj.getEditText().addTextChangedListener(new TextWatcher() {
-//                        @Override
-//                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-//
-//                        }
-//
-//                        @Override
-//                        public void onTextChanged(CharSequence s, int start, int before, int count) {
-//
-//                        }
-//
-//                        @Override
-//                        public void afterTextChanged(Editable s) {
-//
-//                        }
-//                    });
-
-
                 }
                  else {
                     actionBarUtilObj.getEditText().setVisibility(View.VISIBLE);
@@ -168,6 +152,8 @@ public class InvoiceViewFragment extends Fragment implements PaymentRecivedViewH
 
 
         tabLayout.getTabAt(0).select();
+        // little hack to prevent unnecessary tab scrolling
+        tabLayout.clearOnTabSelectedListeners();
 
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
@@ -175,27 +161,38 @@ public class InvoiceViewFragment extends Fragment implements PaymentRecivedViewH
                 int Pos = tab.getPosition();
                 switch (Pos) {
                     case 0:
-                        paymentReceivedModel.clear();
-                        listGen_invoice_dtls.clear();
-                        listDataHeader.clear();
-                        invocieDetailsInfoList.clear();
-                        invoicelist.clear();
-                        hashlist_inv_Hdr.clear();
-                        list_adaapter.clear();
+
+                        if(listGen_invoice_dtls != null)
+                        {
+                            paymentReceivedModel.clear();
+                            listGen_invoice_dtls.clear();
+                            listDataHeader.clear();
+                            invocieDetailsInfoList.clear();
+                            invoicelist.clear();
+                            hashlist_inv_Hdr.clear();
+                            list_adaapter.clear();
+                        }
                         invoice_main_layout.removeAllViews();
 
                         tab_sel_status = "1";
                         break;
                     case 1:
 
-                        paymentReceivedModel.clear();
-                        listGen_invoice_dtls.clear();
-                        listDataHeader.clear();
-                        invocieDetailsInfoList.clear();
-                        invoicelist.clear();
-                        hashlist_inv_Hdr.clear();
-                        list_adaapter.clear();
+                        if(listGen_invoice_dtls!= null)
+                        {
+                            paymentReceivedModel.clear();
+                            listGen_invoice_dtls.clear();
+                            listDataHeader.clear();
+                            invocieDetailsInfoList.clear();
+                            invoicelist.clear();
+                            hashlist_inv_Hdr.clear();
+                            list_adaapter.clear();
+                        }
+
+
+
                         invoice_main_layout.removeAllViews();
+                        btnConfirm.setVisibility(View.GONE);
 
                         tab_sel_status = "2";
                         break;
@@ -261,17 +258,19 @@ public class InvoiceViewFragment extends Fragment implements PaymentRecivedViewH
 
                         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                         builder.setMessage(getResources().getString(R.string.payment_received_confirm))
+                                .setTitle("Thank You!")
                                 .setCancelable(false)
                                 .setNeutralButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         dialog.cancel();
-                                        getActivity().getSupportFragmentManager().popBackStackImmediate();
-                                        //  genFragmentCall_mainObj.Fragment_call(new ClientFragment(),"clintback",null);
+                                        fragmentCall_mainObj.Fragment_call(new InvoiceViewFragment(),"invoicefrag",null);
                                     }
                                 });
                         AlertDialog alert = builder.create();
                         alert.show();
+
+                        dialog.cancel();
 
 
                     }
@@ -330,7 +329,6 @@ public class InvoiceViewFragment extends Fragment implements PaymentRecivedViewH
 
     public void pop_up_window(String message) {
 
-
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity(), R.style.CustomDialog);
         LayoutInflater inflater = getActivity().getLayoutInflater();
 
@@ -339,40 +337,40 @@ public class InvoiceViewFragment extends Fragment implements PaymentRecivedViewH
         alertDialog.setView(dialogView);
 
 
-        final AlertDialog dialog = alertDialog.create();
+        dialog = alertDialog.create();
 
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 
 
-        ImageView image = (ImageView) dialogView.findViewById(R.id.image);
 
-        image.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.cancel();
-            }
-        });
-
+        ImageView close_image = (ImageView)dialogView.findViewById(R.id.image);
 
         TextView textView = (TextView)dialogView.findViewById(R.id.text1);
+        Button confirm = (Button)dialogView.findViewById(R.id.submit_btn);
 
          textView.setText(message);
 
 
-        Button button = (Button) dialogView.findViewById(R.id.submit_btn);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        close_image.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View v) {
+                 dialog.cancel();
+             }
+         });
 
-                if (NetworkConnection.isOnline(getActivity())) {
-                    load_data(getResources().getString(R.string.url_reference) + "pet_invoice_status_update.php");
-                            } else {
-                                Toast.makeText(getActivity(), getResources().getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
-                            }
+         confirm.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View v) {
 
+                 if (NetworkConnection.isOnline(getActivity())) {
+                     load_data(getResources().getString(R.string.url_reference) + "pet_invoice_status_update.php");
+                 } else {
+                     Toast.makeText(getActivity(), getResources().getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
+                 }
 
-            }
-        });
+             }
+         });
+
 
         dialog.show();
     }
@@ -455,8 +453,6 @@ public class InvoiceViewFragment extends Fragment implements PaymentRecivedViewH
 
                             }
 
-                            //listDataChild.put(index1,invocieDetailsInfoList);
-
                             if (StatusFlg.equalsIgnoreCase("1")) {
                                 InvoiceDetailsInfoModel paymentModel = new InvoiceDetailsInfoModel();
                                 paymentModel.setPaymentRecd(false);
@@ -480,11 +476,6 @@ public class InvoiceViewFragment extends Fragment implements PaymentRecivedViewH
 
                     }
 
-                    Log.d("INVOCIELSITSIZE", "INVOCIELSITSIZE" + invoicelist.size());
-
-                  /*  for(int k=0;k<invoicelist.size();k++) {
-                        invoice_view(k);
-                    }*/
 
 
                 } catch (Exception e) {
@@ -522,7 +513,7 @@ public class InvoiceViewFragment extends Fragment implements PaymentRecivedViewH
 
         View tabOne = (View) LayoutInflater.from(getContext()).inflate(R.layout.custom_tab_btn, null);
         TextView txtTab1 = (TextView) tabOne.findViewById(R.id.tab);
-        txtTab1.setText("Payment Pending");
+        txtTab1.setText("Payment\nPending");
         TabLayout.Tab tab = tabLayout.newTab();
         tabLayout.addTab(tab);
         tab.setCustomView(tabOne);
@@ -531,7 +522,7 @@ public class InvoiceViewFragment extends Fragment implements PaymentRecivedViewH
 
         View tabTwo = (View) LayoutInflater.from(getContext()).inflate(R.layout.custom_tab_btn, null);
         TextView txtTab2 = (TextView) tabTwo.findViewById(R.id.tab);
-        txtTab2.setText("Payment Received");
+        txtTab2.setText("Payment\nReceived");
         TabLayout.Tab tab1 = tabLayout.newTab();
         tabLayout.addTab(tab1);
         tab1.setCustomView(tabTwo);
@@ -590,18 +581,6 @@ public class InvoiceViewFragment extends Fragment implements PaymentRecivedViewH
         exp_inv_recyclerView.setAdapter(adapter);
         list_adaapter.add(adapter);
 
-       /* adapter.setOnGroupExpandCollapseListener(new GroupExpandCollapseListener() {
-            @Override
-            public void onGroupExpanded(ExpandableGroup group) {
-               group.getTitle()
-                adapter.getGroups();
-            }
-
-            @Override
-            public void onGroupCollapsed(ExpandableGroup group) {
-
-            }
-        });*/
         btnConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -640,11 +619,6 @@ public class InvoiceViewFragment extends Fragment implements PaymentRecivedViewH
         View view = invoice_main_layout.getChildAt((AdapterPos * 2) + 1);
         RecyclerView recyclerView = view.findViewById(R.id.invoice_view_layout);
         GenreAdapter adapter = list_adaapter.get(AdapterPos);
-        // adapter.getGroupCollection().size();
-        /*adapter.getGroupCollection().get()*/
-        //Toast.makeText(getContext(),"Size:"+adapter.getGroupCollection().size(),Toast.LENGTH_SHORT).show();
-
-
         ArrayList<HashMap<Integer, List<String>>> hdrDtls = new ArrayList<>(adapter.getHdrDtls());
 
 
@@ -738,23 +712,5 @@ public class InvoiceViewFragment extends Fragment implements PaymentRecivedViewH
         recyclerView.requestLayout();
         list_adaapter.set(AdapterPos, Updateadapter);
 
- /*       //hdrDtls.remove(HDRINDEX);
-        //dtls.remove(HDRINDEX);
-       *//* dtls.put(HDRINDEX,TitleList);
-        hdrDtls.set(HDRINDEX,dtls);
-        adapter.getHdrDtls().clear();
-       *//* //notifyItemChanged(HDRINDEX);
-
-     //   adapter.notifyItemChanged(HDRINDEX);
-
-//        adapter.getHdrDtls().addAll(hdrDtls);
-        adapter.getHdrDtls().get(HDRINDEX).put(HDRINDEX,TitleList);
-        adapter.getGroupCollection().get(HDRINDEX).getItems().set(invoiceDetailsInfoModel.size()-1,obj_invoice);
-        list_adaapter.set(AdapterPos,adapter);
-        recyclerView.removeAllViews();
-        recyclerView.setAdapter(adapter);
-   //     adapter.notifyDataSetChanged();
-
-     //    adapter.notify();*/
     }
 }

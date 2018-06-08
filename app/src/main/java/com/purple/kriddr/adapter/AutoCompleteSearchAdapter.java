@@ -32,7 +32,6 @@ public class AutoCompleteSearchAdapter extends ArrayAdapter<PetModel> {
     List<PetModel> items, tempItems, suggestions;
     boolean isPet;
     AutoCompleteSearchAdapter.DataFromAdapterToFragment dataFromAdapterToFragment;
-  //  GenFragmentCall_Main fragmentCallobj;
 
     public AutoCompleteSearchAdapter(Context context, int resource, int textViewResourceId, List<PetModel> items, boolean isPetVal,AutoCompleteSearchAdapter.DataFromAdapterToFragment dataToFragment) {
         super(context, resource, textViewResourceId, items);
@@ -45,8 +44,6 @@ public class AutoCompleteSearchAdapter extends ArrayAdapter<PetModel> {
         suggestions = new ArrayList<PetModel>();
 
         this.dataFromAdapterToFragment=dataToFragment;
-
-      //  this.fragmentCallobj=fragmentCallobj;
 
 
     }
@@ -76,11 +73,6 @@ public class AutoCompleteSearchAdapter extends ArrayAdapter<PetModel> {
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-               // dataFromAdapterToFragment.getClientDetails(people.getPet_id(),people.getOwwner_id());
-                /*Bundle bundle=new Bundle();
-                bundle.putString("pet_id",people.getPet_id());
-                fragmentCallobj.Fragment_call(new ClientViewDetailsFragment(),"clientDetails",bundle);*/
                 dataFromAdapterToFragment.getClientDetails(people.getPet_id(),people.getOwwner_id());
             }
         });

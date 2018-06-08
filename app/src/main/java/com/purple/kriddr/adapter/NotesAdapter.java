@@ -14,6 +14,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.purple.kriddr.R;
 import com.purple.kriddr.model.DocumentModel;
 import com.purple.kriddr.model.NotesModel;
+import com.purple.kriddr.model.PetModel;
 
 import java.util.ArrayList;
 
@@ -46,11 +47,17 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.MyViewHolder
     @Override
     public void onBindViewHolder(NotesAdapter.MyViewHolder holder, int position) {
 
+        final NotesModel nature = notesList.get(position);
+
 
         if(!notesList.get(position).getCreated().equalsIgnoreCase("Empty") && !notesList.get(position).getNotes().equalsIgnoreCase("Empty"))
         {
-            holder.notes_date.setText(notesList.get(position).getCreated());
-            holder.notes_desc.setText(notesList.get(position).getNotes());
+            holder.notes_date.setText(nature.getCreated());
+            holder.notes_desc.setText(nature.getNotes());
+        }
+        else
+        {
+            holder.no_notes.setVisibility(View.VISIBLE);
         }
 
 
@@ -71,9 +78,17 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.MyViewHolder
 
     }
 
+
+    public long getItemId(int position) {
+        return position;
+    }
+    public Object getItem(int position) {
+        return notesList.get(position);
+    }
+
     public static class MyViewHolder extends RecyclerView.ViewHolder {
 
-        TextView notes_date, notes_desc;
+        TextView notes_date, notes_desc, no_notes;
 
 
         public MyViewHolder(View itemView) {
@@ -81,6 +96,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.MyViewHolder
 
             notes_date = (TextView) itemView.findViewById(R.id.notes_date);
             notes_desc = (TextView)itemView.findViewById(R.id.notes_des);
+            no_notes = (TextView)itemView.findViewById(R.id.no_notes);
 
         }
     }

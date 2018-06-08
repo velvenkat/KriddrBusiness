@@ -2,24 +2,24 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:orientation="vertical"
-    android:layout_gravity="center_horizontal"
     android:padding="5dp"
     android:layout_height="wrap_content">
 
 
    <ImageView
        android:id="@+id/recordimagView"
-       android:layout_centerHorizontal="true"
-       android:layout_width="100dp"
+       android:layout_width="150dp"
+       android:scaleType="fitXY"
        android:layout_height="150dp" />
 
     <TextView
         android:id="@+id/record_name"
         android:layout_below="@+id/recordimagView"
-        android:fontFamily="@font/robofont"
-        android:layout_gravity="center_horizontal"
+        android:fontFamily="@font/roboto_regular"
         android:text="11/07/2017"
-        android:textSize="16sp"
+        android:textSize="15sp"
+        android:layout_marginLeft="10dp"
+        android:textColor="@color/text_name_color"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 

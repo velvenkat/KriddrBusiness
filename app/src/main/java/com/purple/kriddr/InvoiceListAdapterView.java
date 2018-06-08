@@ -30,7 +30,6 @@ public class InvoiceListAdapterView extends RecyclerView.Adapter<InvoiceListAdap
 
     public InvoiceListAdapterView(ArrayList<InvoiceDateValues> invoiceList, Context context)
     {
-        Log.d("INVAOCONS","INVAOCONS"+invoiceList.size());
         this.invoiceList = invoiceList;
         this.context = context;
 
@@ -48,19 +47,16 @@ public class InvoiceListAdapterView extends RecyclerView.Adapter<InvoiceListAdap
     public void onBindViewHolder(MyViewHolder holder, int position) {
 
         String inv_date = "", inv_service = "", inv_value = "";
-        Log.d("ONBAD","ONBAD");
 
         final InvoiceDateValues group_model = invoiceList.get(position);
 
-
-       // Log.d("SIEMNE","SIEMNE"+group_model.getGetInfo().size());
 
 
             inv_date = group_model.getInvoice_date();
             inv_service = group_model.getService();
             inv_value = group_model.getAmount();
 
-            Log.d("INDADT","INDADT"+inv_date + "DS "+inv_service + "INVA "+inv_value);
+
 
 
 

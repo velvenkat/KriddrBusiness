@@ -16,6 +16,7 @@
             android:src="@drawable/upload"
             android:layout_width="match_parent"
             android:layout_marginTop="20dp"
+            android:adjustViewBounds="true"
             android:scaleType="fitXY"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
@@ -35,9 +36,9 @@
            android:id="@+id/doc_txt"
            android:layout_width="match_parent"
            android:text="Document name"
-           android:fontFamily="@font/robofont"
+           android:fontFamily="@font/roboto_regular"
            android:textColor="@color/text_color"
-           android:textSize="20dp"
+           android:textSize="18sp"
            android:layout_height="wrap_content" />
 
 
@@ -50,9 +51,10 @@
         android:background="@drawable/rounded_edittext"
         android:hint="Name"
         android:layout_marginTop="10dp"
+        android:textSize="18sp"
         android:paddingLeft="15dp"
         android:selectAllOnFocus="true"
-        android:fontFamily="@font/robofont"
+        android:fontFamily="@font/roboto_regular"
         android:paddingTop="5dp"
         android:paddingBottom="5dp"
         android:inputType="textNoSuggestions"
@@ -67,9 +69,9 @@
         android:layout_width="match_parent"
         android:text="Category"
         android:layout_marginTop="20dp"
-        android:fontFamily="@font/robofont"
+        android:fontFamily="@font/roboto_regular"
         android:textColor="@color/text_color"
-        android:textSize="20dp"
+        android:textSize="18sp"
         android:layout_height="wrap_content" />
 
 
@@ -91,7 +93,8 @@
         android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
         android:background="@drawable/gradient_bg"
-        android:fontFamily="@font/robofont"
+        android:fontFamily="@font/roboto_medium"
+        android:textSize="16sp"
         android:text="DONE"
         android:textColor="@color/white"
         android:layout_height="wrap_content" />

@@ -1,23 +1,22 @@
 package com.purple.kriddr;
 
 import android.content.Context;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.ActionBar;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.PhoneNumberFormattingTextWatcher;
+import android.text.Html;
 import android.text.InputFilter;
 import android.text.Spanned;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,13 +24,13 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.google.gson.Gson;
 import com.purple.kriddr.controller.AppController;
 import com.purple.kriddr.iface.FragmentCallInterface;
 import com.purple.kriddr.iface.InterfaceActionBarUtil;
 import com.purple.kriddr.util.ActionBarUtil;
 import com.purple.kriddr.util.GenFragmentCall_Main;
 import com.purple.kriddr.util.NetworkConnection;
-import com.google.gson.Gson;
 
 import org.json.JSONObject;
 
@@ -51,6 +50,7 @@ public class SignupFragment extends Fragment {
     View rootView;
     ActionBarUtil actionBarUtilObj;
     GenFragmentCall_Main genFragmentCall_mainObj;
+    TextView txtTermsCondts;
 
     @Nullable
     @Override
@@ -60,14 +60,33 @@ public class SignupFragment extends Fragment {
         flname = (EditText)rootView.findViewById(R.id.flname);
         mobile = (EditText)rootView.findViewById(R.id.mobile);
 
+
         mobile.addTextChangedListener(new PhoneNumberFormattingTextWatcher("US"));
 
         email = (EditText)rootView.findViewById(R.id.email_val);
+        txtTermsCondts = (TextView)rootView.findViewById(R.id.terms_condition);
+
+
+        String termsStr="By signing up, I agree to Kriddr's <a href=\"https://www.kriddr.com/terms-of-service\">Terms & Conditions</a> and <a href=\"https://www.kriddr.com/privacy-policy\">Privacy Policy</a>";
+
+        txtTermsCondts.setClickable(true);
+        txtTermsCondts.setMovementMethod(LinkMovementMethod.getInstance());
+        txtTermsCondts.setText(Html.fromHtml(termsStr));
+        txtTermsCondts.setLinkTextColor(Color.BLUE);
 
 
         actionBarUtilObj.setActionBarVisible();
+        actionBarUtilObj.getEditText().setVisibility(View.INVISIBLE);
+        actionBarUtilObj.getImgBack().setVisibility(View.VISIBLE);
 
         actionBarUtilObj.setTitle("Sign Up");
+        actionBarUtilObj.getTitle().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((AppCompatActivity) getActivity()).getSupportFragmentManager().popBackStackImmediate();
+
+            }
+        });
 
 
         final String blockCharacterSet = " -,/.@%`'\"\\=~#^|$%&*!";
@@ -118,10 +137,15 @@ public class SignupFragment extends Fragment {
         } else if (mobile_No.isEmpty() || mobile_No.equals("")) {
             Toast.makeText(getActivity(), getResources().getString(R.string.enter_mobile), Toast.LENGTH_SHORT).show();
         }
-//        else if(!android.util.Patterns.EMAIL_ADDRESS.matcher(email_Val).matches())
-//        {
-//            Toast.makeText(getActivity(), getResources().getString(R.string.invalid_email), Toast.LENGTH_SHORT).show();
-//        }
+        else if(email_Val.isEmpty() || email_Val.equals(""))
+        {
+            Toast.makeText(getActivity(), getResources().getString(R.string.enter_email_val), Toast.LENGTH_SHORT).show();
+
+        }
+        else if(!android.util.Patterns.EMAIL_ADDRESS.matcher(email_Val).matches())
+        {
+            Toast.makeText(getActivity(), getResources().getString(R.string.invalid_email), Toast.LENGTH_SHORT).show();
+        }
         else
         {
             if(NetworkConnection.isOnline(getActivity()))
@@ -151,11 +175,14 @@ public class SignupFragment extends Fragment {
     private void signupData(String url)
     {
 
+        final MyProgressDialog myProgressDialog = new MyProgressDialog(getActivity());
 
         StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 //progress.hide();
+
+                myProgressDialog.hide();
                 Log.d("SIGNUPRES","SIGNUPRES"+s);
 
                 try
@@ -165,22 +192,24 @@ public class SignupFragment extends Fragment {
                     String mobile = jsonObject.getString("mobile");
                     if(name.equals("Success"))
                     {
-                       /* Fragment test;
-                        FragmentManager fragmentManager = getFragmentManager();
-                        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                        test = new OTPFragment();*/
+
                         Bundle args = new Bundle();
                         args.putString("mobile", mobile);
+                        args.putString("type","signup");
                         genFragmentCall_mainObj.Fragment_call(new OTPFragment(),"OTP",args);
-                       /* test.setArguments(args);
-                        fragmentTransaction.replace(R.id.content_frame,test,"sgnfrg");
-                        fragmentTransaction.addToBackStack("sgnfrg");
-                        fragmentTransaction.commit();*/
+
 
                     }
+
                     else if(name.equals("Exist"))
                     {
                         Toast.makeText(getActivity(),getResources().getString(R.string.already_user_exist),Toast.LENGTH_SHORT).show();
+
+                        Bundle args = new Bundle();
+                        args.putString("mobile", mobile_No);
+                        genFragmentCall_mainObj.Fragment_call(new SigninFragment(),"siginfrag",args);
+
+
                     }
                 }
                 catch (Exception e)
@@ -197,6 +226,8 @@ public class SignupFragment extends Fragment {
             public void onErrorResponse(VolleyError volleyError) {
                 // progress.hide();
 
+                myProgressDialog.hide();
+
             }
         }) {
 
@@ -208,7 +239,7 @@ public class SignupFragment extends Fragment {
 
                 Gson gson = new Gson();
                 params.put("name",first_Name);
-                params.put("mobile",mobile_No);
+                params.put("mobile","91||"+ mobile_No);
                 params.put("email",email_Val);
 
 
@@ -217,6 +248,8 @@ public class SignupFragment extends Fragment {
             }
 
         };
+
+        myProgressDialog.show();
         AppController.getInstance().addToRequestQueue(request, tag_string_req_recieve2);
     }
 

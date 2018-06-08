@@ -1,36 +1,38 @@
 package com.purple.kriddr;
 
+import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
+import android.graphics.Bitmap;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.LinearSmoothScroller;
 import android.support.v7.widget.RecyclerView;
-import android.telephony.PhoneNumberFormattingTextWatcher;
-import android.text.InputFilter;
-import android.text.Spanned;
+import android.util.Base64;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,9 +41,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.purple.kriddr.adapter.AutoCompleteSearchAdapter;
-import com.purple.kriddr.adapter.BusinessRecordAdapter;
 import com.purple.kriddr.adapter.InvocieListAdapter;
 import com.purple.kriddr.adapter.NotesAdapter;
 import com.purple.kriddr.adapter.RecordsAdapter;
@@ -52,32 +51,38 @@ import com.purple.kriddr.iface.InterfaceUserModel;
 import com.purple.kriddr.model.DocumentModel;
 import com.purple.kriddr.model.InvoiceDateValues;
 import com.purple.kriddr.model.InvoiceListModel;
-import com.purple.kriddr.model.InvoiceModel;
 import com.purple.kriddr.model.NotesModel;
 import com.purple.kriddr.model.PetListModel;
-import com.purple.kriddr.model.PetModel;
 import com.purple.kriddr.model.UserModel;
 import com.purple.kriddr.parser.PetListParser;
 import com.purple.kriddr.util.ActionBarUtil;
 import com.purple.kriddr.util.GenFragmentCall_Main;
 import com.purple.kriddr.util.NetworkConnection;
+import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static android.app.Activity.RESULT_OK;
 
 /**
  * Created by pf-05 on 2/19/2018.
  */
 
-public class ClientViewDetailsFragment extends Fragment implements RecordsAdapter.DataFromAdapterToFragment{
+public class ClientViewDetailsFragment extends Fragment implements RecordsAdapter.DataFromAdapterToFragment, View.OnClickListener{
 
     View rootView;
-    TextView profile_name, profile_dob, person_text, mobile_text, location_text, prefered_contact_text, brand_value, protein_value, servings_value;
+    TextView profile_name, profile_dob, person_text, mobile_text,email_text, location_text, prefered_contact_text, brand_value, protein_value, servings_value,no_data_items;
     ImageView imageView1, edit_petparent, food_edit, add_Notes, img_plus_btn, img_next_btn;
     JSONObject petJsonObject, invoiceJsonObject, documentJsonObject, notesJsonObject, invoiceValueJsonObject;
     GenFragmentCall_Main fragmentCall_mainObj;
@@ -103,6 +108,10 @@ public class ClientViewDetailsFragment extends Fragment implements RecordsAdapte
     ExpandExpandableListView invoice_data;
     LinearLayout invoice_main_layout;
     InvoiceListModel invoiceListModel;
+    private int PICK_IMAGE_REQUEST = 1;
+    Uri picUri;
+    private Bitmap bitmap;
+    String image = "";
 
     InvocieListAdapter invocieListAdapter;
 //    ListView invoice_list;
@@ -140,8 +149,17 @@ public class ClientViewDetailsFragment extends Fragment implements RecordsAdapte
         });
 
         actionBarUtilObj.setTitle("BACK");
+        actionBarUtilObj.getTitle().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fragmentCall_mainObj.Fragment_call(new ClientFragment(),"fragclient",null);
+
+            }
+        });
+
 
         profile_name = (TextView) rootView.findViewById(R.id.profile_name);
+        email_text = (TextView)rootView.findViewById(R.id.email_text);
         profile_dob = (TextView) rootView.findViewById(R.id.profile_dob);
         person_text = (TextView) rootView.findViewById(R.id.person_text);
         mobile_text = (TextView) rootView.findViewById(R.id.mobile_text);
@@ -158,7 +176,9 @@ public class ClientViewDetailsFragment extends Fragment implements RecordsAdapte
         food_edit = (ImageView) rootView.findViewById(R.id.food_edit);
         img_plus_btn = (ImageView) rootView.findViewById(R.id.img_plus_btn);
         add_Notes = (ImageView) rootView.findViewById(R.id.add_Notes);
+        no_data_items = (TextView)rootView.findViewById(R.id.no_data_items);
 
+        imageView1.setOnClickListener(this);
 
         invoice_main_layout = (LinearLayout) rootView.findViewById(R.id.invoice_main_layout);
 
@@ -168,9 +188,8 @@ public class ClientViewDetailsFragment extends Fragment implements RecordsAdapte
         mRecyclerView1 = (RecyclerView) rootView.findViewById(R.id.notes_list);
         mRecyclerView1.setHasFixedSize(true);
 
-        //    mLayoutManager = new LinearLayoutManager(getActivity());
-//        mRecyclerView.setLayoutManager(mLayoutManager);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, true));
+
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
 
         img_next_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -178,46 +197,26 @@ public class ClientViewDetailsFragment extends Fragment implements RecordsAdapte
 
                 Log.d("NECTPIS", "NECTPIS");
 
-//                LinearLayoutManager linearLayoutManager = (LinearLayoutManager)mRecyclerView.getLayoutManager();
-//
-//                mRecyclerView.getLayoutManager().scrollToPosition(linearLayoutManager.findLastVisibleItemPosition() + 1);
+
                 LinearLayoutManager linearLayoutManager = (LinearLayoutManager) mRecyclerView.getLayoutManager();
 
                 int lastVisibleItemIndex = linearLayoutManager.findFirstCompletelyVisibleItemPosition();
 
 
-                if (linearLayoutManager.findFirstCompletelyVisibleItemPosition() > 1) {
+                if (linearLayoutManager.findFirstCompletelyVisibleItemPosition() > 0) {
 
                     linearLayoutManager.smoothScrollToPosition(mRecyclerView, null, lastVisibleItemIndex - 1);
 
                     LinearLayoutManager manager = (LinearLayoutManager) mRecyclerView.getLayoutManager();
-                    Toast.makeText(getActivity(), "" + manager.findFirstCompletelyVisibleItemPosition(), Toast.LENGTH_SHORT).show();
                 }
 
-
-                //   manager.scrollToPositionWithOffset(manager.find() + 1,0);
-
-
-/*
-                RecyclerView.SmoothScroller smoothScroller = new
-                        LinearSmoothScroller(getActivity()) {
-                            @Override protected int getVerticalSnapPreference() {
-                                return LinearSmoothScroller.SNAP_TO_START;
-                            }
-                        };
-                smoothScroller.setTargetPosition();*/
 
 
             }
         });
 
 
-        mRecyclerView1.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, true));
-
-
-        // mAdapter = new BusinessRecordAdapter(record_nameList, getActivity());
-        // mRecyclerView.setAdapter(mAdapter);
-
+        mRecyclerView1.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
 
         if (NetworkConnection.isOnline(getActivity())) {
             clientDetails(getResources().getString(R.string.url_reference) + "pet_details.php");
@@ -370,6 +369,7 @@ public class ClientViewDetailsFragment extends Fragment implements RecordsAdapte
                     profile_dob.setText("DOB: " + petListModel.getDob());
                     person_text.setText(petListModel.getOwner_name());
                     mobile_text.setText(petListModel.getMobile());
+                    email_text.setText(petListModel.getEmail());
                     location_text.setText(petListModel.getAddress());
                     prefered_contact_text.setText(petListModel.getPreferred_contact());
                     brand_value.setText(petListModel.getBrand());
@@ -385,24 +385,12 @@ public class ClientViewDetailsFragment extends Fragment implements RecordsAdapte
                     else
                     {
                         Log.d("NOPATE","NOPATE");
-                        Glide.with(getActivity()).load(R.drawable.defaultpetphoto).transform(new CircleTransform(getActivity())).into(imageView1);
+                        Glide.with(getActivity()).load(R.drawable.defaultpetphoto).into(imageView1);
 
                     }
 
 
-//
-//                    JSONArray jsonArray1 = jsonObject.getJSONArray("invoices_list");
-//                    for(int index = 0; index < jsonArray1.length(); index++)
-//                    {
-//
-//                        invoiceJsonObject = jsonArray.getJSONObject(index);
-//
-//                        String invoice_id = invoiceJsonObject.getString("invoice_id");
-//                        String invoice_date = invoiceJsonObject.getString("invoice_date");
-//                        String comments = invoiceJsonObject.getString("comments");
-//                        String service = invoiceJsonObject.getString("service");
-//                        String amount = invoiceJsonObject.getString("amount");
-//                    }
+
 
                     JSONArray jsonArray2 = jsonObject.getJSONArray("documents_list");
 
@@ -425,8 +413,6 @@ public class ClientViewDetailsFragment extends Fragment implements RecordsAdapte
 
                     }
 
-//                    mAdapter = new RecordsAdapter(documentList, getActivity());
-//                    mRecyclerView.setAdapter(mAdapter);
 
 
                     recordAdapter();
@@ -470,6 +456,7 @@ public class ClientViewDetailsFragment extends Fragment implements RecordsAdapte
 
                     JSONArray jsonArray4 = jsonObject.getJSONArray("invoices_list");
                     invoiceList = new ArrayList<InvoiceListModel>();
+                    invoice_main_layout.removeAllViews();
 
                     for (int index = 0; index < jsonArray4.length(); index++) {
                         invoiceListModel = new InvoiceListModel();
@@ -552,8 +539,18 @@ public class ClientViewDetailsFragment extends Fragment implements RecordsAdapte
 
     public void recordAdapter() {
 
-        mAdapter = new RecordsAdapter(documentList, getActivity(),(RecordsAdapter.DataFromAdapterToFragment)this);
-        mRecyclerView.setAdapter(mAdapter);
+        if(documentList.get(0).getDocuments_id().equalsIgnoreCase("Empty"))
+        {
+            no_data_items.setVisibility(View.VISIBLE);
+            mRecyclerView.setVisibility(View.GONE);
+        }
+        else
+        {
+            mAdapter = new RecordsAdapter(documentList, getActivity(),(RecordsAdapter.DataFromAdapterToFragment)this);
+            mRecyclerView.setAdapter(mAdapter);
+
+        }
+
 
 
     }
@@ -594,7 +591,16 @@ public class ClientViewDetailsFragment extends Fragment implements RecordsAdapte
 
                 String notes = enter_notes.getText().toString().trim();
 
-                addNotes(getResources().getString(R.string.url_reference) + "pet_notes_creation.php", notes);
+                if(notes.equals("") || notes.isEmpty())
+                {
+                    Toast.makeText(getActivity(),"Please enter the notes",Toast.LENGTH_SHORT).show();
+                }
+                else
+                {
+                    addNotes(getResources().getString(R.string.url_reference) + "pet_notes_creation.php", notes);
+
+                }
+
 
 
             }
@@ -628,9 +634,7 @@ public class ClientViewDetailsFragment extends Fragment implements RecordsAdapte
 
                     if (result.equalsIgnoreCase("Success")) {
 
-
-//                        clientDetails(getResources().getString(R.string.url_reference) + "pet_details.php");
-                       dialog.cancel();
+                        dialog.cancel();
 
 
 
@@ -641,7 +645,6 @@ public class ClientViewDetailsFragment extends Fragment implements RecordsAdapte
                                     @Override
                                     public void onClick(DialogInterface dialog1, int which) {
                                         dialog1.cancel();
-
                                         clientDetails(getResources().getString(R.string.url_reference) + "pet_details.php");
 
 
@@ -777,6 +780,7 @@ public class ClientViewDetailsFragment extends Fragment implements RecordsAdapte
         TextView title_text = (TextView) dialogView.findViewById(R.id.title);
         final EditText enter_name = (EditText) dialogView.findViewById(R.id.business_name);
         final EditText enter_mobile = (EditText) dialogView.findViewById(R.id.mobile);
+        final EditText enter_email = (EditText)dialogView.findViewById(R.id.email);
         final EditText enter_location = (EditText) dialogView.findViewById(R.id.address);
         Button submit_btn = (Button) dialogView.findViewById(R.id.submit_btn);
 
@@ -810,6 +814,7 @@ public class ClientViewDetailsFragment extends Fragment implements RecordsAdapte
             enter_name.setText(petListModel.getOwner_name());
             enter_mobile.setText(petListModel.getMobile());
             enter_location.setText(petListModel.getAddress());
+            enter_email.setText(petListModel.getEmail());
 
             if (petListModel.getPreferred_contact().equalsIgnoreCase("Text message")) {
                 Log.d("EMAILDASR", "EMAILDASR");
@@ -832,6 +837,7 @@ public class ClientViewDetailsFragment extends Fragment implements RecordsAdapte
                 String person_name = enter_name.getText().toString().trim();
                 String mobile_number = enter_mobile.getText().toString().trim();
                 String address = enter_location.getText().toString().trim();
+                String email = enter_email.getText().toString().trim();
 
                 if (person_name.isEmpty() || person_name.equals("")) {
                     Toast.makeText(getActivity(), "Please enter the name", Toast.LENGTH_SHORT).show();
@@ -839,14 +845,18 @@ public class ClientViewDetailsFragment extends Fragment implements RecordsAdapte
                     Toast.makeText(getActivity(), "Please enter the mobile", Toast.LENGTH_SHORT).show();
                 } else if (userModel.getMobile().equals(mobile_number)) {
                     Toast.makeText(getActivity(), getResources().getString(R.string.alread_mobile), Toast.LENGTH_SHORT).show();
-
                 }
-//               else if(address.isEmpty() || address.equals(""))
-//               {
-//                   Toast.makeText(getActivity(), "Please enter the address", Toast.LENGTH_SHORT).show();
-//               }
+                else if(email.isEmpty() || email.equals(""))
+                {
+                    Toast.makeText(getActivity(),"Please enter the email",Toast.LENGTH_SHORT).show();
+                }
+                else if(!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches())
+                {
+                    Toast.makeText(getActivity(), getResources().getString(R.string.invalid_email), Toast.LENGTH_SHORT).show();
+                }
+
                 else {
-                    updatePetParent(getResources().getString(R.string.url_reference) + "pet_owner_update.php", person_name, mobile_number, address, prefered_msg);
+                    updatePetParent(getResources().getString(R.string.url_reference) + "pet_owner_update.php", person_name, mobile_number,email, address, prefered_msg);
                 }
 
             }
@@ -945,17 +955,6 @@ public class ClientViewDetailsFragment extends Fragment implements RecordsAdapte
 
         invoice_list.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
 
-        //    invoice_data.setOnGroupExpandListener(onGroupExpandListenser);
-
-
-//        ArrayList<String> nameList = new ArrayList<>();
-//        nameList.add("A Example");
-//        nameList.add("B Example");
-//        nameList.add("C Example");
-//
-//        InvocieListAdapter adapter = new InvocieListAdapter(getActivity(),nameList);
-//
-//        invoice_data.setAdapter(adapter);
         invoiceAdapter = new InvoiceListAdapterView(invoiceList.get(Pos).getGetInfo(), getActivity());
         invoice_list.setAdapter(invoiceAdapter);
 
@@ -963,19 +962,8 @@ public class ClientViewDetailsFragment extends Fragment implements RecordsAdapte
     }
 
 
-    /*ExpandableListView.OnGroupExpandListener onGroupExpandListenser = new ExpandableListView.OnGroupExpandListener() {
-        int previousGroup = -1;
 
-        @Override
-        public void onGroupExpand(int groupPosition) {
-            if (groupPosition != previousGroup)
-                invoice_data.collapseGroup(previousGroup);
-            previousGroup = groupPosition;
-        }
-    };
-
-*/
-    public void updatePetParent(String url, final String person_name, final String mobile_number, final String address, final String prefered_msg) {
+    public void updatePetParent(String url, final String person_name, final String mobile_number, final String email, final String address, final String prefered_msg) {
         final MyProgressDialog myProgressDialog = new MyProgressDialog(getActivity());
 
         StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
@@ -995,12 +983,14 @@ public class ClientViewDetailsFragment extends Fragment implements RecordsAdapte
                     if (result.equalsIgnoreCase("Success")) {
                         petListModel.setOwner_name(person_name);
                         petListModel.setMobile(mobile_number);
+                        petListModel.setEmail(email);
                         petListModel.setAddress(address);
                         petListModel.setPreferred_contact(prefered_msg);
 
 
                         person_text.setText(petListModel.getOwner_name());
                         mobile_text.setText(petListModel.getMobile());
+                        email_text.setText(petListModel.getEmail());
                         location_text.setText(petListModel.getAddress());
                         prefered_contact_text.setText(petListModel.getPreferred_contact());
 
@@ -1035,6 +1025,7 @@ public class ClientViewDetailsFragment extends Fragment implements RecordsAdapte
                 params.put("mobile", mobile_number);
                 params.put("preferred_contact", prefered_msg);
                 params.put("address", address);
+                params.put("email",email);
                 return params;
             }
 
@@ -1058,4 +1049,204 @@ public class ClientViewDetailsFragment extends Fragment implements RecordsAdapte
     }
 
 
+    @Override
+    public void onClick(View v) {
+
+        if (v == imageView1) {
+            showFileChooser();
+        }
+    }
+
+    private void showFileChooser() {
+
+        startActivityForResult(getPickImageChooserIntent(), PICK_IMAGE_REQUEST);
+
+
+    }
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (resultCode == Activity.RESULT_OK) {
+            {
+                if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+                    CropImage.ActivityResult result = CropImage.getActivityResult(data);
+                    if (resultCode == RESULT_OK) {
+
+                        try {
+                            bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), picUri);
+
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+
+
+                        updateImageView(getResources().getString(R.string.url_reference) + "pet_photo_edit.php",bitmap);
+
+
+                    } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                        Toast.makeText(getActivity(), "Cropping failed: " + result.getError(), Toast.LENGTH_LONG).show();
+                    }
+
+
+                }
+                if (requestCode == PICK_IMAGE_REQUEST) {
+                    if (getPickImageResultUri(data) != null) {
+                        picUri = getPickImageResultUri(data);
+
+                        CropImage.activity(picUri)
+                                .setGuidelines(CropImageView.Guidelines.OFF)
+                                .setActivityTitle("My Crop")
+                                .setCropShape(CropImageView.CropShape.OVAL)
+                                .setCropMenuCropButtonTitle("Done")
+                                .setMinCropResultSize(400, 400)
+                                .setMaxCropResultSize(1500, 1500)
+                                .setAspectRatio(1, 1)
+                                .start(getContext(),this);
+
+
+
+
+                    }
+                }
+            }
+
+        }
+
+    }
+
+    private void updateImageView(String url,final Bitmap bitmap)
+    {
+        StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String s) {
+                //progress.hide();
+                Log.d("LISTOFCLIENTS", "LISTOFCLIENTS" + s);
+
+
+                try {
+
+                    JSONObject jsonObject = new JSONObject(s);
+
+
+
+                    RoundedBitmapDrawable drawable = RoundedBitmapDrawableFactory.create(getResources(), bitmap);
+                    drawable.setCircular(true);
+                    imageView1.setImageDrawable(drawable);
+
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                // progress.hide();
+
+            }
+        }) {
+
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+
+                image = getStringImage(bitmap);
+                Log.d("LODGRES", "LSORED" + pet_id + "IAMGE"+image);
+                params.put("pet_id", pet_id);
+                params.put("image",image);
+                return params;
+            }
+
+        };
+        AppController.getInstance().addToRequestQueue(request);
+    }
+
+    public String getStringImage(Bitmap bmp) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bmp.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] imageBytes = baos.toByteArray();
+        String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
+        return encodedImage;
+    }
+
+
+    public Uri getPickImageResultUri(Intent data) {
+        boolean isCamera = true;
+        if (data != null) {
+            String action = data.getAction();
+            isCamera = action != null && action.equals(MediaStore.ACTION_IMAGE_CAPTURE);
+        }
+
+
+        return isCamera ? getCaptureImageOutputUri() : data.getData();
+    }
+
+
+
+
+
+
+    private Uri getCaptureImageOutputUri() {
+        Uri outputFileUri = null;
+        File getImage = getActivity().getExternalCacheDir();
+        if (getImage != null) {
+            outputFileUri = Uri.fromFile(new File(getImage.getPath(), "profile.png"));
+        }
+        return outputFileUri;
+    }
+
+
+    public Intent getPickImageChooserIntent() {
+
+        Uri outputFileUri = getCaptureImageOutputUri();
+
+        List<Intent> allIntents = new ArrayList<>();
+        PackageManager packageManager = getActivity().getPackageManager();
+
+        // collect all camera intents
+        Intent captureIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+        List<ResolveInfo> listCam = packageManager.queryIntentActivities(captureIntent, 0);
+        for (ResolveInfo res : listCam) {
+            Intent intent = new Intent(captureIntent);
+            intent.setComponent(new ComponentName(res.activityInfo.packageName, res.activityInfo.name));
+            intent.setPackage(res.activityInfo.packageName);
+            if (outputFileUri != null) {
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
+            }
+            allIntents.add(intent);
+        }
+
+        // collect all gallery intents
+        Intent galleryIntent = new Intent(Intent.ACTION_GET_CONTENT);
+        galleryIntent.setType("image/*");
+        List<ResolveInfo> listGallery = packageManager.queryIntentActivities(galleryIntent, 0);
+        for (ResolveInfo res : listGallery) {
+            Intent intent = new Intent(galleryIntent);
+            intent.setComponent(new ComponentName(res.activityInfo.packageName, res.activityInfo.name));
+            intent.setPackage(res.activityInfo.packageName);
+            allIntents.add(intent);
+        }
+
+        // the main intent is the last in the list (fucking android) so pickup the useless one
+        Intent mainIntent = allIntents.get(allIntents.size() - 1);
+        for (Intent intent : allIntents) {
+            if (intent.getComponent().getClassName().equals("com.android.documentsui.DocumentsActivity")) {
+                mainIntent = intent;
+                break;
+            }
+        }
+        allIntents.remove(mainIntent);
+
+        // Create a chooser from the main intent
+        Intent chooserIntent = Intent.createChooser(mainIntent, "Select source");
+
+        // Add all other intents
+        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, allIntents.toArray(new Parcelable[allIntents.size()]));
+
+        return chooserIntent;
+    }
 }

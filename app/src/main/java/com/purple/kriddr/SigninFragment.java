@@ -1,11 +1,9 @@
 package com.purple.kriddr;
 
 import android.content.Context;
-import android.support.v4.app.Fragment;
-
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.ActionBar;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.text.InputFilter;
@@ -16,14 +14,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.google.gson.Gson;
 import com.purple.kriddr.controller.AppController;
 import com.purple.kriddr.iface.FragmentCallInterface;
 import com.purple.kriddr.iface.InterfaceActionBarUtil;
@@ -31,7 +28,6 @@ import com.purple.kriddr.model.UserModel;
 import com.purple.kriddr.util.ActionBarUtil;
 import com.purple.kriddr.util.GenFragmentCall_Main;
 import com.purple.kriddr.util.NetworkConnection;
-import com.google.gson.Gson;
 
 import org.json.JSONObject;
 
@@ -53,6 +49,7 @@ public class SigninFragment extends Fragment {
     List<UserModel> feedslist;
     GenFragmentCall_Main genFragmentCall_mainObj;
     ActionBarUtil actionBarUtilObj;
+    String mobile;
 
     @Nullable
     @Override
@@ -68,6 +65,18 @@ public class SigninFragment extends Fragment {
         login_button = (Button) rootView.findViewById(R.id.login_button);
 
 
+        Bundle bundle = getArguments();
+
+        try {
+            mobile = bundle.getString("mobile");
+            Log.d("MOBRES", "MOBRES" + mobile);
+            mobileNo.setText(mobile);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
 
         actionBarUtilObj.getImgBack().setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,6 +87,14 @@ public class SigninFragment extends Fragment {
 
         actionBarUtilObj.setActionBarVisible();
         actionBarUtilObj.getEditText().setVisibility(View.INVISIBLE);
+        actionBarUtilObj.getImgBack().setVisibility(View.VISIBLE);
+        actionBarUtilObj.getTitle().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((AppCompatActivity) getActivity()).getSupportFragmentManager().popBackStackImmediate();
+
+            }
+        });
 
         actionBarUtilObj.setTitle("Sign In");
 
@@ -168,6 +185,7 @@ public class SigninFragment extends Fragment {
             Toast.makeText(getActivity(), getResources().getString(R.string.enter_mobile), Toast.LENGTH_SHORT).show();
         } else {
             if (NetworkConnection.isOnline(getActivity())) {
+                Log.d("FUNEDXEEX","FUNEDXEEX");
                 loginData(getResources().getString(R.string.url_reference) + "login_auth.php");
 
             } else {
@@ -181,12 +199,13 @@ public class SigninFragment extends Fragment {
 
     private void loginData(String url) {
 
+        final MyProgressDialog myProgressDialog = new MyProgressDialog(getActivity());
 
         StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
-                //progress.hide();
                 Log.d("LOGINRES", "LOGINRES" + s);
+                myProgressDialog.hide();
 
 
                 try {
@@ -194,18 +213,10 @@ public class SigninFragment extends Fragment {
                     String name = jsonObject.getString("name");
                     String mobile = jsonObject.getString("mobile");
                     if (name.equals("Success")) {
-                       /* Fragment test;
-                        FragmentManager fragmentManager = getFragmentManager();
-                        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                        test = new OTPFragment();*/
                         Bundle args = new Bundle();
                         args.putString("mobile", mobile);
+                        args.putString("type","login");
                         genFragmentCall_mainObj.Fragment_call(new OTPFragment(),"OTP",args);
-                        /*test.setArguments(args);
-                        fragmentTransaction.replace(R.id.content_frame, test, "sgnfrg");
-                        fragmentTransaction.addToBackStack("sgnfrg");
-                        fragmentTransaction.commit();*/
-
                     } else if (name.equals("Empty")) {
                         Toast.makeText(getActivity(), getResources().getString(R.string.invalid_user), Toast.LENGTH_SHORT).show();
                     } else if (name.equals("Exist")) {
@@ -215,14 +226,6 @@ public class SigninFragment extends Fragment {
                     e.printStackTrace();
                 }
 
-//
-//                try {
-//                    feedslist = UserJsonParser.parseFeed(s);
-//                    // progress.hide();
-//                    updatedisplay();
-//                }catch (NoClassDefFoundError e){
-//                    e.printStackTrace();
-//                }
 
 
             }
@@ -230,6 +233,7 @@ public class SigninFragment extends Fragment {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
                 // progress.hide();
+                myProgressDialog.hide();
 
             }
         }) {
@@ -238,17 +242,18 @@ public class SigninFragment extends Fragment {
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<String, String>();
 
-                Log.d("SIGNUPPASS", "SIGNUPPASS" + first_name + "MOB" + mobile_number);
+                Log.d("SIGNUPPASS", "SIGNUPPASS" + first_name + "MOB" + "91||"+ mobile_number);
 
                 Gson gson = new Gson();
                 params.put("name", first_name);
-                params.put("mobile", mobile_number);
+                params.put("mobile","91||"+ mobile_number);
 
 
                 return params;
             }
 
         };
+        myProgressDialog.show();
         AppController.getInstance().addToRequestQueue(request, tag_string_req_recieve2);
     }
 }

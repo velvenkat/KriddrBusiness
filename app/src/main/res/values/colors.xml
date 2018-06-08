@@ -13,7 +13,10 @@
 
     <color name="text_green_color">#a3d69a</color>
 
-    <color name="pet_cross">#F0EBE6</color>
+    <color name="pet_cross">#F0F0F6</color>
+
+    <color name="graph_color">#E05B32</color>
+
 
     <color name="fill_map_color">#fb9970</color>
 
@@ -28,7 +31,13 @@
     <color name="dot_light_screen8">#93c6fd</color>
     <color name="oragane_dot">#ea8b49</color>
     <color name="button_color">#ea8948</color>
-    <color name="text_color">#dc4a2b</color>
+    <color name="text_color">#dc492a</color>
+    <color name="text_name_color">#5d5d5d</color>
+    <color name="invoice_title_text">#535b61</color>
+    <color name="invocie_total_val">#323e57</color>
+    <color name="invoice_value">#555555</color>
+    <color name="text_client_own">#888888</color>
+    <color name="profile_text_color">#535b61</color>
 
     <array name="array_dot_active">
         <item>@color/dot_light_screen1</item>

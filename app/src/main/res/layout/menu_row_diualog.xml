@@ -6,13 +6,13 @@
     >
 <TextView
     android:id="@+id/dialog_menu_textView"
-
     android:layout_width="match_parent"
     android:focusable="false"
-    android:textSize="18sp"
+    android:textSize="20sp"
     android:layout_marginTop="20dp"
+    android:textColor="#555555"
     android:layout_gravity="center_vertical"
-    android:fontFamily="@font/robofont"
+    android:fontFamily="@font/roboto_regular"
     android:gravity="center_horizontal"
     android:layout_height="50dp">
 </TextView>

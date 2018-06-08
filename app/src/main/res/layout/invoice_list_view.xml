@@ -29,9 +29,10 @@
 
             <TextView
                 android:id="@+id/head_month_year"
-                android:fontFamily="@font/roboto_bold"
-                android:textSize="20sp"
+                android:fontFamily="@font/roboto_medium"
+                android:textSize="19sp"
                 android:layout_marginTop="20dp"
+                android:textColor="@color/invoice_title_text"
                 android:layout_marginLeft="20dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
@@ -41,8 +42,9 @@
             <TextView
                 android:id="@+id/head_invoice_name"
                 android:layout_toLeftOf="@+id/collapse_view"
-                android:fontFamily="@font/roboto_bold"
+                android:fontFamily="@font/roboto_medium"
                 android:layout_marginRight="20dp"
+                android:textColor="@color/invocie_total_val"
                 android:layout_marginTop="20dp"
                 android:textSize="20sp"
                 android:layout_width="wrap_content"

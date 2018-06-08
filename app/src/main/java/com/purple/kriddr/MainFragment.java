@@ -76,9 +76,6 @@ public class MainFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-       /* mActionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
-        mActionBar.hide();*/
-
     }
 
     public void onAttach(Context context) {

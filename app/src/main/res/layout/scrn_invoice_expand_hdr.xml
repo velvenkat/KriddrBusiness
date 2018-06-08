@@ -6,9 +6,8 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_toLeftOf="@+id/txtTotalAmt"
-    android:fontFamily="@font/roboto_regular"
-    android:textSize="20sp"
-    android:textStyle="bold"
+    android:fontFamily="@font/roboto_medium"
+    android:textSize="19sp"
     android:paddingLeft="20dp"
     android:maxLines="1"
     android:ellipsize="end"
@@ -20,9 +19,9 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_below="@+id/txtPetName"
-    android:fontFamily="@font/roboto_regular"
+    android:fontFamily="@font/roboto_light"
     android:textColor="@color/text_color"
-    android:textSize="18sp"
+    android:textSize="15sp"
     android:paddingLeft="20dp"
     android:layout_alignParentLeft="true"
     android:maxLines="1"
@@ -39,12 +38,11 @@
         android:layout_centerVertical="true"
         android:layout_toLeftOf="@+id/imgTick"
         android:layout_toStartOf="@+id/imgTick"
-        android:fontFamily="@font/roboto_regular"
-
-
+        android:fontFamily="@font/roboto_light"
         android:text="$12"
-        android:textSize="18sp"
-        android:textStyle="bold" />
+        android:textColor="#323e57"
+        android:textSize="20sp"
+         />
 
     <ImageView
         android:id="@+id/imgTick"

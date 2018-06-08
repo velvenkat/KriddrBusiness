@@ -47,7 +47,6 @@ public class SliderPagerAdapter extends PagerAdapter {
 
         Map<Integer,Object> myList=image_arraylist.get(position);
 
-       // Picasso.with(activity.getApplicationContext()).load((Integer) myList.get(0)).into(im_slider);
         Glide.with(activity).load((Integer)myList.get(0)).into(im_slider);
 
 

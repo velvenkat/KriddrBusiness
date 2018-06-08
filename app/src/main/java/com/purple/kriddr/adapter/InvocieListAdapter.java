@@ -25,7 +25,6 @@ public class InvocieListAdapter extends BaseExpandableListAdapter {
 
     public InvocieListAdapter(Context context, List<InvoiceListModel> invoiceList) {
 
-        Log.d("CONSCALL","CONSCALL"+invoiceList.size());
         this.context = context;
         this.invoiceList = invoiceList;
     }
@@ -69,9 +68,6 @@ public class InvocieListAdapter extends BaseExpandableListAdapter {
     public View getGroupView(int i, boolean b, View view, ViewGroup viewGroup)
     {
 
-        Log.d("GETGRPCALL","GETGRPCALL");
-
-
         if(view == null)
         {
             LayoutInflater layoutInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -99,7 +95,6 @@ public class InvocieListAdapter extends BaseExpandableListAdapter {
     @Override
     public View getChildView(int i, int i1, boolean b, View view, ViewGroup viewGroup) {
 
-        Log.d("CHILDVAIEALLCED","CHILDVAIEALLCED");
 
         InvoiceListModel currentParent = getGroup(i);
 
@@ -108,7 +103,6 @@ public class InvocieListAdapter extends BaseExpandableListAdapter {
         //the first row is used as header
         if(i1 ==0)
         {
-            Log.d("PSOERZERO","PSOERZERO");
 
             view = inflater.inflate(R.layout.child_header, null);
             TextView head_month_year = (TextView)view.findViewById(R.id.head_month_year);
@@ -119,7 +113,6 @@ public class InvocieListAdapter extends BaseExpandableListAdapter {
         //Here is the ListView of the ChildView
         if(i1>0 && i1<getChildrenCount(i)-1)
         {
-            Log.d("CHILVIEW","CHILVIEW");
             InvoiceDateValues currentChild = getChild(i,i1-1);
             view = inflater.inflate(R.layout.child_header,null);
 
@@ -131,11 +124,7 @@ public class InvocieListAdapter extends BaseExpandableListAdapter {
             head_invoice_name.setText(currentChild.getService());
             head_invoice_value.setText(currentChild.getAmount());
 
-//
-//            TextView txtChildName = (TextView)view.findViewById(R.id.txtChildName);
-//            TextView txtChildAge = (TextView)view.findViewById(R.id.txtChildAge);
-//            txtChildName.setText(currentChild.childName);
-//            txtChildAge.setText("Age: " + String.valueOf(currentChild.age));
+
         }
 
         return view;

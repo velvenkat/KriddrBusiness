@@ -52,6 +52,8 @@ import com.purple.kriddr.model.UserModel;
 import com.purple.kriddr.util.ActionBarUtil;
 import com.purple.kriddr.util.GenFragmentCall_Main;
 import com.purple.kriddr.util.NetworkConnection;
+import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
 
 import org.json.JSONObject;
 
@@ -67,6 +69,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static android.app.Activity.RESULT_OK;
 import static com.bumptech.glide.load.resource.bitmap.TransformationUtils.rotateImage;
 
 /**
@@ -125,7 +128,6 @@ public class ClientCreationFragment extends Fragment implements View.OnClickList
         if (context instanceof InterfaceUserModel) {
             interfaceUserModel = (InterfaceUserModel) context;
             userModel = interfaceUserModel.getUserModel();
-            //  Toast.makeText(getActivity(),"USRMDOELDID"+userModel.getId(),Toast.LENGTH_SHORT).show();
 
         }
     }
@@ -189,6 +191,13 @@ public class ClientCreationFragment extends Fragment implements View.OnClickList
 
 
         actionBarUtilObj.setTitle("Back");
+        actionBarUtilObj.getTitle().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((AppCompatActivity) getActivity()).getSupportFragmentManager().popBackStackImmediate();
+
+            }
+        });
 
 
         if (Build.VERSION.SDK_INT == Build.VERSION_CODES.M) {
@@ -298,44 +307,14 @@ public class ClientCreationFragment extends Fragment implements View.OnClickList
 
     public String getStringImage(Bitmap bmp) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bmp.compress(Bitmap.CompressFormat.JPEG, 70, baos);
+        bmp.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         byte[] imageBytes = baos.toByteArray();
         String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
         return encodedImage;
     }
 
 
-    private static Bitmap rotateImageIfRequired(Bitmap img, Uri selectedImage) throws IOException {
 
-        ExifInterface ei = new ExifInterface(selectedImage.getPath());
-        int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
-
-        switch (orientation) {
-            case ExifInterface.ORIENTATION_ROTATE_90:
-                return rotateImage(img, 90);
-            case ExifInterface.ORIENTATION_ROTATE_180:
-                return rotateImage(img, 180);
-            case ExifInterface.ORIENTATION_ROTATE_270:
-                return rotateImage(img, 270);
-            default:
-                return img;
-        }
-    }
-
-    public Bitmap getResizedBitmap(Bitmap image, int maxSize) {
-        int width = image.getWidth();
-        int height = image.getHeight();
-
-        float bitmapRatio = (float) width / (float) height;
-        if (bitmapRatio > 0) {
-            width = maxSize;
-            height = (int) (width / bitmapRatio);
-        } else {
-            height = maxSize;
-            width = (int) (height * bitmapRatio);
-        }
-        return Bitmap.createScaledBitmap(image, width, height, true);
-    }
 
     public boolean checkPermissionForExternalStorage(){
         int result = ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE);
@@ -365,139 +344,60 @@ public class ClientCreationFragment extends Fragment implements View.OnClickList
     }
 
 
-
-
-    private void performCrop(Uri picUri) {
-
-        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
-        StrictMode.setVmPolicy(builder.build());
-
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-            builder.detectFileUriExposure();
-        }
-
-
-        if (checkPermissionForExternalStorage()||checkPermissionForCamera())
-        {
-            try {
-                Intent cropIntent = new Intent("com.android.camera.action.CROP");
-                // indicate image type and Uri
-                cropIntent.setDataAndType(picUri, "image/*");
-                // set crop properties here
-                cropIntent.putExtra("crop", true);
-                // indicate aspect of desired crop
-                cropIntent.putExtra("aspectX", 1);
-                cropIntent.putExtra("aspectY", 1);
-                // indicate output X and Y
-                cropIntent.putExtra("outputX", 128);
-                cropIntent.putExtra("outputY", 128);
-                // retrieve data on return
-                cropIntent.putExtra("return-data", true);
-                cropIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                // start the activity - we handle returning in onActivityResult
-                startActivityForResult(cropIntent, PIC_CROP);
-            }
-            // respond to users whose devices do not support the crop action
-            catch (ActivityNotFoundException anfe) {
-                // display an error message
-                String errorMessage = "Whoops - your device doesn't support the crop action!";
-                Toast toast = Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_SHORT);
-                toast.show();
-            }
-        }
-
-
-    }
-
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(resultCode == Activity.RESULT_OK) {
-            if(requestCode == PIC_CROP)
+
+        if (resultCode == Activity.RESULT_OK) {
             {
+                if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+                    CropImage.ActivityResult result = CropImage.getActivityResult(data);
+                    if (resultCode == RESULT_OK) {
+                        ((ImageView) getActivity().findViewById(R.id.add_photo)).setImageURI(result.getUri());
 
-                if (data != null) {
-                    // get the returned data
-
-
-                    Bundle extras = data.getExtras();
-
-
-                    try {
-                        selectedBitmap = extras.getParcelable("data");
-                        if(selectedBitmap== null)
-                        {
-
-                        }
-
-
-                    }
-                    catch (Exception e)
-                    {
-
-                        // This solution is work for A1 plus mobile. We are write the below code for A1 mobile previously bitmap is getting null.
-                        Uri uri = data.getData();
-
-
+                        picUri = result.getUri();
                         try {
-                            selectedBitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(),uri);
-                        } catch (IOException e1) {
-                            e1.printStackTrace();
+                            selectedBitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), picUri);
+                        } catch (IOException e) {
+                            e.printStackTrace();
                         }
-                        e.printStackTrace();
 
+                        RoundedBitmapDrawable drawable = RoundedBitmapDrawableFactory.create(getResources(), selectedBitmap);
+                        drawable.setCircular(true);
+                        add_photo.setImageDrawable(drawable);
+
+
+                    } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                        Toast.makeText(getActivity(), "Cropping failed: " + result.getError(), Toast.LENGTH_LONG).show();
                     }
 
 
+                }
+                if (requestCode == PICK_IMAGE_REQUEST) {
+                    if (getPickImageResultUri(data) != null) {
+                        picUri = getPickImageResultUri(data);
+
+                        CropImage.activity(picUri)
+                                .setGuidelines(CropImageView.Guidelines.OFF)
+                                .setActivityTitle("My Crop")
+                                .setCropShape(CropImageView.CropShape.OVAL)
+                                .setCropMenuCropButtonTitle("Done")
+                                .setMinCropResultSize(400, 400)
+                                .setMaxCropResultSize(1500, 1500)
+                                .setAspectRatio(1, 1)
+                                .start(getContext(),this);
 
 
 
-                    add_photo.setImageBitmap(selectedBitmap);
+
+                    }
                 }
             }
 
-
-
-
-
-        if (requestCode == PICK_IMAGE_REQUEST)
-        {
-
-
-                if (getPickImageResultUri(data) != null) {
-                    picUri = getPickImageResultUri(data);
-
-
-                    performCrop(picUri);
-
-//                try {
-//                    bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), picUri);
-//                    bitmap = rotateImageIfRequired(bitmap, picUri);
-//                    bitmap = getResizedBitmap(bitmap, 200);
-//
-//
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-
-
-                }
-//                else {
-//
-//
-//                    bitmap = (Bitmap) data.getExtras().get("data");
-//
-//                }
-            }
-
-//            RoundedBitmapDrawable drawable = RoundedBitmapDrawableFactory.create(getResources(), bitmap);
-//            drawable.setCircular(true);
-//            add_photo.setImageDrawable(drawable);
         }
 
 
     }
+
 
     public Uri getPickImageResultUri(Intent data) {
         boolean isCamera = true;
@@ -512,9 +412,6 @@ public class ClientCreationFragment extends Fragment implements View.OnClickList
 
 
     private void showFileChooser() {
-        //  Intent i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        // startActivityForResult(i, PICK_IMAGE_REQUEST);
-
         startActivityForResult(getPickImageChooserIntent(), PICK_IMAGE_REQUEST);
 
     }
@@ -607,29 +504,6 @@ public class ClientCreationFragment extends Fragment implements View.OnClickList
         if (petNameVal.isEmpty() || petNameVal.equals("")) {
             Toast.makeText(getActivity(), getResources().getString(R.string.enter_pet_name), Toast.LENGTH_SHORT).show();
         }
-//        else if (daymonthyear.isEmpty() || daymonthyear.equals("")) {
-//            Toast.makeText(getActivity(), getResources().getString(R.string.enter_dob), Toast.LENGTH_SHORT).show();
-//        }
-//        else if (brandVal.isEmpty() || brandVal.equals("")) {
-//            Toast.makeText(getActivity(), getResources().getString(R.string.enter_brand), Toast.LENGTH_SHORT).show();
-//        }
-//        else if (proteinVal.isEmpty() || proteinVal.equals("")) {
-//            Toast.makeText(getActivity(), getResources().getString(R.string.enter_protein), Toast.LENGTH_SHORT).show();
-//        }
-//        else if (servingVal.isEmpty() || servingVal.equals("")) {
-//            Toast.makeText(getActivity(), getResources().getString(R.string.enter_servings), Toast.LENGTH_SHORT).show();
-//        }
-//        else if (nameVal.isEmpty() || nameVal.equals("")) {
-//            Toast.makeText(getActivity(), getResources().getString(R.string.enter_servings), Toast.LENGTH_SHORT).show();
-//
-//        }
-//        else if (mobileVal.isEmpty() || mobileVal.equals("")) {
-//            Toast.makeText(getActivity(), getResources().getString(R.string.enter_number), Toast.LENGTH_SHORT).show();
-//        }
-//        else if (addressVal.isEmpty() || addressVal.equals("")) {
-//            Toast.makeText(getActivity(), getResources().getString(R.string.enter_address), Toast.LENGTH_SHORT).show();
-//
-//        }
 
         else {
             if (NetworkConnection.isOnline(getActivity())) {
@@ -638,6 +512,7 @@ public class ClientCreationFragment extends Fragment implements View.OnClickList
                 Toast.makeText(getActivity(), getResources().getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
             }
         }
+
 
     }
 
@@ -672,11 +547,6 @@ public class ClientCreationFragment extends Fragment implements View.OnClickList
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         dialog.cancel();
-//
-//                                        Bundle bundle = new Bundle();
-//                                        bundle.putString("mobile_number",phone_number);
-//                                        bundle.putParcelable("pet_parent",petModel);
-//                                        fragmentCall_mainObj.Fragment_call(new PetClientListFragment(),"clntback",bundle);
 
                                         ((AppCompatActivity) getActivity()).getSupportFragmentManager().popBackStackImmediate();
 
@@ -704,6 +574,8 @@ public class ClientCreationFragment extends Fragment implements View.OnClickList
             @Override
             public void onErrorResponse(VolleyError volleyError) {
                 // progress.hide();
+
+                Log.d("ONERRRES","ONERRRES"+volleyError.getMessage());
 
                 myProgressDialog.hide();
 
@@ -772,24 +644,6 @@ public class ClientCreationFragment extends Fragment implements View.OnClickList
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         Date dateobj = new Date();
         upcoming_date = df.format(myCalendar1.getTime());
-
-
-
-
-
-//        if (myCalendar1.getTime().before(cal.getTime())) {
-//            Toast.makeText(getActivity(), "Please select valid date", Toast.LENGTH_SHORT).show();
-//        } else {
-//
-//
-//
-//
-//
-//
-//        }
-
-
-
 
 
     }

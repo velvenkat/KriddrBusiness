@@ -100,8 +100,6 @@ public class AddInvoiceCommentsFragment extends Fragment {
             flower = bundle_args.getParcelable("flower_model");
 
 
-            Log.d("ARED","ARED"+pet_photo);
-
         }
 
         imageView1 = (ImageView)rootView.findViewById(R.id.imageView1);
@@ -122,19 +120,6 @@ public class AddInvoiceCommentsFragment extends Fragment {
         add_invoice.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                Log.d("SAMRDDS","SAMRDDS");
-
-//                pet_comments = text_comments.getText().toString().trim();
-//
-//                if (NetworkConnection.isOnline(getActivity())) {
-//                    submitData(getResources().getString(R.string.url_reference) + "pet_invoice_creation.php");
-//                } else {
-//                    Toast.makeText(getActivity(), getResources().getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
-//                }
-
-
-
 
 
                 pet_comments = text_comments.getText().toString().trim();
@@ -235,15 +220,12 @@ public class AddInvoiceCommentsFragment extends Fragment {
 
     private void submitData(String url)
     {
-        Log.d("CALLAPI","CALLAPI");
-
         final MyProgressDialog myProgressDialog = new MyProgressDialog(getActivity());
 
         StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 //progress.hide();
-                Log.d("ADDINORES","ADDINORES"+s);
 
                 myProgressDialog.hide();
 
@@ -267,8 +249,6 @@ public class AddInvoiceCommentsFragment extends Fragment {
                                         bundle.putString("pet_id",flower.getPet_id());
                                         bundle.putString("pet_photo",pet_photo);
                                         fragmentCall_mainObj.Fragment_call(new ClientViewDetailsFragment(),"clientViewice",bundle);
-
-                                       // ((AppCompatActivity) getActivity()).getSupportFragmentManager().popBackStackImmediate();
 
 
 
@@ -295,8 +275,6 @@ public class AddInvoiceCommentsFragment extends Fragment {
             public void onErrorResponse(VolleyError volleyError) {
                 // progress.hide();
 
-                Log.e("SAMPORRMAD", "SAMPORRMAD : " + volleyError.getMessage());
-
                 myProgressDialog.hide();
 
             }
@@ -307,8 +285,6 @@ public class AddInvoiceCommentsFragment extends Fragment {
                 Gson gson = new Gson();
 
                 String jsonValues = gson.toJson(flower);
-
-                Log.d("JSONRESVAVAL","JSONRESVAVAL"+jsonValues);
 
                 final String requestBody = jsonValues.toString();
 
