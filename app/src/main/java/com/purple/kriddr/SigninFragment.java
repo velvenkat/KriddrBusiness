@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.text.InputFilter;
@@ -125,6 +126,33 @@ public class SigninFragment extends Fragment {
 
         return rootView;
     }
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        Fragment mContent;
+        if(savedInstanceState!=null) {
+            mContent = getActivity().getSupportFragmentManager().getFragment(savedInstanceState, "Sign_In_STATE");
+            FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+
+            fragmentTransaction.replace(R.id.frame_layout, mContent, "Sign_In");
+
+
+            fragmentTransaction.addToBackStack("Sign_In");
+
+            fragmentTransaction.commit();
+
+        }
+    }
+
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        //Save the fragment's instance
+        Log.e("I","OnSAVE_INSTANCE");
+        getActivity().getSupportFragmentManager().putFragment(outState, "Sign_In_STATE", this);
+    }
     public void onAttach(Context context){
         super.onAttach(context);
         if(context instanceof FragmentCallInterface){
@@ -212,16 +240,21 @@ public class SigninFragment extends Fragment {
                     JSONObject jsonObject = new JSONObject(s);
                     String name = jsonObject.getString("name");
                     String mobile = jsonObject.getString("mobile");
-                    if (name.equals("Success")) {
+                    String sms_Status=jsonObject.getString("sms_status");
+                    if (sms_Status!=null && name.trim().equalsIgnoreCase("Success") && sms_Status.trim().equalsIgnoreCase("Message sent successfully") ) {
                         Bundle args = new Bundle();
                         args.putString("mobile", mobile);
                         args.putString("type","login");
                         genFragmentCall_mainObj.Fragment_call(new OTPFragment(),"OTP",args);
-                    } else if (name.equals("Empty")) {
+                    } else if (name.trim().equalsIgnoreCase("Empty")) {
                         Toast.makeText(getActivity(), getResources().getString(R.string.invalid_user), Toast.LENGTH_SHORT).show();
-                    } else if (name.equals("Exist")) {
+                    } else if (name.trim().equalsIgnoreCase("Exist")) {
                         Toast.makeText(getActivity(), getResources().getString(R.string.already_user_exist), Toast.LENGTH_SHORT).show();
                     }
+                    else if (sms_Status!=null && !sms_Status.trim().equalsIgnoreCase("Message sent successfully")) {
+                        Toast.makeText(getActivity(), "Error:"+sms_Status, Toast.LENGTH_SHORT).show();
+                    }
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -238,11 +271,11 @@ public class SigninFragment extends Fragment {
             }
         }) {
 
-            @Override
+            @  Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<String, String>();
 
-                Log.d("SIGNUPPASS", "SIGNUPPASS" + first_name + "MOB" + "91||"+ mobile_number);
+                Log.d("SIGNUPPASS", "SIGNUPPASS" + first_name + "MOB" + "1||"+ mobile_number);
 
                 Gson gson = new Gson();
                 params.put("name", first_name);
