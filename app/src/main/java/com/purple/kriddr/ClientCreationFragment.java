@@ -19,13 +19,17 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.os.StrictMode;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.app.AppCompatActivity;
+import android.telephony.PhoneNumberFormattingTextWatcher;
+import android.text.InputType;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -90,7 +94,7 @@ public class ClientCreationFragment extends Fragment implements View.OnClickList
     final int PIC_CROP = 11;
     final int PIC_CHOOSE = 12;
 
-    String myFormat = "MM-dd-yyyy";
+    String myFormat = "yyyy-MM-dd";
     SimpleDateFormat sdf = new SimpleDateFormat(myFormat);
 
     DatePickerDialog.OnDateSetListener pickup_date;
@@ -104,7 +108,6 @@ public class ClientCreationFragment extends Fragment implements View.OnClickList
     Uri picUri;
     String image = "";
     List<PetModel> feedlist;
-    GenFragmentCall_Main fragmentCall_mainObj;
 
 
 
@@ -114,11 +117,7 @@ public class ClientCreationFragment extends Fragment implements View.OnClickList
 
         InterfaceUserModel interfaceUserModel;
 
-        if(context instanceof FragmentCallInterface)
-        {
-            FragmentCallInterface callInterface = (FragmentCallInterface)context;
-            fragmentCall_mainObj = callInterface.Get_GenFragCallMainObj();
-        }
+
         if (context instanceof InterfaceActionBarUtil)
         {
             actionBarUtilObj=((InterfaceActionBarUtil)context).getActionBarUtilObj();
@@ -162,13 +161,14 @@ public class ClientCreationFragment extends Fragment implements View.OnClickList
         protein_value = (EditText)rootView.findViewById(R.id.protein_value);
         servings_value = (EditText)rootView.findViewById(R.id.servings_value);
 
-
+        day_month_year.setInputType(InputType.TYPE_NULL);
 
         person_name_text = (TextView)rootView.findViewById(R.id.person_name_text);
         mobile_text = (TextView)rootView.findViewById(R.id.mobile_text);
         location_text = (TextView)rootView.findViewById(R.id.location_text);
 
         person_name_text.setText(petModel.getOwner_name());
+        mobile_text.addTextChangedListener(new PhoneNumberFormattingTextWatcher("US"));
         mobile_text.setText(petModel.getMobile());
         location_text.setText(petModel.getAddress());
 
@@ -182,7 +182,8 @@ public class ClientCreationFragment extends Fragment implements View.OnClickList
         actionBarUtilObj.getImgBack().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((AppCompatActivity) getActivity()).getSupportFragmentManager().popBackStackImmediate();
+             //   ((AppCompatActivity) getActivity()).getSupportFragmentManager().popBackStackImmediate();
+                show_prev_client_list_scrn();
             }
         });
 
@@ -194,7 +195,8 @@ public class ClientCreationFragment extends Fragment implements View.OnClickList
         actionBarUtilObj.getTitle().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((AppCompatActivity) getActivity()).getSupportFragmentManager().popBackStackImmediate();
+              //  ((AppCompatActivity) getActivity()).getSupportFragmentManager().popBackStackImmediate();
+                show_prev_client_list_scrn();
 
             }
         });
@@ -269,6 +271,29 @@ public class ClientCreationFragment extends Fragment implements View.OnClickList
 
 
         return rootView;
+    }
+
+
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        android.support.v4.app.Fragment mContent;
+        if(savedInstanceState != null)
+        {
+            mContent = getActivity().getSupportFragmentManager().getFragment(savedInstanceState,"CLIENT_CRT_STATE");
+            FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.frame_layout,mContent,"client_crt_new");
+            fragmentTransaction.addToBackStack("client_crt_new");
+            fragmentTransaction.commit();
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        getActivity().getSupportFragmentManager().putFragment(outState,"CLIENT_CRT_STATE",this);
     }
 
 
@@ -507,7 +532,12 @@ public class ClientCreationFragment extends Fragment implements View.OnClickList
 
         else {
             if (NetworkConnection.isOnline(getActivity())) {
-                submitData(getResources().getString(R.string.url_reference) + "pet_creation.php");
+                if(petModel.getProfile_status().equalsIgnoreCase("verified")) {
+                    submitData(getResources().getString(R.string.url_reference) + "temporary_pet_creation.php");
+                }
+                else{
+                    submitData(getResources().getString(R.string.url_reference) + "pet_creation.php");
+                }
             } else {
                 Toast.makeText(getActivity(), getResources().getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
             }
@@ -537,26 +567,30 @@ public class ClientCreationFragment extends Fragment implements View.OnClickList
                     JSONObject jsonObject = new JSONObject(s);
                     String id = jsonObject.getString("id");
                     String result = jsonObject.getString("result");
-                    if(result.equalsIgnoreCase("Success"))
+                    if(result.toLowerCase().contains("success"))
                     {
+                        if(!petModel.getProfile_status().equalsIgnoreCase("verified")) {
+                            Toast.makeText(getContext(), "result :" + result, Toast.LENGTH_LONG).show();
+                            show_prev_client_list_scrn();
+                        }
+                        else {
+                            final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                            builder.setMessage("Pet created successfully. A request has been sent to the Pet Parent for approval.")
+                                    .setCancelable(false)
+                                    .setNeutralButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            dialog.cancel();
 
-                        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                        builder.setMessage(getResources().getString(R.string.client_creation))
-                                .setCancelable(false)
-                                .setNeutralButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        dialog.cancel();
-
-                                        ((AppCompatActivity) getActivity()).getSupportFragmentManager().popBackStackImmediate();
+                                            //   ((AppCompatActivity) getActivity()).getSupportFragmentManager().popBackStackImmediate();
+                                            show_prev_client_list_scrn();
 
 
-
-                                    }
-                                });
-                        AlertDialog alert = builder.create();
-                        alert.show();
-
+                                        }
+                                    });
+                            AlertDialog alert = builder.create();
+                            alert.show();
+                        }
 
                     }
 
@@ -599,7 +633,6 @@ public class ClientCreationFragment extends Fragment implements View.OnClickList
                 Log.d("SENTTOSERVE",""+userModel.getId() + "BRNA "+brandVal + "PROTEN "+proteinVal + "PROSE "+servingsVal);
                 Log.d("UPCIMDS","UPCIMDS"+upcoming_date + "IMG "+image);
 
-                Gson gson = new Gson();
                 params.put("user_id",userModel.getId());
                 params.put("owner_id",petModel.getOwwner_id());
                 params.put("pet_name",petNameVal);
@@ -608,6 +641,15 @@ public class ClientCreationFragment extends Fragment implements View.OnClickList
                 params.put("protein",proteinVal);
                 params.put("portion_size",servingsVal);
                 params.put("image",image);
+                if(petModel.getProfile_status().equalsIgnoreCase("verified")) {
+                    params.put("owner_name", petModel.getOwner_name());
+                    params.put("user_name", userModel.getName());
+                    params.put("mobile",petModel.getMobile());  ///will Clarify with the shankar
+                }
+                else
+                params.put("key","unclaimed");
+
+
                 return params;
             }
 
@@ -618,7 +660,21 @@ public class ClientCreationFragment extends Fragment implements View.OnClickList
     }
 
 
+   public void show_prev_client_list_scrn(){
+       FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+       Fragment prev_frag = null;
+               prev_frag= getActivity().getSupportFragmentManager().findFragmentByTag("vw_client_list");
 
+       //Fragment frag_feed = getActivity().getSupportFragmentManager().findFragmentByTag("frag_feed");
+       //  Toast.makeText(getContext(), "I am ", Toast.LENGTH_LONG).show();
+       if (prev_frag.isAdded()) { // if the fragment is already in container
+           //    Toast.makeText(getContext(), "I am Here", Toast.LENGTH_LONG).show();
+           ft.remove(this);
+           ft.show(prev_frag);
+
+           ft.commit();
+       }
+   }
 
 
 
@@ -641,9 +697,9 @@ public class ClientCreationFragment extends Fragment implements View.OnClickList
 
 
 
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-        Date dateobj = new Date();
-        upcoming_date = df.format(myCalendar1.getTime());
+/*        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        Date dateobj = new Date();*/
+        upcoming_date = sdf.format(myCalendar1.getTime());
 
 
     }

@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.telecom.Call;
 
 import com.purple.kriddr.AddInvoiceCommentsFragment;
+import com.purple.kriddr.ClientCreationFragment;
 import com.purple.kriddr.ProfileFragment;
 import com.purple.kriddr.R;
 import com.purple.kriddr.model.UserModel;
@@ -40,6 +41,11 @@ public class GenFragmentCall_Main {
         if(_scrn_fragment instanceof AddInvoiceCommentsFragment){
             Fragment invoice=Call_Activity.getSupportFragmentManager().findFragmentByTag("addinvoice");
             fragmentTransaction.hide(invoice);
+            fragmentTransaction.add(R.id.frame_layout, _scrn_fragment, tag);
+        }
+        else if(_scrn_fragment instanceof ClientCreationFragment){
+            Fragment pet_list_frag=Call_Activity.getSupportFragmentManager().findFragmentByTag("vw_client_list");
+            fragmentTransaction.hide(pet_list_frag);
             fragmentTransaction.add(R.id.frame_layout, _scrn_fragment, tag);
         }
         else {

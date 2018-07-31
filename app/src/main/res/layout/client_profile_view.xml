@@ -102,19 +102,13 @@
                             android:textColor="@color/text_color"
                             android:textSize="18sp"
                             android:layout_height="wrap_content" />
-
                         <ImageView
-                            android:id="@+id/edit_petparent"
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            android:visibility="gone"
-                            android:layout_alignBottom="@+id/pet_parenttxt"
-                            android:layout_alignParentEnd="true"
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
+                            android:id="@+id/img_edt_parnt_dtls"
                             android:layout_alignParentRight="true"
-                            android:layout_marginEnd="10dp"
-                            android:layout_marginRight="10dp"
-                            android:src="@drawable/edit_red" />
-
+                            android:src="@drawable/edit_red"
+                            />
 
 
 

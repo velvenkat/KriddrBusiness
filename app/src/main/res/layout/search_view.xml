@@ -50,6 +50,7 @@
         android:textColorHint="#404040"
         android:textSize="18sp"
         android:ellipsize="end"
+        android:inputType="textCapWords"
         android:maxLines="1"
         android:id="@+id/edtSearchText"
         />

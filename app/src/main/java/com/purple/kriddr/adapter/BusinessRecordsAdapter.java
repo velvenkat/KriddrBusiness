@@ -52,7 +52,7 @@ public class BusinessRecordsAdapter extends RecyclerView.Adapter<BusinessRecords
     @Override
     public void onBindViewHolder(BusinessRecordsAdapter.MyViewHolder holder, final int position) {
 
-        Glide.with(context).load(docList.get(position).getDocument()).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(holder.record_image);
+        Glide.with(context).load(docList.get(position).getDocument()).into(holder.record_image);
 
         if(docList.get(position).getCreated().equalsIgnoreCase("Empty"))
         {

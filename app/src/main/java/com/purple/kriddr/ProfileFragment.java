@@ -3,6 +3,7 @@ package com.purple.kriddr;
 import android.app.Dialog;
 import android.graphics.Color;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -10,9 +11,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.telephony.PhoneNumberFormattingTextWatcher;
+import android.telephony.PhoneNumberUtils;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
@@ -97,13 +101,16 @@ public class ProfileFragment extends Fragment implements BusinessRecordsAdapter.
 
 
         setHasOptionsMenu(true);
-
+        bus_phone_value.addTextChangedListener(new PhoneNumberFormattingTextWatcher("US"));
 
         actionBarUtilObj.setActionBarVisible();
 
         actionBarUtilObj.getImgBack().setVisibility(View.INVISIBLE);
 
         actionBarUtilObj.getImgSettings().setVisibility(View.VISIBLE);
+
+        actionBarUtilObj.getTitle().setVisibility(View.VISIBLE);
+        actionBarUtilObj.getEditText().setVisibility(View.INVISIBLE);
 
         actionBarUtilObj.getImgSettings().setImageResource(R.drawable.menusetting);
 
@@ -120,7 +127,7 @@ public class ProfileFragment extends Fragment implements BusinessRecordsAdapter.
 
 
         bus_name_value.setText(userModel.getBusiness_name());
-        bus_phone_value.setText(userModel.getBusiness_phone());
+        bus_phone_value.setText(userModel.getBusiness_phone().trim());
         address_Value.setText(userModel.getBusiness_address());
         name_value.setText(userModel.getName());
         email_value.setText(userModel.getEmail());
@@ -235,14 +242,37 @@ public class ProfileFragment extends Fragment implements BusinessRecordsAdapter.
     }
 
 
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        Fragment mContent;
+        if(savedInstanceState != null)
+        {
+            mContent = getActivity().getSupportFragmentManager().getFragment(savedInstanceState,"Prof_View_STATE");
+            FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.frame_layout,mContent,"profviewclient");
+            fragmentTransaction.addToBackStack("profviewclient");
+            fragmentTransaction.commit();
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        getActivity().getSupportFragmentManager().putFragment(outState,"Prof_View_STATE",this);
+    }
+
+
 
     public void recordList(String url) {
+        final MyProgressDialog progressDialog=new MyProgressDialog(getContext());
         StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 //progress.hide();
                 Log.d("LISTOFCLIENTS", "LISTOFCLIENTS" + s);
-
+                progressDialog.hide();
                 try
                 {
                     JSONObject jsonObject = new JSONObject(s);
@@ -285,7 +315,7 @@ public class ProfileFragment extends Fragment implements BusinessRecordsAdapter.
             @Override
             public void onErrorResponse(VolleyError volleyError) {
                 // progress.hide();
-
+                progressDialog.hide();
             }
         }) {
 
@@ -299,6 +329,7 @@ public class ProfileFragment extends Fragment implements BusinessRecordsAdapter.
             }
 
         };
+        progressDialog.show();
         AppController.getInstance().addToRequestQueue(request);
 
     }

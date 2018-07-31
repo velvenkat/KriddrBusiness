@@ -17,6 +17,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
@@ -39,12 +40,14 @@ import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.highlight.ChartHighlighter;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.listener.ChartTouchListener;
 import com.github.mikephil.charting.listener.OnChartGestureListener;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.purple.kriddr.controller.AppController;
+import com.purple.kriddr.custom.CustomMarkerView;
 import com.purple.kriddr.iface.FragmentCallInterface;
 import com.purple.kriddr.iface.InterfaceActionBarUtil;
 import com.purple.kriddr.iface.InterfaceUserModel;
@@ -138,6 +141,8 @@ public class InvoiceHistory extends Fragment implements OnChartGestureListener, 
         actionBarUtilObj.getImgBack().setVisibility(View.INVISIBLE);
 
         actionBarUtilObj.getImgSettings().setVisibility(View.GONE);
+        actionBarUtilObj.getTitle().setVisibility(View.VISIBLE);
+        actionBarUtilObj.getEditText().setVisibility(View.INVISIBLE);
 
         actionBarUtilObj.getImgSettings().setImageResource(R.drawable.search);
 
@@ -163,7 +168,8 @@ public class InvoiceHistory extends Fragment implements OnChartGestureListener, 
 
 
                 if (NetworkConnection.isOnline(getActivity())) {
-                    invoiceHistoryDetails(getResources().getString(R.string.url_reference) + "invoice_week_month_year.php");
+                   invoiceHistoryDetails(getResources().getString(R.string.url_reference) + "invoice_week_month_year.php");
+             //       setData();
                 } else {
                     Toast.makeText(getActivity(), getResources().getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
                 }
@@ -194,12 +200,15 @@ public class InvoiceHistory extends Fragment implements OnChartGestureListener, 
 
 
     public void invoiceHistoryDetails(String url) {
+        final MyProgressDialog myProgressDialog=new MyProgressDialog(getActivity());
+
         StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 //progress.hide();
-                Log.d("INVOICELSTRES", "INVOICELSTRES" + s);
 
+                Log.d("INVOICELSTRES", "INVOICELSTRES" + s);
+                myProgressDialog.hide();
                 xVals = new ArrayList<String>();
                 yVals = new ArrayList<Entry>();
                 Y_VAL_MAX=0;
@@ -208,7 +217,8 @@ public class InvoiceHistory extends Fragment implements OnChartGestureListener, 
                     JSONObject jsonObject = new JSONObject(s);
                     JSONArray jsonArray = jsonObject.getJSONArray("response");
 
-
+                    xVals.add("0");
+                    yVals.add(new Entry(Float.valueOf(0), 0));
                     for (int index = 0; index < jsonArray.length(); index++) {
                         invoiceModelGraph = new InvoiceModelGraph();
                         graphJsonObject = jsonArray.getJSONObject(index);
@@ -223,7 +233,7 @@ public class InvoiceHistory extends Fragment implements OnChartGestureListener, 
                         {
                             int yAxis= graphJsonObject.getInt("yaxis");
                             xVals.add(xAxis);
-                            yVals.add(new Entry(Float.valueOf(yAxis), index));
+                            yVals.add(new Entry(Float.valueOf(yAxis), index+1));
                             if(yAxis>Y_VAL_MAX)
                                 Y_VAL_MAX=yAxis;
 
@@ -349,7 +359,7 @@ public class InvoiceHistory extends Fragment implements OnChartGestureListener, 
             @Override
             public void onErrorResponse(VolleyError volleyError) {
                 // progress.hide();
-
+                myProgressDialog.hide();
             }
         }) {
 
@@ -366,6 +376,7 @@ public class InvoiceHistory extends Fragment implements OnChartGestureListener, 
             }
 
         };
+        myProgressDialog.show();
         AppController.getInstance().addToRequestQueue(request);
 
     }
@@ -417,11 +428,23 @@ public class InvoiceHistory extends Fragment implements OnChartGestureListener, 
     private void setData() {
 
 
+       /* xVals=new ArrayList<>();
+        yVals=new ArrayList<>();
+      *//*  xVals.add("0");
+        yVals.add(new Entry(Float.valueOf(0),0));*//*
+        xVals.add("Tues");
+        yVals.add(new Entry(Float.valueOf(300),0));
+        xVals.add("Fri");
+        yVals.add(new Entry(Float.valueOf(2000),1));
+        xVals.add("SAT");
+        yVals.add(new Entry(Float.valueOf(150),2));
+        xVals.add("SUN");
+        yVals.add(new Entry(Float.valueOf(350),3));*/
 
         YAxis leftAxis = mchart.getAxisLeft();
         leftAxis.removeAllLimitLines(); // reset all limit lines to avoid overlapping lines
 
-        leftAxis.setAxisMaxValue(Y_VAL_MAX+100);
+        leftAxis.setAxisMaxValue(Y_VAL_MAX+200);
         leftAxis.setAxisMinValue(0f);
         leftAxis.setLabelCount(yVals.size(), true);
 
@@ -440,7 +463,7 @@ public class InvoiceHistory extends Fragment implements OnChartGestureListener, 
         //  dont forget to refresh the drawing
 
 
-        mchart.invalidate();
+
 
 
         LineDataSet set1;
@@ -469,11 +492,51 @@ public class InvoiceHistory extends Fragment implements OnChartGestureListener, 
 
         // set data
         mchart.setData(data);
+        mchart.setDrawMarkerViews(true);
 
+
+/*
+        mchart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
+            @Override
+            public void onValueSelected(Entry e, int dataSetIndex, Highlight h) {
+                mchart.highlightValue(h);
+            }
+
+            @Override
+            public void onNothingSelected() {
+
+            }
+        });
+*/
+
+        CustomMarkerView customMarkerView = new CustomMarkerView(getContext(), R.layout.graph_marker_vw);
+        mchart.setMarkerView(customMarkerView);
+        //mchart.setHighlighter(new ChartHighlighter(mchart));
+        mchart.notifyDataSetChanged();
+        mchart.invalidate();
 
 
     }
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        Fragment mContent;
+        if(savedInstanceState != null)
+        {
+            mContent = getActivity().getSupportFragmentManager().getFragment(savedInstanceState,"INV_HIST_STATE");
+            FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.frame_layout,mContent,"invoicehist");
+            fragmentTransaction.addToBackStack("invoicehist");
+            fragmentTransaction.commit();
+        }
+    }
 
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        getActivity().getSupportFragmentManager().putFragment(outState,"INV_HIST_STATE",this);
+    }
 
     @Override
     public void onAttach(Context context) {

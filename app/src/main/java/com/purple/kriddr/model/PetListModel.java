@@ -137,6 +137,16 @@ public class PetListModel {
     String protein;
     String portion_size;
 
+    public String getD_date() {
+        return d_date;
+    }
+
+    public void setD_date(String d_date) {
+        this.d_date = d_date;
+    }
+
+    String d_date;
+
 
 
 }

@@ -48,13 +48,13 @@
     <string name="no_record_found">No records found</string>
 
     <string name="begin_by_adding">Begin by adding your three \n \u0020 \u0020 \u0020 \u0020 \u0020 best clients!</string>
-    <string name="client_creation">Client creation successfully</string>
+    <string name="client_creation">Client created successfully</string>
     
     <string name="payment_received_confirm">Payment received sucessfully</string>
-    <string name="record_creation">Record saved</string>
-    <string name="note_success">Note successfully saved</string>
+    <string name="record_creation">Record created successfully</string>
+    <string name="note_success">Notes saved successfully </string>
 
-    <string name="invoice_creation">Invoice creation successfully</string>
+    <string name="invoice_creation">Invoice created successfully</string>
     
     <string name="servings_norm">Servings (in  cups, \n tablespoons, etc.)</string>
 
@@ -69,22 +69,22 @@
     <string name="logout">Sign Out</string>
 
     <string name="enter_flname">Please enter your name</string>
-    <string name="enter_mobile">Please enter your mobile number</string>
-    <string name="enter_email_val">Please enter your email</string>
-    <string name="invalid_email">Invalid email</string>
+    <string name="enter_mobile">Please enter your phone number</string>
+    <string name="enter_email_val">Please enter your email id</string>
+    <string name="invalid_email">Invalid email id</string>
     <string name="no_internet">No internet connection</string>
-    <string name="already_user_exist">Already user exist this mobile number</string>
+    <string name="already_user_exist">Already user exist in this mobile number</string>
     <string name="enter_business">Please enter business name</string>
-    <string name="enter_address">Please enter address</string>
+    <string name="enter_address">Please enter your address</string>
     <string name="invalid_user">Invalid user</string>
     <string name="fill_alldigit">Fill all the digits</string>
     <string name="choose_image">Please choose the image</string>
     <string name="do_you_want_exit">Do you want to exit?</string>
     <string name="yes">Yes</string>
     <string name="cancel">No</string>
-    <string name="business_already_create">Already busniess created</string>
+    <string name="business_already_create">Already business created</string>
 
-    <string name="enter_mobile_num">Please enter mobile</string>
+    <string name="enter_mobile_num">Please enter phone number</string>
 
     <string name="alread_mobile">Already this mobile number is exists for the business owner</string>
     
@@ -106,10 +106,11 @@
 
 
     <!-- Development Instance -->
-    <!--<string name="url_reference">http://13.71.127.81/dev/kriddr/web_service/home/</string>-->
+     <string name="url_reference">http://13.71.127.81/dev/kriddr/web_service/home/</string>
 
 
-    <string name="url_reference">http://18.188.194.43/kriddr/web_service/home/</string>
+   <!--<string name="url_reference">http://18.188.194.43/kriddr/web_service/home/</string>-->
+
 
 
     <string name="title_activity_kridder_navigation">KridderNavigationActivity</string>

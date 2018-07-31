@@ -44,7 +44,7 @@ public class InvoiceListAdapterView extends RecyclerView.Adapter<InvoiceListAdap
     }
 
     @Override
-    public void onBindViewHolder(MyViewHolder holder, int position) {
+    public void onBindViewHolder(MyViewHolder holder , int position) {
 
         String inv_date = "", inv_service = "", inv_value = "";
 
@@ -62,6 +62,11 @@ public class InvoiceListAdapterView extends RecyclerView.Adapter<InvoiceListAdap
 
         holder.invoice_date.setText(inv_date);
         holder.invoice_service.setText(inv_service);
+        if(inv_value.trim().equalsIgnoreCase(""))
+        {
+            holder.invoice_value.setText("--");
+        }
+        else
         holder.invoice_value.setText("$"+inv_value);
     }
 

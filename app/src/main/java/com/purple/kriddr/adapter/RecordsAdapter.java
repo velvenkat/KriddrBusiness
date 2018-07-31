@@ -17,6 +17,7 @@ import com.purple.kriddr.model.PetModel;
 
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by pf-05 on 2/22/2018.
@@ -24,12 +25,12 @@ import java.util.ArrayList;
 
 public class RecordsAdapter extends RecyclerView.Adapter<RecordsAdapter.MyViewHolder> {
 
-    ArrayList<DocumentModel> docList = new ArrayList<>();
+    List<DocumentModel> docList = new ArrayList<>();
     Context context;
     RecordsAdapter.DataFromAdapterToFragment dataFromAdapterToFragment;
 
 
-    public RecordsAdapter(ArrayList<DocumentModel> docList,Context context,RecordsAdapter.DataFromAdapterToFragment listener)
+    public RecordsAdapter(List<DocumentModel> docList, Context context, RecordsAdapter.DataFromAdapterToFragment listener)
     {
 
         this.docList = docList;
@@ -54,7 +55,7 @@ public class RecordsAdapter extends RecyclerView.Adapter<RecordsAdapter.MyViewHo
     @Override
     public void onBindViewHolder(RecordsAdapter.MyViewHolder holder, final int position) {
 
-        Glide.with(context).load(docList.get(position).getDocument()).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(holder.record_image);
+        Glide.with(context).load(docList.get(position).getDocument()).into(holder.record_image);
 
         if(docList.get(position).getCreated().equalsIgnoreCase("Empty"))
         {

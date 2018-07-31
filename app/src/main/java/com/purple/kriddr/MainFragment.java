@@ -73,10 +73,7 @@ public class MainFragment extends Fragment {
         return rootView;
     }
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-    }
+
 
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -186,6 +183,33 @@ public class MainFragment extends Fragment {
                 genFragmentCall_mainObj.Fragment_call(new SignupFragment(), "SgnUpFrag", null);
             }
         });
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        Fragment mContent;
+        if(savedInstanceState!=null) {
+            mContent = getActivity().getSupportFragmentManager().getFragment(savedInstanceState, "Welcome_STATE");
+            FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+
+            fragmentTransaction.replace(R.id.frame_layout, mContent, "welcome_scrn");
+
+
+            fragmentTransaction.addToBackStack("welcome_scrn");
+
+            fragmentTransaction.commit();
+
+        }
+    }
+
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        //Save the fragment's instance
+        getActivity().getSupportFragmentManager().putFragment(outState, "Welcome_STATE", this);
     }
 
 

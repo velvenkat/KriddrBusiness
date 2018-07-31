@@ -4,17 +4,13 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.telephony.PhoneNumberFormattingTextWatcher;
@@ -26,8 +22,6 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -35,7 +29,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -45,8 +38,6 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.google.firebase.crash.FirebaseCrash;
-import com.google.gson.Gson;
 import com.purple.kriddr.adapter.AutoCompleteSearchAdapter;
 import com.purple.kriddr.adapter.ClientViewAdapter;
 import com.purple.kriddr.controller.AppController;
@@ -74,7 +65,7 @@ import java.util.Map;
  * Created by pf-05 on 2/10/2018.
  */
 
-public class ClientFragment extends Fragment implements ClientViewAdapter.DataFromAdapterToFragment,AutoCompleteSearchAdapter.DataFromAdapterToFragment {
+public class ClientFragment extends Fragment implements ClientViewAdapter.DataFromAdapterToFragment, AutoCompleteSearchAdapter.DataFromAdapterToFragment {
     View rootView;
     RecyclerView mRecyclerView;
     RecyclerView.LayoutManager mLayoutManager;
@@ -153,10 +144,6 @@ public class ClientFragment extends Fragment implements ClientViewAdapter.DataFr
             public void onClick(View view) {
 
 
-                FirebaseCrash.report(new Exception("My first Android non-fatal error"));
-
-
-
                 mBottomSheetDialog = new Dialog(getActivity(), R.style.MaterialDialogSheet);
                 mBottomSheetDialog.setContentView(R.layout.search_layout); // your custom view.
                 mBottomSheetDialog.setCancelable(true);
@@ -168,8 +155,8 @@ public class ClientFragment extends Fragment implements ClientViewAdapter.DataFr
                 AutoCompleteTextView search_owner = (AutoCompleteTextView) mBottomSheetDialog.getWindow().findViewById(R.id.search_owner);
                 search_owner.setThreshold(1);
 
-                setAutoSearchAdapter(search_pet,true);
-                setAutoSearchAdapter(search_owner,false);
+                setAutoSearchAdapter(search_pet, true);
+                setAutoSearchAdapter(search_owner, false);
                 mBottomSheetDialog.show();
 
 
@@ -185,22 +172,20 @@ public class ClientFragment extends Fragment implements ClientViewAdapter.DataFr
             public void onClick(View view) {
 
                 Log.d("PETID", "PETID" + pet_id);
-                if (pet_id.equals("Empty")) {
-                    fragmentCall_mainObj.Fragment_call(new PetClientCreationFragment(), "OTP", null);
-                } else {
-                    pop_up_window();
+              /*  if (pet_id.equals("Empty")) {
+                    fragmentCall_mainObj.Fragment_call(new PetClientCreationFragment(), "ClientCrt", null);
+                } else {*/
+                pop_up_window();
 
-                }
+                //}
 
 
             }
         });
 
 
-
         dataAdapter = new ArrayAdapter<String>(getActivity(), R.layout.spinner_layout, sortNameList);
         dataAdapter.setDropDownViewResource(R.layout.simple_spinner_contact);
-
 
 
         sort_by_most_recent.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -258,17 +243,24 @@ public class ClientFragment extends Fragment implements ClientViewAdapter.DataFr
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+
         Fragment mContent;
-        if(savedInstanceState!= null)
-        {
-            mContent = getActivity().getSupportFragmentManager().getFragment(savedInstanceState,"CLIFRAST");
+        if (savedInstanceState != null) {
+            mContent = getActivity().getSupportFragmentManager().getFragment(savedInstanceState, "CLIFRAST");
             FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.frame_layout,mContent,"clientfrag");
+            fragmentTransaction.replace(R.id.frame_layout, mContent, "clientfrag");
             fragmentTransaction.addToBackStack("clientfrag");
             fragmentTransaction.commit();
         }
     }
 
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        //To save the instance state
+        getActivity().getSupportFragmentManager().putFragment(outState, "CLIFRAST", this);
+    }
 
     public void onResume() {
         super.onResume();
@@ -278,19 +270,11 @@ public class ClientFragment extends Fragment implements ClientViewAdapter.DataFr
         handle_BackKey();
     }
 
-    @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-
-        //To save the instance state
-        getActivity().getSupportFragmentManager().putFragment(outState,"CLIFRAST",this);
-    }
 
     public void setAutoSearchAdapter(AutoCompleteTextView txtView, boolean isPet) {
 
-        if(feedlist!= null)
-        {
-            adapter = new AutoCompleteSearchAdapter(getContext(), R.layout.search_layout, R.id.search_pet, feedlist, isPet,(AutoCompleteSearchAdapter.DataFromAdapterToFragment)this);
+        if (feedlist != null) {
+            adapter = new AutoCompleteSearchAdapter(getContext(), R.layout.search_layout, R.id.search_pet, feedlist, isPet, (AutoCompleteSearchAdapter.DataFromAdapterToFragment) this);
             txtView.setAdapter(adapter);
         }
 
@@ -421,15 +405,15 @@ public class ClientFragment extends Fragment implements ClientViewAdapter.DataFr
 
                 if (mobile_number.equals("") || mobile_number.isEmpty()) {
                     Toast.makeText(getActivity(), getResources().getString(R.string.enter_mobile_num), Toast.LENGTH_SHORT).show();
-                }
-
-                else {
+                } else if (mobile_number.length() < 10) {
+                    Toast.makeText(getActivity(), "Please enter 10 digit phone number", Toast.LENGTH_SHORT).show();
+                } else {
                     dialog.cancel();
+                    srch_pets(getResources().getString(R.string.url_reference) + "pet_list.php", mobile_number);
 
-
-                    int findOwnerIndex = 0;
+                  /*  int findOwnerIndex = 0;
                     if (feedlist.size() > 0) {
-                        for (int i = 0; i < feedlist.size(); i++) {
+                        for (int i = 0; i < feedlist.size(); i++)/ {
                             if (mobile_number.equals(feedlist.get(i).getMobile())) {
                                 //String owner_id = feedlist.get(i).getOwwner_id();
                                 break;
@@ -442,13 +426,14 @@ public class ClientFragment extends Fragment implements ClientViewAdapter.DataFr
                         if (findOwnerIndex >= feedlist.size()) {
                             Log.d("THISREA", "THISREA");
                             bundle.putString("mobile_no", mobile_number);
-                            fragmentCall_mainObj.Fragment_call(new PetClientCreationFragment(), "ClientFrag", bundle);
+                            fragmentCall_mainObj.Fragment_call(new PetClientCreationFragment(), "ClientCrt", bundle);
                         } else {
                             PetModel petModel = feedlist.get(findOwnerIndex);
                             bundle.putParcelable("pet_parent", petModel);
                             fragmentCall_mainObj.Fragment_call(new PetClientListFragment(), "petparentlist", bundle);
                         }
-                    }
+                    }*/
+
                 }
 
 
@@ -460,12 +445,13 @@ public class ClientFragment extends Fragment implements ClientViewAdapter.DataFr
 
 
     public void petList(String url) {
+        final MyProgressDialog myProgressDialog=new MyProgressDialog(getActivity());
         StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 //progress.hide();
                 Log.d("LISTOFCLIENTS", "LISTOFCLIENTS" + s);
-
+                myProgressDialog.hide();
 
                 try {
 
@@ -480,6 +466,13 @@ public class ClientFragment extends Fragment implements ClientViewAdapter.DataFr
                     } else {
 
                         feedlist = PetListParser.parseFeed(s);
+                        Log.e("dsdf","va"+feedlist.get(0).getCreated());
+                        Collections.sort(feedlist, new Comparator<PetModel>() {
+                            public int compare(PetModel s1, PetModel s2) {
+                                // Write your logic here.
+                                return (s2.getCreated().compareTo(s1.getCreated()));
+                            }
+                        });
 
                         display_data(feedlist);
 
@@ -496,7 +489,7 @@ public class ClientFragment extends Fragment implements ClientViewAdapter.DataFr
             @Override
             public void onErrorResponse(VolleyError volleyError) {
                 // progress.hide();
-
+              myProgressDialog.hide();
             }
         }) {
 
@@ -510,24 +503,98 @@ public class ClientFragment extends Fragment implements ClientViewAdapter.DataFr
             }
 
         };
+        myProgressDialog.show();
+        AppController.getInstance().addToRequestQueue(request);
+
+    }
+
+    public void srch_pets(String url, final String srch_mobileNo) {
+        final MyProgressDialog myProgressDialog = new MyProgressDialog(getActivity());
+        StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String s) {
+                //progress.hide();
+                Log.d("LISTOFCLIENTS", "LISTOFCLIENTS" + s);
+                myProgressDialog.hide();
+
+                try {
+
+                    JSONObject jsonObject = new JSONObject(s);
+                    JSONArray jsonArray = jsonObject.getJSONArray("response");
+
+                    JSONObject parentObject = jsonArray.getJSONObject(0);
+
+                    String pet_id = parentObject.getString("pet_id");
+
+                    if (pet_id.equals("Empty") || pet_id.contains("Empty") || pet_id.equals("")) {
+                        //  no_client.setVisibility(View.VISIBLE);
+                        //mRecyclerView.setVisibility(View.GONE);
+                        Bundle bundle = new Bundle();
+                        bundle.putString("mobile_no", srch_mobileNo);
+                        fragmentCall_mainObj.Fragment_call(new Parent_Pet_Creation_Fragment(), "cr_pet_parent", bundle);
+
+                    } else {
+
+                        ArrayList<PetModel> Pet_List = new ArrayList<>(PetListParser.parseFeed(s));
+                        Bundle bundle = new Bundle();
+                        bundle.putParcelableArrayList("pet_list", Pet_List);
+
+                        fragmentCall_mainObj.Fragment_call(new PetClientListFragment(), "vw_client_list", bundle);
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+
+                /** display_data(); */
+
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+            myProgressDialog.hide();
+
+                // progress.hide();
+
+            }
+        }) {
+
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+
+
+                params.put("mobile", srch_mobileNo);
+                params.put("user_id",userModel.getId());
+                return params;
+            }
+
+        };
+        myProgressDialog.show();
         AppController.getInstance().addToRequestQueue(request);
 
     }
 
     @Override
-    public void getClientinfo(String pet_id, String owner_id) {
-     //   mBottomSheetDialog.dismiss();
+    public void getClientinfo(String pet_id, String owner_id,int ProfileStatus) {
+        //   mBottomSheetDialog.dismiss();
         Bundle bundle = new Bundle();
         bundle.putString("pet_id", pet_id);
+        bundle.putInt("share_status",PetClientListFragment.SHARE_STATUS.ADDED.ordinal());
+        bundle.putInt("profile_status",ProfileStatus);
         fragmentCall_mainObj.Fragment_call(new ClientViewDetailsFragment(), "clientDetail", bundle);
     }
 
     @Override
-   public void getClientDetails(String pet_id, String owner_id) {
+    public void getClientDetails(String pet_id, String owner_id,int ProfileStatus) {
         mBottomSheetDialog.dismiss();
-        Bundle bundle=new Bundle();
-        bundle.putString("pet_id",pet_id);
-       fragmentCall_mainObj.Fragment_call(new ClientViewDetailsFragment(),"clientDetails",bundle);
+        Bundle bundle = new Bundle();
+        bundle.putString("pet_id", pet_id);
+        bundle.putInt("share_status",PetClientListFragment.SHARE_STATUS.ADDED.ordinal());
+        bundle.putInt("profile_status",ProfileStatus);
+        fragmentCall_mainObj.Fragment_call(new ClientViewDetailsFragment(), "clientDetails", bundle);
     }
 }
 

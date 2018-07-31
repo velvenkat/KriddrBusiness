@@ -9,6 +9,39 @@ import android.os.Parcelable;
 
 public class PetModel implements Parcelable{
 
+    protected PetModel(Parcel in) {
+        pet_id = in.readString();
+        owwner_id = in.readString();
+        owner_name = in.readString();
+        mobile = in.readString();
+        email = in.readString();
+        address = in.readString();
+        preferred_contact = in.readString();
+        photo = in.readString();
+        pet_name = in.readString();
+        dob = in.readString();
+        brand = in.readString();
+        protein = in.readString();
+        portion_size = in.readString();
+        shared_with_business = in.readString();
+        profile_status=in.readString();
+        type = in.readString();
+        user_id = in.readString();
+        created=in.readString();
+    }
+
+    public static final Creator<PetModel> CREATOR = new Creator<PetModel>() {
+        @Override
+        public PetModel createFromParcel(Parcel in) {
+            return new PetModel(in);
+        }
+
+        @Override
+        public PetModel[] newArray(int size) {
+            return new PetModel[size];
+        }
+    };
+
     public String getPet_id() {
         return pet_id;
     }
@@ -87,13 +120,7 @@ public class PetModel implements Parcelable{
 
 
 
-    public String getPrefered_contact() {
-        return prefered_contact;
-    }
 
-    public void setPrefered_contact(String prefered_contact) {
-        this.prefered_contact = prefered_contact;
-    }
 
     public String getAddress() {
         return address;
@@ -119,6 +146,37 @@ public class PetModel implements Parcelable{
         this.mobile = mobile;
     }
 
+    public String getPreferred_contact() {
+        return preferred_contact;
+    }
+
+    public void setPreferred_contact(String preferred_contact) {
+        this.preferred_contact = preferred_contact;
+    }
+
+    public String getShared_with_business() {
+        return shared_with_business;
+    }
+
+    public void setShared_with_business(String shared_with_business) {
+        this.shared_with_business = shared_with_business;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getUser_id() {
+        return user_id;
+    }
+
+    public void setUser_id(String user_id) {
+        this.user_id = user_id;
+    }
 
     String pet_id;
     String owwner_id;
@@ -126,48 +184,40 @@ public class PetModel implements Parcelable{
     String mobile;
     String email;
     String address;
-    String prefered_contact;
+    String preferred_contact;
     String photo;
     String pet_name;
     String dob;
     String brand;
     String protein;
     String portion_size;
+    String shared_with_business;
+    String type;
+    String user_id;
+    String profile_status;
 
-
-
-
-    protected PetModel(Parcel in) {
-        pet_id = in.readString();
-        owwner_id = in.readString();
-        owner_name = in.readString();
-        mobile = in.readString();
-        email = in.readString();
-        address = in.readString();
-        prefered_contact = in.readString();
-        photo = in.readString();
-        pet_name = in.readString();
-        dob = in.readString();
-        brand = in.readString();
-        protein = in.readString();
-        portion_size = in.readString();
+    public String getProfile_status() {
+        return profile_status;
     }
 
-    public static final Creator<PetModel> CREATOR = new Creator<PetModel>() {
-        @Override
-        public PetModel createFromParcel(Parcel in) {
-            return new PetModel(in);
-        }
+    public void setProfile_status(String profile_status) {
+        this.profile_status = profile_status;
+    }
 
-        @Override
-        public PetModel[] newArray(int size) {
-            return new PetModel[size];
-        }
-    };
+    public String getCreated() {
+        return created;
+    }
+
+    public void setCreated(String created) {
+        this.created = created;
+    }
+
+    String created;
+
+
 
     public PetModel() {
     }
-
 
 
     @Override
@@ -177,20 +227,23 @@ public class PetModel implements Parcelable{
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-
         dest.writeString(pet_id);
         dest.writeString(owwner_id);
         dest.writeString(owner_name);
         dest.writeString(mobile);
         dest.writeString(email);
         dest.writeString(address);
-        dest.writeString(prefered_contact);
+        dest.writeString(preferred_contact);
         dest.writeString(photo);
         dest.writeString(pet_name);
         dest.writeString(dob);
         dest.writeString(brand);
         dest.writeString(protein);
         dest.writeString(portion_size);
-
+        dest.writeString(shared_with_business);
+        dest.writeString(type);
+        dest.writeString(user_id);
+        dest.writeString(created);
+        dest.writeString(profile_status);
     }
 }

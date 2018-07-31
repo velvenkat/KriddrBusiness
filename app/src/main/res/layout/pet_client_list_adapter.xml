@@ -10,33 +10,37 @@
         android:id="@+id/customercardvw"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:foreground="#20FFFFFF"
-        card_view:cardBackgroundColor="#20FFFFFF"
-        card_view:cardCornerRadius="1dp"
-        card_view:cardElevation="1dp"
-        card_view:cardUseCompatPadding="true">
+
+        card_view:cardBackgroundColor="#FFFFFF"
+        card_view:cardCornerRadius="10dp"
+        card_view:cardElevation="0dp"
+        card_view:cardUseCompatPadding="true"
+       >
 
 
 
 
         <RelativeLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
+
             android:layout_height="wrap_content"
+            android:padding="5dp"
             android:layout_width="match_parent">
 
             <ImageView
                 android:id="@+id/imageView"
                 android:layout_width="70dp"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="10dp"
+
+                android:layout_centerVertical="true"
+
                 android:layout_height="70dp"
-                android:layout_alignParentTop="true"/>
+            />
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_toRightOf="@+id/imageView"
-                android:gravity="center_vertical"
-                android:layout_height="80dp">
+                android:layout_centerVertical="true"
+                android:layout_toLeftOf="@+id/btnReqStatus"
+                android:layout_height="wrap_content">
 
                 <TextView
                     android:id="@+id/name"
@@ -45,9 +49,11 @@
                     android:textSize="20sp"
                     android:layout_marginLeft="10dp"
                     android:textColor="#3d3d3d"
-                    android:layout_centerVertical="true"
+                    android:layout_alignParentLeft="true"
+
+
                     android:fontFamily="@font/roboto_medium"
-                    android:text="Relative layout"/>
+                    android:text="RR"/>
 
                 <TextView
                     android:id="@+id/contact"
@@ -57,10 +63,25 @@
                     android:textColor="#3d3d3d"
                     android:layout_height="wrap_content"
                     android:textSize="17sp"
-                    android:layout_centerVertical="true"
+
                     android:layout_below="@+id/name"
                     android:layout_alignLeft="@+id/name"/>
+
             </RelativeLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text=""
+                android:fontFamily="@font/roboto_regular"
+                android:textSize="16sp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:textAllCaps="false"
+                android:textColor="#EF6021"
+                android:layout_alignParentRight="true"
+                android:id="@+id/btnReqStatus"
+                />
         </RelativeLayout>
 
 

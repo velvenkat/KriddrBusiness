@@ -19,14 +19,17 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.os.StrictMode;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.PhoneNumberFormattingTextWatcher;
+import android.text.InputType;
 import android.util.Base64;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -77,14 +80,14 @@ import static com.bumptech.glide.load.resource.bitmap.TransformationUtils.rotate
  * Created by pf-05 on 2/14/2018.
  */
 
-public class PetClientCreationFragment extends Fragment implements View.OnClickListener{
+public class Parent_Pet_Creation_Fragment extends Fragment implements View.OnClickListener{
 
     View rootView;
     EditText petname_value, day_month_year, brand_value, protein_value, servings_value, name_value,mobile_value,address_value,email_value;
     DatePickerDialog.OnDateSetListener pickup_date;
     Calendar myCalendar1 = Calendar.getInstance();
     String petnameVal,daymonthyear,brandVal,proteinVal,servingVal,nameVal,mobileVal,addressVal,emailVal;
-    String myFormat = "MM-dd-yyyy";
+    String myFormat = "yyyy-MM-dd";
     SimpleDateFormat sdf = new SimpleDateFormat(myFormat);
     String PickupDate_Str="", upcoming_date = "";
     ActionBarUtil actionBarUtilObj;
@@ -126,7 +129,7 @@ public class PetClientCreationFragment extends Fragment implements View.OnClickL
 
         done_button = (Button)rootView.findViewById(R.id.done_button);
 
-
+        day_month_year.setInputType(InputType.TYPE_NULL);
 
         actionBarUtilObj.setActionBarVisible();
 
@@ -250,7 +253,27 @@ public class PetClientCreationFragment extends Fragment implements View.OnClickL
 
         return rootView;
     }
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
 
+        Fragment mContent;
+        if(savedInstanceState!= null)
+        {
+            mContent = getActivity().getSupportFragmentManager().getFragment(savedInstanceState,"Client_crt_state");
+            FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.frame_layout,mContent,"ClientCrt");
+            fragmentTransaction.addToBackStack("ClientCrt");
+            fragmentTransaction.commit();
+        }
+    }
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        //To save the instance state
+        getActivity().getSupportFragmentManager().putFragment(outState,"Client_crt_state",this);
+    }
 
     private static void requestWritePermission(final Context context) {
         if (ActivityCompat.shouldShowRequestPermissionRationale((Activity) context, android.Manifest.permission.CAMERA)) {
@@ -519,6 +542,9 @@ public class PetClientCreationFragment extends Fragment implements View.OnClickL
 
 
                     }
+                    else{
+                        Toast.makeText(getContext(),""+result,Toast.LENGTH_LONG).show();
+                    }
 
                 }
                 catch (Exception e)
@@ -626,9 +652,9 @@ public class PetClientCreationFragment extends Fragment implements View.OnClickL
 
 
 
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-        Date dateobj = new Date();
-        upcoming_date = df.format(myCalendar1.getTime());
+        /*DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        Date dateobj = new Date();*/
+        upcoming_date = sdf.format(myCalendar1.getTime());
 
 
 

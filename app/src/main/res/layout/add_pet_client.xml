@@ -57,6 +57,7 @@
                 android:layout_toRightOf="@+id/client_txt"
                 android:background="@drawable/rounded_edittext"
                 android:hint="@string/pet_name"
+                android:inputType="textCapWords"
                 android:paddingBottom="5dp"
                 android:paddingLeft="15dp"
                 android:paddingTop="5dp" />
@@ -98,6 +99,7 @@
                 android:layout_height="45dp"
                 android:fontFamily="@font/roboto_regular"
                 android:textSize="18sp"
+                android:inputType="textCapSentences"
                 android:layout_below="@+id/day_month_year"
                 android:layout_alignLeft="@+id/day_month_year"
                 android:layout_marginTop="20dp"
@@ -114,6 +116,7 @@
                 android:layout_height="45dp"
                 android:fontFamily="@font/roboto_regular"
                 android:textSize="18sp"
+                android:inputType="textCapSentences"
                 android:layout_below="@+id/brand_value"
                 android:layout_alignLeft="@+id/brand_value"
                 android:layout_marginTop="10dp"
@@ -130,6 +133,7 @@
                 android:layout_height="60dp"
                 android:fontFamily="@font/roboto_regular"
                 android:textSize="18sp"
+                android:inputType="textCapSentences"
                 android:layout_below="@+id/protein_value"
                 android:layout_alignLeft="@+id/protein_value"
                 android:layout_marginTop="10dp"
@@ -164,6 +168,7 @@
                 android:layout_toRightOf="@+id/brand_txt"
                 android:background="@drawable/rounded_edittext"
                 android:hint="Pet parent name"
+                android:inputType="textCapWords"
                 android:paddingBottom="5dp"
                 android:paddingLeft="15dp"
                 android:paddingTop="5dp" />
@@ -197,7 +202,7 @@
                 android:layout_toRightOf="@+id/brand_txt"
                 android:background="@drawable/rounded_edittext"
                 android:hint="@string/enter_email"
-                android:inputType="textNoSuggestions"
+
                 android:paddingBottom="5dp"
                 android:paddingLeft="15dp"
                 android:paddingTop="5dp" />
@@ -213,7 +218,7 @@
                 android:layout_below="@+id/parent_email_value"
                 android:layout_marginTop="10dp"
                 android:layout_alignLeft="@+id/parent_email_value"
-
+                android:inputType="textCapSentences"
                 android:layout_toRightOf="@+id/brand_txt"
                 android:background="@drawable/rounded_edittext"
                 android:hint="@string/address"

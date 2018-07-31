@@ -6,11 +6,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.purple.kriddr.CircleTransform;
+import com.purple.kriddr.PetClientListFragment;
 import com.purple.kriddr.R;
 import com.purple.kriddr.model.PetModel;
 
@@ -38,13 +40,23 @@ public class PetClientListAdapter extends RecyclerView.Adapter<PetClientListAdap
 
     public interface DataFromAdapterToFragment
     {
-        public void getClientInfo(String  pet_id, String owner_id);
+        public void getClientInfo(String  pet_id, String owner_id,int Share_Status,int Profile_Status);
     }
 
     @Override
     public PetClientListAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.pet_client_list_adapter,parent,false);
         return new PetClientListAdapter.MyViewHolder(v);
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
     }
 
     @Override
@@ -58,9 +70,26 @@ public class PetClientListAdapter extends RecyclerView.Adapter<PetClientListAdap
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                int ShareStatus;
+                int ProfileStatus;
+                if(nature.getShared_with_business().trim().equalsIgnoreCase("pending")){
+                 ShareStatus= PetClientListFragment.SHARE_STATUS.PENDING.ordinal();
 
+                }
+                else if(nature.getShared_with_business().equalsIgnoreCase("approved")){
+                    ShareStatus= PetClientListFragment.SHARE_STATUS.ADDED.ordinal();
 
-                dataFromAdapterToFragment.getClientInfo(nature.getPet_id(),nature.getOwwner_id());
+                }
+                else{
+                    ShareStatus= PetClientListFragment.SHARE_STATUS.NOT_ADDED.ordinal();
+                }
+                if(nature.getProfile_status().equalsIgnoreCase("verified")){
+                 ProfileStatus=PetClientListFragment.PROFILE_STATUS.VERIFIED.ordinal();
+                }
+                else{
+                    ProfileStatus=PetClientListFragment.PROFILE_STATUS.NOT_VERIFIED.ordinal();
+                }
+                dataFromAdapterToFragment.getClientInfo(nature.getPet_id(),nature.getOwwner_id(),ShareStatus,ProfileStatus);
             }
         });
 
@@ -73,6 +102,15 @@ public class PetClientListAdapter extends RecyclerView.Adapter<PetClientListAdap
             Glide.with(context).load(nature.getPhoto()).transform(new CircleTransform(context)).into(holder.imageView);
         }
 
+        if(nature.getShared_with_business().trim().equalsIgnoreCase("pending")){
+            holder.btnReqStatus.setText("Pending");
+        }
+        else if(nature.getShared_with_business().equalsIgnoreCase("approved")){
+            holder.btnReqStatus.setText("Added");
+        }
+        else{
+
+        }
 
 
 
@@ -88,6 +126,7 @@ public class PetClientListAdapter extends RecyclerView.Adapter<PetClientListAdap
     {
         public TextView first_Name,second_Name;
         ImageView imageView;
+        TextView btnReqStatus;
 
 
         public MyViewHolder(View itemView) {
@@ -96,6 +135,7 @@ public class PetClientListAdapter extends RecyclerView.Adapter<PetClientListAdap
             first_Name = (TextView)itemView.findViewById(R.id.name);
             second_Name = (TextView)itemView.findViewById(R.id.contact);
             imageView = (ImageView)itemView.findViewById(R.id.imageView);
+            btnReqStatus=(TextView)itemView.findViewById(R.id.btnReqStatus);
         }
     }
 }

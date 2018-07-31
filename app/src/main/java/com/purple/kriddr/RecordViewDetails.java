@@ -3,8 +3,10 @@ package com.purple.kriddr;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
 import android.view.Gravity;
@@ -137,7 +139,26 @@ public class RecordViewDetails extends Fragment implements RecordSearchAdapter.D
         return rootView;
     }
 
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        android.support.v4.app.Fragment mContent;
+        if(savedInstanceState != null)
+        {
+            mContent = getActivity().getSupportFragmentManager().getFragment(savedInstanceState,"Rec_Vw_Dtls");
+            FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.frame_layout,mContent,"rec_vw_dtls");
+            fragmentTransaction.addToBackStack("rec_vw_dtls");
+            fragmentTransaction.commit();
+        }
+    }
 
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        getActivity().getSupportFragmentManager().putFragment(outState,"Rec_Vw_Dtls",this);
+    }
 
     public void setAutoSearchAdapter(AutoCompleteTextView txtView, boolean isPet) {
         adapter = new RecordSearchAdapter(getContext(), R.layout.search_layout, R.id.search_pet, documentList, isPet,(RecordSearchAdapter.DataFromAdapterToFragment)this);

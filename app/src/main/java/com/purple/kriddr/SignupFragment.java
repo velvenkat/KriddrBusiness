@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.text.Html;
@@ -137,6 +138,9 @@ public class SignupFragment extends Fragment {
         } else if (mobile_No.isEmpty() || mobile_No.equals("")) {
             Toast.makeText(getActivity(), getResources().getString(R.string.enter_mobile), Toast.LENGTH_SHORT).show();
         }
+        else if(mobile_No.length()<10){
+            Toast.makeText(getActivity(), "Please enter 10 digit phone number", Toast.LENGTH_SHORT).show();
+        }
         else if(email_Val.isEmpty() || email_Val.equals(""))
         {
             Toast.makeText(getActivity(), getResources().getString(R.string.enter_email_val), Toast.LENGTH_SHORT).show();
@@ -144,7 +148,7 @@ public class SignupFragment extends Fragment {
         }
         else if(!android.util.Patterns.EMAIL_ADDRESS.matcher(email_Val).matches())
         {
-            Toast.makeText(getActivity(), getResources().getString(R.string.invalid_email), Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(),  getResources().getString(R.string.invalid_email), Toast.LENGTH_SHORT).show();
         }
         else
         {
@@ -161,6 +165,33 @@ public class SignupFragment extends Fragment {
         }
 
     }
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        Fragment mContent;
+        if(savedInstanceState!=null) {
+            mContent = getActivity().getSupportFragmentManager().getFragment(savedInstanceState, "RECORDVOICE_STATE");
+            FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+
+            fragmentTransaction.replace(R.id.frame_layout, mContent, "rec_voice");
+
+
+            fragmentTransaction.addToBackStack("rec_voice");
+
+            fragmentTransaction.commit();
+
+        }
+    }
+
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        //Save the fragment's instance
+        getActivity().getSupportFragmentManager().putFragment(outState, "RECORDVOICE_STATE", this);
+    }
+
 
     public void onAttach(Context context){
         super.onAttach(context);
@@ -190,7 +221,8 @@ public class SignupFragment extends Fragment {
                     JSONObject jsonObject = new JSONObject(s);
                     String name = jsonObject.getString("name");
                     String mobile = jsonObject.getString("mobile");
-                    if(name.equals("Success"))
+                    String sms_status=jsonObject.getString("sms_status");
+                    if(name.equalsIgnoreCase("Success") && sms_status!=null && sms_status.trim().equalsIgnoreCase("Message sent successfully"))
                     {
 
                         Bundle args = new Bundle();
@@ -211,6 +243,11 @@ public class SignupFragment extends Fragment {
 
 
                     }
+                    else if(sms_status!=null && !sms_status.equalsIgnoreCase("Message sent successfully")){
+                        Toast.makeText(getActivity(),sms_status,Toast.LENGTH_SHORT).show();
+
+                    }
+
                 }
                 catch (Exception e)
                 {

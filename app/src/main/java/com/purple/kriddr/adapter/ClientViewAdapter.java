@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.purple.kriddr.CircleTransform;
+import com.purple.kriddr.PetClientListFragment;
 import com.purple.kriddr.R;
 import com.purple.kriddr.model.PetModel;
 
@@ -37,7 +38,7 @@ public class ClientViewAdapter extends RecyclerView.Adapter<ClientViewAdapter.My
 
     public interface DataFromAdapterToFragment
     {
-        public void getClientinfo(String  pet_id, String owner_id);
+        public void getClientinfo(String  pet_id, String owner_id,int Profile_Status);
     }
 
     @Override
@@ -59,9 +60,15 @@ public class ClientViewAdapter extends RecyclerView.Adapter<ClientViewAdapter.My
             @Override
             public void onClick(View view) {
 
-               PetModel model = clientList.get(position);
-
-                dataFromAdapterToFragment.getClientinfo(nature.getPet_id(),nature.getOwwner_id());
+               //PetModel model = clientList.get(position);
+                 int ProfileStatus;
+                if(nature.getProfile_status().equalsIgnoreCase("verified")){
+                   ProfileStatus= PetClientListFragment.PROFILE_STATUS.VERIFIED.ordinal();
+                }
+                else{
+                    ProfileStatus= PetClientListFragment.PROFILE_STATUS.NOT_VERIFIED.ordinal();
+                }
+                dataFromAdapterToFragment.getClientinfo(nature.getPet_id(),nature.getOwwner_id(),ProfileStatus);
 
             }
         });

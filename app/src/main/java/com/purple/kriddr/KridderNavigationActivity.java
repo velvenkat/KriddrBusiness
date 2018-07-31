@@ -26,7 +26,7 @@ import com.purple.kriddr.util.GenFragmentCall_Main;
 public class KridderNavigationActivity extends AppCompatActivity implements InterfaceUserModel,FragmentCallInterface,InterfaceActionBarUtil {
 
     private TextView mTextMessage;
-    Toolbar toolbar;
+  //  Toolbar toolbar;
     public static String USER_MODEL_TAG = "USER_MODEL_OBJ";
     UserModel userModel;
 
@@ -70,35 +70,27 @@ public class KridderNavigationActivity extends AppCompatActivity implements Inte
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_kridder_navigation);
 
-        Fragment mContent;
-        if (savedInstanceState != null) {
-            //Restore the fragment's instance
-            mContent = getSupportFragmentManager().getFragment(savedInstanceState, "addinvoice");
-
-            fragmentCall_mainObj.Fragment_call(mContent,"addInvoice",null);
-        }
-
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
         BottomNavigationViewHelper.disableShiftMode(bottomNavigationView);
 
-        toolbar = (Toolbar)findViewById(R.id.toolbar);
+        //toolbar = (Toolbar)findViewById(R.id.toolbar);
 
         userModel =getIntent().getParcelableExtra(KridderNavigationActivity.USER_MODEL_TAG);
 
         fragmentCall_mainObj=new GenFragmentCall_Main(this);
 
-       fragmentCall_mainObj.Fragment_call(new ClientFragment(),"clientfrag",null);
+
 
        ScreenFromVal=getIntent().getIntExtra(MainActivity.SCREEN_FROM_TAG,-1);
 
 
 
-        Drawable drawable = toolbar.getOverflowIcon();
+      /*  Drawable drawable = toolbar.getOverflowIcon();
         if(drawable != null) {
             drawable = DrawableCompat.wrap(drawable);
             DrawableCompat.setTint(drawable.mutate(), getResources().getColor(R.color.black));
             toolbar.setOverflowIcon(drawable);
-        }
+        }*/
 
         actionBarUtilObj=new ActionBarUtil(this);
         actionBarUtilObj.setTitle("CLIENT");
@@ -110,27 +102,11 @@ public class KridderNavigationActivity extends AppCompatActivity implements Inte
         if(ScreenFromVal== MainActivity.Screens.UPDATE_PROFILE.ordinal()){
             navigation.setSelectedItemId(R.id.navigation_profile);
         }
-
+        fragmentCall_mainObj.Fragment_call(new ClientFragment(),"clientfrag",null);
     }
 
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
 
-        //Save the fragment's instanc
-        Fragment mContent=null;
-        boolean isAddInvoice=false;
-       for(Fragment fragment:getSupportFragmentManager().getFragments()){
-           String tag=fragment.getTag();
-           if(tag.equalsIgnoreCase("addinvoice")){
-               isAddInvoice=true;
-               break;
-           }
-       }
-       if(isAddInvoice)
-        getSupportFragmentManager().putFragment(outState, "addinvoice", mContent);
-    }
 
     @Override
     public void setUserModel(UserModel userModelObj) {

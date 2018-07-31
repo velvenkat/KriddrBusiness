@@ -8,7 +8,7 @@
     <TextView
         android:id="@+id/no_notes"
         android:gravity="center"
-        android:textSize="20sp"
+        android:textSize="16sp"
         android:visibility="gone"
         android:textColor="@color/text_color"
         android:text="@string/no_notes_found"

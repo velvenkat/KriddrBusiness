@@ -3,8 +3,10 @@ package com.purple.kriddr;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -158,21 +160,25 @@ public class AddInvoiceFragment extends Fragment {
 
         return rootView;
     }
-
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-        if (savedInstanceState != null) {
-            //Restore the fragment's state here
+        Fragment mContent;
+        if(savedInstanceState != null)
+        {
+            mContent = getActivity().getSupportFragmentManager().getFragment(savedInstanceState,"ADD_INV_STATE");
+            FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.frame_layout,mContent,"addinvoice");
+            fragmentTransaction.addToBackStack("addinvoice");
+            fragmentTransaction.commit();
         }
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
+    public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
 
-        //Save the fragment's state here
+        getActivity().getSupportFragmentManager().putFragment(outState,"ADD_INV_STATE",this);
     }
 
     public void setAdapter() {
@@ -310,10 +316,12 @@ public class AddInvoiceFragment extends Fragment {
     }
 
     private void invoiceserviceDetails(String url) {
+        final MyProgressDialog myProgressDialog = new MyProgressDialog(getActivity());
         StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
 
+                myProgressDialog.hide();
                 invoiceserviceIdList.clear();
                 invoiceserviceNameList.clear();
 
@@ -349,7 +357,7 @@ public class AddInvoiceFragment extends Fragment {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-
+                myProgressDialog.hide();
             }
         }) {
 
@@ -362,6 +370,7 @@ public class AddInvoiceFragment extends Fragment {
             }
 
         };
+        myProgressDialog.show();
         AppController.getInstance().addToRequestQueue(request);
     }
 

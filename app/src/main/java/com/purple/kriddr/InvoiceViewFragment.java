@@ -5,9 +5,11 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.telephony.PhoneNumberFormattingTextWatcher;
@@ -117,6 +119,8 @@ public class InvoiceViewFragment extends Fragment implements PaymentRecivedViewH
         actionBarUtilObj.getImgBack().setVisibility(View.INVISIBLE);
         actionBarUtilObj.getImgSettings().setVisibility(View.VISIBLE);
         actionBarUtilObj.getImgSettings().setImageResource(R.drawable.search);
+        actionBarUtilObj.getTitle().setVisibility(View.VISIBLE);
+        actionBarUtilObj.getEditText().setVisibility(View.INVISIBLE);
 
         actionBarUtilObj.setTitle("INVOICE");
 
@@ -128,13 +132,18 @@ public class InvoiceViewFragment extends Fragment implements PaymentRecivedViewH
 
                 if(actionBarUtilObj.getEditText().getVisibility() == View.VISIBLE)
                 {
-                    paymentReceivedModel.clear();
-                    listGen_invoice_dtls.clear();
-                    listDataHeader.clear();
-                    invocieDetailsInfoList.clear();
-                    invoicelist.clear();
-                    hashlist_inv_Hdr.clear();
-                    list_adaapter.clear();
+                    if(listGen_invoice_dtls!= null)
+                    {
+                        paymentReceivedModel.clear();
+                        listGen_invoice_dtls.clear();
+                        listDataHeader.clear();
+                        invocieDetailsInfoList.clear();
+                        invoicelist.clear();
+                        hashlist_inv_Hdr.clear();
+                        list_adaapter.clear();
+                    }
+
+
                     invoice_main_layout.removeAllViews();
                     name_UsrSearch = actionBarUtilObj.getEditText().getText().toString();
 
@@ -230,7 +239,26 @@ public class InvoiceViewFragment extends Fragment implements PaymentRecivedViewH
     }
 
 
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        Fragment mContent;
+        if(savedInstanceState != null)
+        {
+            mContent = getActivity().getSupportFragmentManager().getFragment(savedInstanceState,"INV_View_STATE");
+            FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.frame_layout,mContent,"invoicefrag");
+            fragmentTransaction.addToBackStack("invoicefrag");
+            fragmentTransaction.commit();
+        }
+    }
 
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        getActivity().getSupportFragmentManager().putFragment(outState,"INV_View_STATE",this);
+    }
 
 
     public void load_data(String url)
@@ -381,12 +409,14 @@ public class InvoiceViewFragment extends Fragment implements PaymentRecivedViewH
 
 
     public void invoiceList(String url, final String StatusFlg) {
+        final MyProgressDialog myProgressDialog=new MyProgressDialog(getActivity());
         StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 //progress.hide();
-                Log.d("INVEIRES", "INVEIRES" + s);
 
+                Log.d("INVEIRES", "INVEIRES" + s);
+                myProgressDialog.hide();
                 try {
                     JSONObject jsonObject = new JSONObject(s);
                     JSONArray jsonArray = jsonObject.getJSONArray("invoices_list");
@@ -488,7 +518,7 @@ public class InvoiceViewFragment extends Fragment implements PaymentRecivedViewH
             @Override
             public void onErrorResponse(VolleyError volleyError) {
                 // progress.hide();
-
+                myProgressDialog.hide();
             }
         }) {
 
@@ -504,6 +534,7 @@ public class InvoiceViewFragment extends Fragment implements PaymentRecivedViewH
             }
 
         };
+        myProgressDialog.show();
         AppController.getInstance().addToRequestQueue(request);
 
     }

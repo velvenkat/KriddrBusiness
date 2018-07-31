@@ -5,8 +5,10 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -147,7 +149,26 @@ public class AddInvoiceCommentsFragment extends Fragment {
 
         return rootView;
     }
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        Fragment mContent;
+        if(savedInstanceState != null)
+        {
+            mContent = getActivity().getSupportFragmentManager().getFragment(savedInstanceState,"ADD_INV_CMT_STATE");
+            FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.frame_layout,mContent,"addinvoicecomments");
+            fragmentTransaction.addToBackStack("addinvoicecomments");
+            fragmentTransaction.commit();
+        }
+    }
 
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        getActivity().getSupportFragmentManager().putFragment(outState,"ADD_INV_CMT_STATE",this);
+    }
     public void onResume(){
         super.onResume();
         text_comments.setOnKeyListener(new View.OnKeyListener() {
@@ -248,6 +269,7 @@ public class AddInvoiceCommentsFragment extends Fragment {
                                         Bundle bundle= new Bundle();
                                         bundle.putString("pet_id",flower.getPet_id());
                                         bundle.putString("pet_photo",pet_photo);
+                                        bundle.putInt("share_status", PetClientListFragment.SHARE_STATUS.ADDED.ordinal());
                                         fragmentCall_mainObj.Fragment_call(new ClientViewDetailsFragment(),"clientViewice",bundle);
 
 

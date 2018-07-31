@@ -52,6 +52,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
                 android:textSize="18sp"
+                android:inputType="textCapWords"
                 android:fontFamily="@font/roboto_regular"
                 android:layout_marginLeft="10dp"
                 android:layout_toRightOf="@+id/client_txt"
@@ -103,6 +104,7 @@
                 android:layout_toRightOf="@+id/brand_txt"
                 android:background="@drawable/rounded_edittext"
                 android:hint="@string/brand"
+                android:inputType="textCapSentences"
                 android:paddingBottom="5dp"
                 android:paddingLeft="15dp"
                 android:paddingTop="5dp" />
@@ -112,6 +114,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
                 android:textSize="18sp"
+                android:inputType="textCapSentences"
                 android:fontFamily="@font/roboto_regular"
                 android:layout_below="@+id/brand_value"
                 android:layout_alignLeft="@+id/brand_value"
@@ -136,6 +139,7 @@
                 android:hint="@string/servings_norm"
                 android:paddingBottom="5dp"
                 android:paddingLeft="15dp"
+                android:inputType="textCapSentences"
                 android:paddingTop="5dp"
                 android:visibility="visible" />
 

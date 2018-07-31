@@ -1,9 +1,12 @@
 package com.purple.kriddr;
 
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.view.Gravity;
+
+import dmax.dialog.SpotsDialog;
 
 /**
  * Created by pf-05 on 2/20/2018.
@@ -11,17 +14,17 @@ import android.view.Gravity;
 
 public class MyProgressDialog {
 
-    ProgressDialog progress;
+    AlertDialog progress;
 
 
     public MyProgressDialog(Context context) {
 
-        progress = new ProgressDialog(context);
-        progress.setCancelable(false);
-        progress.getWindow().setGravity(Gravity.CENTER);
-        progress.setIndeterminate(true);
-        progress.setIndeterminateDrawable(context.getResources().getDrawable(R.drawable.dialog_circle));
-        progress.hide();
+        progress = new SpotsDialog(context);
+       // progress.setCancelable(false);
+       // progress.getWindow().setGravity(Gravity.CENTER_HORIZONTAL);
+       /* progress.setIndeterminate(true);
+        progress.setIndeterminateDrawable(context.getResources().getDrawable(R.drawable.dialog_circle));*/
+        //progress.();
 
     }
 
@@ -31,6 +34,6 @@ public class MyProgressDialog {
     }
     public void hide()
     {
-        progress.hide();
+        progress.dismiss();
     }
 }

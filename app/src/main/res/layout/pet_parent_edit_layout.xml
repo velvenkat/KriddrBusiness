@@ -10,7 +10,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:padding="20dp"
-        android:background="@drawable/rounded_popup_window"
+        android:background="@drawable/rounded_popup_window_wobottom"
         android:layout_height="wrap_content">
 
 
@@ -26,37 +26,30 @@
 
         <ImageView
             android:id="@+id/image"
-            android:layout_alignParentEnd="true"
             android:layout_width="15dp"
             android:layout_height="15dp"
+            android:layout_alignParentRight="true"
             android:src="@drawable/cancel"
             android:fontFamily="@font/robofont"
             android:layout_marginRight="10dp"
             android:layout_marginTop="10dp"
             android:textSize="25dp"/>
 
-        <ImageView
-            android:layout_below="@+id/title"
-            android:id="@+id/profile_icon"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_alignBottom="@+id/business_name"
-            android:layout_alignTop="@+id/business_name"
-            android:src="@drawable/profilepic" />
 
 
 
         <EditText
-            android:id="@+id/business_name"
+            android:id="@+id/dob"
             android:layout_width="match_parent"
-            android:layout_below="@+id/title"
             android:layout_height="50dp"
+            android:layout_below="@+id/image"
             android:layout_marginLeft="10dp"
-            android:layout_toRightOf="@+id/profile_icon"
+            android:layout_marginTop="20dp"
+
             android:background="@drawable/rounded_edittext"
             android:fontFamily="@font/roboto_regular"
             android:textSize="18sp"
-            android:hint="@string/business_name"
+            android:hint="Date of Birth"
             android:inputType="textNoSuggestions"
             android:paddingBottom="5dp"
             android:paddingLeft="15dp"
@@ -64,57 +57,14 @@
             android:selectAllOnFocus="true" />
 
 
-        <ImageView
-            android:id="@+id/phone_icon"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_alignBottom="@+id/mobile"
-            android:layout_alignTop="@+id/mobile"
-            android:layout_below="@+id/profile_icon"
-            android:src="@drawable/mobilelogo" />
-
-
-        <EditText
-            android:id="@+id/mobile"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_below="@+id/profile_icon"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="20dp"
-            android:layout_toRightOf="@+id/phone_icon"
-            android:background="@drawable/rounded_edittext"
-            android:fontFamily="@font/roboto_regular"
-            android:textSize="18sp"
-            android:hint="@string/phone"
-            android:inputType="number"
-            android:paddingBottom="5dp"
-            android:paddingLeft="15dp"
-            android:paddingTop="5dp"
-            android:selectAllOnFocus="true" />
-
-
-
-
-
-
-        <ImageView
-            android:id="@+id/emailgr_icon"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_alignBottom="@+id/email"
-            android:layout_alignTop="@+id/email"
-            android:layout_below="@+id/phone_icon"
-            android:src="@drawable/emailgr" />
-
-
         <EditText
             android:id="@+id/email"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:layout_below="@+id/phone_icon"
+            android:layout_below="@+id/dob"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="20dp"
-            android:layout_toRightOf="@+id/emailgr_icon"
+
             android:background="@drawable/rounded_edittext"
             android:fontFamily="@font/roboto_regular"
             android:textSize="18sp"
@@ -128,29 +78,20 @@
 
 
 
-        <ImageView
-            android:id="@+id/email_icon"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_alignBottom="@+id/address"
-            android:layout_alignTop="@+id/address"
-            android:layout_below="@+id/emailgr_icon"
-            android:src="@drawable/loaction" />
 
 
         <EditText
             android:id="@+id/address"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:layout_below="@+id/emailgr_icon"
+            android:layout_below="@+id/email"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="20dp"
-            android:layout_toRightOf="@+id/phone_icon"
             android:background="@drawable/rounded_edittext"
             android:fontFamily="@font/roboto_regular"
             android:textSize="18sp"
             android:hint="@string/address"
-            android:inputType="textNoSuggestions"
+            android:inputType="textCapSentences"
             android:paddingBottom="5dp"
             android:paddingLeft="15dp"
             android:paddingTop="5dp"

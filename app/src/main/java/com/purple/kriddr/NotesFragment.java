@@ -4,8 +4,10 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -58,6 +60,7 @@ public class NotesFragment extends Fragment {
     RecyclerView.LayoutManager mlayoutManager;
     NotesListAdapter mAdapter;
     JSONObject notesJsonObject;
+    int Profile_Status;
 
     GenFragmentCall_Main fragmentCall_mainObj;
     ActionBarUtil actionBarUtilObj;
@@ -65,6 +68,7 @@ public class NotesFragment extends Fragment {
 
     ImageView add_Notes;
     NotesModel notesModel;
+    String Owner_ID;
     ArrayList<NotesModel> notesList;
     String pet_id = "";
     AlertDialog dialog;
@@ -93,6 +97,26 @@ public class NotesFragment extends Fragment {
 
         }
     }
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        android.support.v4.app.Fragment mContent;
+        if(savedInstanceState != null)
+        {
+            mContent = getActivity().getSupportFragmentManager().getFragment(savedInstanceState,"Notes_View_STATE");
+            FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.frame_layout,mContent,"notes_view");
+            fragmentTransaction.addToBackStack("notes_view");
+            fragmentTransaction.commit();
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        getActivity().getSupportFragmentManager().putFragment(outState,"Notes_View_STATE",this);
+    }
 
     @Nullable
     @Override
@@ -103,7 +127,8 @@ public class NotesFragment extends Fragment {
         Bundle bundle_args=getArguments();
         if(bundle_args!=null) {
             pet_id = bundle_args.getString("pet_id", null);
-
+            Profile_Status=bundle_args.getInt("profile_status");
+            Owner_ID=bundle_args.getString("owner_id");
 
         }
 
@@ -273,7 +298,13 @@ public class NotesFragment extends Fragment {
                 params.put("pet_id",pet_id);
                 params.put("notes",notes);
                 params.put("user_type","business");
+                if(Profile_Status==PetClientListFragment.PROFILE_STATUS.VERIFIED.ordinal()){
 
+                }
+                else {
+                    params.put("key","unclaimed");
+                    params.put("owner_id",Owner_ID);
+                }
                 return params;
             }
 
@@ -287,12 +318,14 @@ public class NotesFragment extends Fragment {
 
 
 
+
     private void notesDetails(String url) {
+        final MyProgressDialog myProgressDialog=new MyProgressDialog(getActivity());
         StringRequest request = new StringRequest(Request.Method.POST,url,new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 Log.d("BASEUNTRRES","BASEUNTRRES"+s);
-
+                myProgressDialog.hide();
                 try
                 {
 
@@ -342,7 +375,7 @@ public class NotesFragment extends Fragment {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-
+                myProgressDialog.hide();
             }
         }) {
 
@@ -362,6 +395,7 @@ public class NotesFragment extends Fragment {
             }
 
         };
+        myProgressDialog.show();
         AppController.getInstance().addToRequestQueue(request);
     }
 

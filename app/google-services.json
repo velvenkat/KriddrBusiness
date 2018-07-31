@@ -1,31 +1,47 @@
 {
   "project_info": {
-    "project_number": "230517854956",
-    "firebase_url": "https://kriddr-business.firebaseio.com",
-    "project_id": "kriddr-business",
-    "storage_bucket": "kriddr-business.appspot.com"
+    "project_number": "67328828556",
+    "firebase_url": "https://kriddrbusiness.firebaseio.com",
+    "project_id": "kriddrbusiness",
+    "storage_bucket": "kriddrbusiness.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:230517854956:android:0770426e4705f848",
+        "mobilesdk_app_id": "1:67328828556:android:0770426e4705f848",
         "android_client_info": {
           "package_name": "com.purple.kriddr"
         }
       },
       "oauth_client": [
         {
-          "client_id": "230517854956-c9h7f45rghvv8mge4klu4et3f9pmr18p.apps.googleusercontent.com",
+          "client_id": "67328828556-o1jbke48hvrcbudm8o7uo8edgt5d3o4o.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.purple.kriddr",
+            "certificate_hash": "d86a4bc1a6b9d01d34e98f15e6e4d06080a49cb0"
+          }
+        },
+        {
+          "client_id": "67328828556-27u39ad3ttqba9221m987ipaakktvr45.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.purple.kriddr",
+            "certificate_hash": "6cffef0c221ab7453279b1a6027032f8f397d1cc"
+          }
+        },
+        {
+          "client_id": "67328828556-q4mhns18cfmr18cpuqe6um3njn1e2dlf.apps.googleusercontent.com",
           "client_type": 3
         },
         {
-          "client_id": "230517854956-c9h7f45rghvv8mge4klu4et3f9pmr18p.apps.googleusercontent.com",
+          "client_id": "67328828556-q4mhns18cfmr18cpuqe6um3njn1e2dlf.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBVWCHY5XTzfKyh-N2Yucp6RqSkEPJs2Tk"
+          "current_key": "AIzaSyBp6aFLysNklLJXphgL-4yUJ3KjSZLNMTI"
         }
       ],
       "services": {
@@ -33,8 +49,13 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "67328828556-q4mhns18cfmr18cpuqe6um3njn1e2dlf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         },
         "ads_service": {
           "status": 2

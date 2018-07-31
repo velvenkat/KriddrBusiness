@@ -19,6 +19,7 @@ import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
@@ -34,6 +35,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -87,7 +89,9 @@ public class CreateBusinessProfile extends Fragment implements View.OnClickListe
     Uri picUri;
     UserModel userModel;
     int ScreenFromVal;
+    RelativeLayout rl_email_contr;
     List<UserModel> feedslist;
+    EditText edt_email;
     String image = "";
     ActionBarUtil actionBarUtilObj;
     public static final int CROP_IMAGE_ACTIVITY_REQUEST_CODE = 203;
@@ -101,6 +105,8 @@ public class CreateBusinessProfile extends Fragment implements View.OnClickListe
         add_Photo = (ImageView) rootView.findViewById(R.id.add_photo);
         business = (EditText) rootView.findViewById(R.id.business_name);
         mobile = (EditText) rootView.findViewById(R.id.mobile);
+        edt_email = (EditText) rootView.findViewById(R.id.edt_email);
+        rl_email_contr = (RelativeLayout) rootView.findViewById(R.id.rl_email_contr);
 
         mobile.addTextChangedListener(new PhoneNumberFormattingTextWatcher("US"));
         address = (EditText) rootView.findViewById(R.id.address);
@@ -129,8 +135,6 @@ public class CreateBusinessProfile extends Fragment implements View.OnClickListe
         });
 
 
-
-
         if (Build.VERSION.SDK_INT == Build.VERSION_CODES.M) {
             //Toast.makeText(this, "Permission checking", Toast.LENGTH_SHORT).show();
             checkPermission();
@@ -155,25 +159,20 @@ public class CreateBusinessProfile extends Fragment implements View.OnClickListe
                 //((TextView) actionBar.getCustomView().findViewById(R.id.textBarTitle)).setText("EDIT PROFILE");
                 actionBarUtilObj.setTitle("EDIT PROFILE");
                 create_profile.setText("UPDATE PROFILE");
+                rl_email_contr.setVisibility(View.VISIBLE);
+                edt_email.setText(userModel.getEmail());
                 Log.d("PAGCALL", "PAGCALL" + userModel.getBusiness_name() + "USERID VAL " + userModel.getId());
                 userModel = bundle.getParcelable(KridderNavigationActivity.USER_MODEL_TAG);
                 business.setText(userModel.getBusiness_name());
                 mobile.setText(userModel.getBusiness_phone());
                 address.setText(userModel.getBusiness_address());
 
-                Glide.with(getActivity()).load(userModel.getLogo_url()).asBitmap().diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).centerCrop().into(new BitmapImageViewTarget(add_Photo) {
-                    @Override
-                    protected void setResource(Bitmap resource) {
-                        RoundedBitmapDrawable circularBitmapDrawable =
-                                RoundedBitmapDrawableFactory.create(getActivity().getResources(), resource);
-                        circularBitmapDrawable.setCircular(true);
-                        add_Photo.setImageDrawable(circularBitmapDrawable);
-                    }
-                });
+                Glide.with(getActivity()).load(userModel.getLogo_url()).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).transform(new CircleTransform(getActivity())).into(add_Photo);
 
 
 
             } else {
+                rl_email_contr.setVisibility(View.GONE);
                 actionBarUtilObj.setTitle("CREATE BUSINESS PROFILE");
             }
 
@@ -198,10 +197,38 @@ public class CreateBusinessProfile extends Fragment implements View.OnClickListe
 
         return rootView;
     }
-    public void onAttach(Context context){
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        Fragment mContent;
+        if (savedInstanceState != null) {
+            mContent = getActivity().getSupportFragmentManager().getFragment(savedInstanceState, "CRT_Busns_STATE");
+            FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+
+            fragmentTransaction.replace(R.id.frame_layout, mContent, "crt_busns_scrn");
+
+
+            fragmentTransaction.addToBackStack("crt_busns_scrn");
+
+            fragmentTransaction.commit();
+
+        }
+    }
+
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        //Save the fragment's instance
+        getActivity().getSupportFragmentManager().putFragment(outState, "CRT_Busns_STATE", this);
+    }
+
+    public void onAttach(Context context) {
         super.onAttach(context);
-        if(context instanceof InterfaceActionBarUtil){
-          actionBarUtilObj=((InterfaceActionBarUtil)context).getActionBarUtilObj();
+        if (context instanceof InterfaceActionBarUtil) {
+            actionBarUtilObj = ((InterfaceActionBarUtil) context).getActionBarUtilObj();
         }
     }
 
@@ -349,7 +376,6 @@ public class CreateBusinessProfile extends Fragment implements View.OnClickListe
     }
 
 
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
@@ -374,7 +400,7 @@ public class CreateBusinessProfile extends Fragment implements View.OnClickListe
                         add_Photo.setImageDrawable(drawable);
 
 
-                       // Toast.makeText(getActivity(), "Cropping successful, Sample: " + result.getSampleSize(), Toast.LENGTH_LONG).show();
+                        // Toast.makeText(getActivity(), "Cropping successful, Sample: " + result.getSampleSize(), Toast.LENGTH_LONG).show();
                     } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                         Toast.makeText(getActivity(), "Cropping failed: " + result.getError(), Toast.LENGTH_LONG).show();
                     }
@@ -393,9 +419,7 @@ public class CreateBusinessProfile extends Fragment implements View.OnClickListe
                                 .setMinCropResultSize(400, 400)
                                 .setMaxCropResultSize(1500, 1500)
                                 .setAspectRatio(1, 1)
-                                .start(getContext(),this);
-
-
+                                .start(getContext(), this);
 
 
                     }
@@ -425,7 +449,7 @@ public class CreateBusinessProfile extends Fragment implements View.OnClickListe
         mobile_Number = mobile.getText().toString().trim();
         mobile_Number = mobile_Number.replaceAll("[^0-9]", "").trim();
         mobile_Number = mobile_Number.trim();
-
+        String EMailVal = "";
         address_Value = address.getText().toString().trim();
         if (business_Name.equals("") || business_Name.isEmpty()) {
             isFieldSet = false;
@@ -436,9 +460,16 @@ public class CreateBusinessProfile extends Fragment implements View.OnClickListe
         } else if (address_Value.equals("") || address_Value.isEmpty()) {
             isFieldSet = false;
             Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.enter_address), Toast.LENGTH_SHORT).show();
-        } else if (ScreenFromVal== MainActivity.Screens.EDIT_PROFILE.ordinal()) {
+        } else if (ScreenFromVal == MainActivity.Screens.EDIT_PROFILE.ordinal()) {
+            EMailVal = edt_email.getText().toString();
+            if (EMailVal.trim().equalsIgnoreCase("")) {
+                isFieldSet = false;
+                Toast.makeText(getActivity(), getResources().getString(R.string.enter_email_val), Toast.LENGTH_SHORT).show();
 
-            if (bitmap == null) {
+            } else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(EMailVal).matches()) {
+                isFieldSet = false;
+                Toast.makeText(getActivity(), getResources().getString(R.string.invalid_email), Toast.LENGTH_SHORT).show();
+            } else if (bitmap == null) {
                 image = "old";
             } else {
 
@@ -462,7 +493,7 @@ public class CreateBusinessProfile extends Fragment implements View.OnClickListe
 
         if (isFieldSet) {
             if (NetworkConnection.isOnline(getActivity())) {
-                if (ScreenFromVal== MainActivity.Screens.EDIT_PROFILE.ordinal()) {
+                if (ScreenFromVal == MainActivity.Screens.EDIT_PROFILE.ordinal()) {
                     createProfile(getResources().getString(R.string.url_reference) + "business_details_edit.php");
                 } else {
                     createProfile(getResources().getString(R.string.url_reference) + "business_creation.php");
@@ -480,14 +511,13 @@ public class CreateBusinessProfile extends Fragment implements View.OnClickListe
     }
 
     private void createProfile(String url) {
-
-
+        final MyProgressDialog myProgressDialog=new MyProgressDialog(getActivity());
         StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
 
                 Log.d("PROFILERES", "PROFILERES" + s);
-
+                myProgressDialog.hide();
                 try {
                     UserModel flower = new UserModel();
                     JSONObject jsonObj = new JSONObject(s);
@@ -514,10 +544,9 @@ public class CreateBusinessProfile extends Fragment implements View.OnClickListe
                         entry.close();
 
                         Intent intent = new Intent(getActivity(), KridderNavigationActivity.class);
-                        if (ScreenFromVal== MainActivity.Screens.EDIT_PROFILE.ordinal()) {
+                        if (ScreenFromVal == MainActivity.Screens.EDIT_PROFILE.ordinal()) {
                             intent.putExtra(MainActivity.SCREEN_FROM_TAG, MainActivity.Screens.UPDATE_PROFILE.ordinal());
-                        }
-                        else{
+                        } else {
                             intent.putExtra(MainActivity.SCREEN_FROM_TAG, MainActivity.Screens.CREATE_PROFILE.ordinal());
                         }
                         intent.putExtra(KridderNavigationActivity.USER_MODEL_TAG, flower);
@@ -537,7 +566,7 @@ public class CreateBusinessProfile extends Fragment implements View.OnClickListe
             @Override
             public void onErrorResponse(VolleyError volleyError) {
                 // progress.hide();
-
+                myProgressDialog.hide();
             }
         }) {
 
@@ -562,8 +591,10 @@ public class CreateBusinessProfile extends Fragment implements View.OnClickListe
                 params.put("name", business_Name);
                 params.put("phone", mobile_Number);
                 params.put("address", address_Value);
-                if (ScreenFromVal== MainActivity.Screens.EDIT_PROFILE.ordinal()) {
+                if (ScreenFromVal == MainActivity.Screens.EDIT_PROFILE.ordinal()) {
+
                     params.put("business_id", userModel.getBusiness_id());
+                    params.put("email", edt_email.getText().toString().trim());
                 }
                 params.put("image", image);
                 return checkParams(params);
@@ -582,6 +613,7 @@ public class CreateBusinessProfile extends Fragment implements View.OnClickListe
 
 
         };
+        myProgressDialog.show();
         AppController.getInstance().addToRequestQueue(request);
 
     }

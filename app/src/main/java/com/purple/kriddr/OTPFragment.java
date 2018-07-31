@@ -223,6 +223,33 @@ public class OTPFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        Fragment mContent;
+        if(savedInstanceState!=null) {
+            mContent = getActivity().getSupportFragmentManager().getFragment(savedInstanceState, "OTP_STATE");
+            FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+
+            fragmentTransaction.replace(R.id.frame_layout, mContent, "otp_scrn");
+
+
+            fragmentTransaction.addToBackStack("otp_scrn");
+
+            fragmentTransaction.commit();
+
+        }
+    }
+
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        //Save the fragment's instance
+        getActivity().getSupportFragmentManager().putFragment(outState, "OTP_STATE", this);
+    }
+
     public void isEnteredAllDigit() {
 
         first_pin = pin_first_edittext.getText().toString().trim();
@@ -248,10 +275,11 @@ public class OTPFragment extends Fragment {
 
     private void passingOTPData(String url) {
         final String full_otp = first_pin + second_pin + third_pin + fourth_pin + fifth_pin;
+        final MyProgressDialog progressDialog=new MyProgressDialog(getContext());
         StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
-
+                progressDialog.hide();
                 Log.d("GVTRES", "GVTRES" + s);
 
                 try {
@@ -265,7 +293,7 @@ public class OTPFragment extends Fragment {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-
+               progressDialog.hide();
             }
         }) {
 
@@ -279,6 +307,7 @@ public class OTPFragment extends Fragment {
             }
 
         };
+        progressDialog.show();
         AppController.getInstance().addToRequestQueue(request);
 
     }

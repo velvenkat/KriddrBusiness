@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,7 +62,7 @@ public class BusinessRecordViewDetails extends android.support.v4.app.Fragment {
 
                 if (NetworkConnection.isOnline(getActivity())) {
 
-                    Glide.with(getActivity()).load(image_url).diskCacheStrategy(DiskCacheStrategy.NONE).thumbnail(0.5f).skipMemoryCache(true).into(photoView);
+                    Glide.with(getActivity()).load(image_url).thumbnail(0.5f).into(photoView);
 
                 } else {
                     Toast.makeText(getActivity(), getResources().getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
@@ -102,7 +103,26 @@ public class BusinessRecordViewDetails extends android.support.v4.app.Fragment {
         return rootView;
     }
 
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        android.support.v4.app.Fragment mContent;
+        if(savedInstanceState != null)
+        {
+            mContent = getActivity().getSupportFragmentManager().getFragment(savedInstanceState,"Bus_Rec_View_STATE");
+            FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.frame_layout,mContent,"businessrecd");
+            fragmentTransaction.addToBackStack("businessrecd");
+            fragmentTransaction.commit();
+        }
+    }
 
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        getActivity().getSupportFragmentManager().putFragment(outState,"Bus_Rec_View_STATE",this);
+    }
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);

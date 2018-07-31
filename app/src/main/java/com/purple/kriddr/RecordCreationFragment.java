@@ -19,9 +19,11 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.os.StrictMode;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
@@ -78,7 +80,7 @@ import static com.purple.kriddr.controller.AppController.TAG;
  * Created by pf-05 on 2/22/2018.
  */
 
-public class RecordCreationFragment extends Fragment implements View.OnClickListener{
+public class RecordCreationFragment extends Fragment implements View.OnClickListener {
 
 
     ImageView add_photo;
@@ -92,6 +94,7 @@ public class RecordCreationFragment extends Fragment implements View.OnClickList
     String doc_id = "", doc_name = "";
     final int PIC_CROP = 11;
     Uri picUri;
+    int Profile_Status;
     Button submit_button;
     private int PICK_IMAGE_REQUEST = 1;
     private Bitmap selectedBitmap;
@@ -100,23 +103,24 @@ public class RecordCreationFragment extends Fragment implements View.OnClickList
     ActionBarUtil actionBarUtilObj;
     UserModel userModel;
     String pet_id = "";
-    String[] Per_List=new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
-
+    String Owner_id = "";
+    String[] Per_List = new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
 
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        rootView = inflater.inflate(R.layout.add_records,container,false);
+        rootView = inflater.inflate(R.layout.add_records, container, false);
 
 
+        ((KridderNavigationActivity) getActivity()).setNavigationVisibility(false);
 
-        ((KridderNavigationActivity)getActivity()).setNavigationVisibility(false);
-
-        Bundle bundle_args=getArguments();
-        if(bundle_args!=null) {
+        Bundle bundle_args = getArguments();
+        if (bundle_args != null) {
             pet_id = bundle_args.getString("pet_id", null);
+            Owner_id = bundle_args.getString("owner_id", null);
+            Profile_Status = bundle_args.getInt("profile_status");
 
 
         }
@@ -148,11 +152,11 @@ public class RecordCreationFragment extends Fragment implements View.OnClickList
         }
 
 
-        add_photo = (ImageView)rootView.findViewById(R.id.add_photo);
-        docu_name = (EditText)rootView.findViewById(R.id.doc_name);
-        category_value = (Spinner)rootView.findViewById(R.id.category_value);
+        add_photo = (ImageView) rootView.findViewById(R.id.add_photo);
+        docu_name = (EditText) rootView.findViewById(R.id.doc_name);
+        category_value = (Spinner) rootView.findViewById(R.id.category_value);
 
-        submit_button = (Button)rootView.findViewById(R.id.submit_button);
+        submit_button = (Button) rootView.findViewById(R.id.submit_button);
 
 
         category_adapter = new ArrayAdapter<>(getActivity(), R.layout.spinner_layout, docNameList);
@@ -166,10 +170,8 @@ public class RecordCreationFragment extends Fragment implements View.OnClickList
 
                     doc_id = docIdList.get(position).toString();
                     doc_name = docNameList.get(position).toString();
-                    Log.v("TYPENAME","TYPENAME"+doc_id + "TYNA"+doc_name);
-                }
-                catch (Exception e)
-                {
+                    Log.v("TYPENAME", "TYPENAME" + doc_id + "TYNA" + doc_name);
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
 
@@ -182,13 +184,10 @@ public class RecordCreationFragment extends Fragment implements View.OnClickList
         });
 
 
-
-        if (NetworkConnection.isOnline(getActivity()))
-        {
+        if (NetworkConnection.isOnline(getActivity())) {
             categoryList(getResources().getString(R.string.url_reference) + "master_data.php");
 
         }
-
 
 
         add_photo.setOnClickListener(this);
@@ -200,38 +199,47 @@ public class RecordCreationFragment extends Fragment implements View.OnClickList
                 validateData();
 
 
-
             }
         });
-
 
 
         return rootView;
     }
 
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        android.support.v4.app.Fragment mContent;
+        if (savedInstanceState != null) {
+            mContent = getActivity().getSupportFragmentManager().getFragment(savedInstanceState, "Rec_CREATE_STATE");
+            FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.frame_layout, mContent, "rec_crt_frag");
+            fragmentTransaction.addToBackStack("rec_crt_frag");
+            fragmentTransaction.commit();
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        getActivity().getSupportFragmentManager().putFragment(outState, "Rec_CREATE_STATE", this);
+    }
 
 
-
-    public void validateData()
-    {
+    public void validateData() {
 
         String docName = docu_name.getText().toString().trim();
 
-        if(docName.isEmpty() || docName.equalsIgnoreCase(""))
-        {
+        if (docName.isEmpty() || docName.equalsIgnoreCase("")) {
             Toast.makeText(getActivity(), "Please enter the document name", Toast.LENGTH_SHORT).show();
-        }
-        else if (selectedBitmap == null) {
+        } else if (selectedBitmap == null) {
             Toast.makeText(getActivity(), "Please choose the image", Toast.LENGTH_SHORT).show();
-        }
-        else if(doc_id.equalsIgnoreCase("Select"))
-        {
-            Toast.makeText(getActivity(),"Please choose the category",Toast.LENGTH_SHORT).show();
-        }
-
-        else {
+        } else if (doc_id.equalsIgnoreCase("Select")) {
+            Toast.makeText(getActivity(), "Please choose the category", Toast.LENGTH_SHORT).show();
+        } else {
             if (NetworkConnection.isOnline(getActivity())) {
-                submitData(getResources().getString(R.string.url_reference) + "pet_documents_creation.php",docName);
+                submitData(getResources().getString(R.string.url_reference) + "temp_pet_documents_creation.php", docName);
             } else {
                 Toast.makeText(getActivity(), getResources().getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
             }
@@ -241,8 +249,7 @@ public class RecordCreationFragment extends Fragment implements View.OnClickList
     }
 
 
-    private void submitData(String url, final String docName)
-    {
+    private void submitData(String url, final String docName) {
 
         final MyProgressDialog myProgressDialog = new MyProgressDialog(getActivity());
 
@@ -250,56 +257,52 @@ public class RecordCreationFragment extends Fragment implements View.OnClickList
             @Override
             public void onResponse(String s) {
                 //progress.hide();
-                Log.d("RECORDFRAG","RECORDFRAG"+s);
+                Log.d("RECORDFRAG", "RECORDFRAG" + s);
 
 
                 myProgressDialog.hide();
 
-                try
-                {
+                try {
 
                     JSONObject jsonObject = new JSONObject(s);
                     String id = jsonObject.getString("id");
                     String result = jsonObject.getString("result");
-                    if(result.equalsIgnoreCase("Success"))
-                    {
+                    if (result.equalsIgnoreCase("Success")) {
+                        if (Profile_Status == PetClientListFragment.PROFILE_STATUS.VERIFIED.ordinal()) {
+                            final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                            builder.setMessage("Record saved successfully. A request has been sent to the Pet Parent for approval.")
+                                    .setCancelable(false)
+                                    .setNeutralButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            dialog.cancel();
 
-                        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                        builder.setMessage(getResources().getString(R.string.record_creation))
-                                .setCancelable(false)
-                                .setNeutralButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        dialog.cancel();
-
-                                        ((AppCompatActivity) getActivity()).getSupportFragmentManager().popBackStackImmediate();
-
+                                            ((AppCompatActivity) getActivity()).getSupportFragmentManager().popBackStackImmediate();
 
 
-                                    }
-                                });
-                        AlertDialog alert = builder.create();
-                        alert.show();
-                        Button positiveButton = alert.getButton(android.support.v7.app.AlertDialog.BUTTON_POSITIVE);
-                        Button negativeButton = alert.getButton(android.support.v7.app.AlertDialog.BUTTON_NEGATIVE);
-                        Button neturalButton = alert.getButton(android.support.v7.app.AlertDialog.BUTTON_NEUTRAL);
+                                        }
+                                    });
+                            AlertDialog alert = builder.create();
+                            alert.show();
+                            Button positiveButton = alert.getButton(android.support.v7.app.AlertDialog.BUTTON_POSITIVE);
+                            Button negativeButton = alert.getButton(android.support.v7.app.AlertDialog.BUTTON_NEGATIVE);
+                            Button neturalButton = alert.getButton(android.support.v7.app.AlertDialog.BUTTON_NEUTRAL);
 
-                        positiveButton.setTextColor(Color.parseColor("#000000"));
-                        //positiveButton.setBackgroundColor(Color.parseColor("#FFE1FCEA"));
+                            positiveButton.setTextColor(Color.parseColor("#000000"));
+                            //positiveButton.setBackgroundColor(Color.parseColor("#FFE1FCEA"));
 
-                        negativeButton.setTextColor(Color.parseColor("#000000"));
-                        neturalButton.setTextColor(Color.parseColor("#000000"));
-
+                            negativeButton.setTextColor(Color.parseColor("#000000"));
+                            neturalButton.setTextColor(Color.parseColor("#000000"));
+                        } else {
+                            Toast.makeText(getContext(), "" + result, Toast.LENGTH_LONG).show();
+                            ((AppCompatActivity) getActivity()).getSupportFragmentManager().popBackStackImmediate();
+                        }
 
                     }
 
-                }
-                catch (Exception e)
-                {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
-
-
 
 
             }
@@ -318,21 +321,23 @@ public class RecordCreationFragment extends Fragment implements View.OnClickList
                 Map<String, String> params = new HashMap<String, String>();
 
 
-
                 image = getStringImage(selectedBitmap);
 
-                Log.d("SERNRES","SERNRES"+userModel.getId() + "PE ID"+pet_id + "NA "+docName + "DOCATID "+doc_id + "IMG "+image);
+                Log.d("SERNRES", "SERNRES" + userModel.getId() + "PE ID" + pet_id + "NA " + docName + "DOCATID " + doc_id + "IMG " + image);
 
                 Gson gson = new Gson();
-                params.put("user_id",userModel.getId());
-                params.put("pet_id",pet_id);
-                params.put("name",docName);
-                params.put("document_category_id",doc_id);
-                params.put("image",image);
-                params.put("user_type","1");
+                params.put("user_id", userModel.getId());
+                params.put("owner_id", Owner_id);
+                params.put("pet_id", pet_id);
+                params.put("name", docName);
+                params.put("document_category_id", doc_id);
+                params.put("image", image);
+                params.put("user_type", "1");
+                if (Profile_Status == PetClientListFragment.PROFILE_STATUS.NOT_VERIFIED.ordinal()) {
+                    params.put("key", "unclaimed");
+                }
                 return params;
             }
-
 
 
             @Override
@@ -349,22 +354,18 @@ public class RecordCreationFragment extends Fragment implements View.OnClickList
     }
 
 
-
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
 
         InterfaceUserModel interfaceUserModel;
 
-        if(context instanceof FragmentCallInterface)
-        {
-            FragmentCallInterface callInterface = (FragmentCallInterface)context;
+        if (context instanceof FragmentCallInterface) {
+            FragmentCallInterface callInterface = (FragmentCallInterface) context;
             fragmentCall_mainObj = callInterface.Get_GenFragCallMainObj();
         }
-        if (context instanceof InterfaceActionBarUtil)
-        {
-            actionBarUtilObj=((InterfaceActionBarUtil)context).getActionBarUtilObj();
+        if (context instanceof InterfaceActionBarUtil) {
+            actionBarUtilObj = ((InterfaceActionBarUtil) context).getActionBarUtilObj();
 
         }
 
@@ -377,16 +378,16 @@ public class RecordCreationFragment extends Fragment implements View.OnClickList
     }
 
 
-    private void categoryList(String url)
-    {
-        StringRequest request = new StringRequest(Request.Method.POST,url,new Response.Listener<String>() {
+    private void categoryList(String url) {
+
+        StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
 
-                Log.d("CATEGORLIST","CATEGORLIST"+s);
+                Log.d("CATEGORLIST", "CATEGORLIST" + s);
 
-               docIdList.clear();
-               docNameList.clear();
+                docIdList.clear();
+                docNameList.clear();
 
 
                 docIdList.add("Select");
@@ -396,8 +397,7 @@ public class RecordCreationFragment extends Fragment implements View.OnClickList
 
                     JSONArray jsonArray = new JSONArray(s);
 
-                    for(int i = 0; i < jsonArray.length();i++)
-                    {
+                    for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject obj = jsonArray.getJSONObject(i);
 
                         documents_id = obj.getString("documents_id");
@@ -412,11 +412,7 @@ public class RecordCreationFragment extends Fragment implements View.OnClickList
                     category_value.setAdapter(category_adapter);
 
 
-
-
-                }
-                catch (Exception e)
-                {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
 
@@ -431,8 +427,7 @@ public class RecordCreationFragment extends Fragment implements View.OnClickList
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<String, String>();
-                params.put("master_data","documents_category");
-
+                params.put("master_data", "documents_category");
 
 
                 return params;
@@ -463,10 +458,9 @@ public class RecordCreationFragment extends Fragment implements View.OnClickList
     }
 
 
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(resultCode == Activity.RESULT_OK) {
+        if (resultCode == Activity.RESULT_OK) {
 
 
             {
@@ -492,11 +486,9 @@ public class RecordCreationFragment extends Fragment implements View.OnClickList
             }
 
 
-            }
-
         }
 
-
+    }
 
 
     private static void requestWritePermission(final Context context) {
@@ -532,10 +524,6 @@ public class RecordCreationFragment extends Fragment implements View.OnClickList
     }
 
 
-
-
-
-
     public String getStringImage(Bitmap bmp) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bmp.compress(Bitmap.CompressFormat.JPEG, 100, baos);
@@ -545,35 +533,32 @@ public class RecordCreationFragment extends Fragment implements View.OnClickList
     }
 
 
-
-    public boolean checkPermissionForExternalStorage(){
+    public boolean checkPermissionForExternalStorage() {
         int result = ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE);
-        if (result == PackageManager.PERMISSION_GRANTED){
-            Log.v("permission","grantedyes");
+        if (result == PackageManager.PERMISSION_GRANTED) {
+            Log.v("permission", "grantedyes");
 
             return true;
         } else {
-            Log.v("permission","grantedno");
+            Log.v("permission", "grantedno");
             ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 2);
             return false;
         }
     }
 
-    public boolean checkPermissionForCamera(){
+    public boolean checkPermissionForCamera() {
         int result = ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA);
-        if (result == PackageManager.PERMISSION_GRANTED){
-            Log.v("permission","grantedyes");
+        if (result == PackageManager.PERMISSION_GRANTED) {
+            Log.v("permission", "grantedyes");
 
             return true;
         } else {
-            Log.v("permission","grantedno");
+            Log.v("permission", "grantedno");
             ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 2);
 
             return false;
         }
     }
-
-
 
 
     public Uri getPickImageResultUri(Intent data) {

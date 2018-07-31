@@ -9,10 +9,12 @@ import android.widget.ArrayAdapter;
 import android.widget.Filter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.purple.kriddr.CircleTransform;
 import com.purple.kriddr.ClientViewDetailsFragment;
+import com.purple.kriddr.PetClientListFragment;
 import com.purple.kriddr.R;
 import com.purple.kriddr.model.PetModel;
 import com.purple.kriddr.util.GenFragmentCall_Main;
@@ -50,7 +52,7 @@ public class AutoCompleteSearchAdapter extends ArrayAdapter<PetModel> {
 
     public interface DataFromAdapterToFragment
     {
-        public void getClientDetails(String  pet_id, String owner_id);
+        public void getClientDetails(String  pet_id, String owner_id,int Profile_Status);
     }
 
     @Override
@@ -73,7 +75,15 @@ public class AutoCompleteSearchAdapter extends ArrayAdapter<PetModel> {
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                dataFromAdapterToFragment.getClientDetails(people.getPet_id(),people.getOwwner_id());
+                //Toast.makeText(getContext(),"Created_Dt"+people.getCreated(),Toast.LENGTH_LONG).show();
+                int Profile_Status;
+                if(people.getProfile_status().equalsIgnoreCase("verified")){
+                 Profile_Status= PetClientListFragment.PROFILE_STATUS.VERIFIED.ordinal();
+                }
+                else {
+                    Profile_Status= PetClientListFragment.PROFILE_STATUS.NOT_VERIFIED.ordinal();
+                }
+                dataFromAdapterToFragment.getClientDetails(people.getPet_id(),people.getOwwner_id(),Profile_Status);
             }
         });
         return convertView;
